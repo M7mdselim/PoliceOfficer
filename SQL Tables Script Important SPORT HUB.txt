@@ -1,0 +1,367 @@
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY IDENTITY,
+    Name NVARCHAR(100),
+    CheckNumber NVARCHAR(50),
+    MobileNumber NVARCHAR(50),
+    Category NVARCHAR(50),
+    ID NVARCHAR(50),
+    ProfileImage VARBINARY(MAX),
+    DateUpdated DATETIME DEFAULT GETDATE()
+);
+
+
+CREATE TABLE Transactions (
+    TransactionID INT PRIMARY KEY IDENTITY,
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    SportID INT FOREIGN KEY REFERENCES Sports(SportID),
+    AmountPaid DECIMAL(10, 2),
+    RemainingAmount DECIMAL(10, 2),
+    DateAndTime DATETIME,
+    CashierName NVARCHAR(255),
+    DiscountPercentage DECIMAL(5, 2) NULL
+);
+
+ALTER TABLE Transactions
+ADD Notes NVARCHAR(MAX);
+
+-- Create Sports table
+CREATE TABLE Sports (
+    SportID INT PRIMARY KEY IDENTITY,
+    SportName NVARCHAR(100),
+    Price DECIMAL(10, 2)
+);
+
+
+
+
+
+IF OBJECT_ID('InsertTransaction', 'P') IS NOT NULL
+  DROP PROCEDURE InsertTransaction;
+
+
+
+CREATE TABLE CashierDetails (
+    CashierID INT IDENTITY(1,1) PRIMARY KEY,
+    Username NVARCHAR(50) NOT NULL UNIQUE,
+    PasswordHash NVARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Roles (
+    RoleID INT IDENTITY(1,1) PRIMARY KEY,
+    RoleName NVARCHAR(50) NOT NULL UNIQUE
+);
+
+INSERT INTO Roles (RoleName) VALUES ('Cashier');
+INSERT INTO Roles (RoleName) VALUES ('Admin');
+INSERT INTO Roles (RoleName) VALUES ('Control');
+
+
+ALTER TABLE CashierDetails
+ADD RoleID INT FOREIGN KEY REFERENCES Roles(RoleID) NOT NULL DEFAULT 1;
+
+CREATE INDEX IX_Users_MembershipID ON Users (ID);
+CREATE INDEX IX_Users_MobileNumber ON Users (MobileNumber);
+CREATE INDEX IX_Users_name ON Users (name);
+
+ALTER PROCEDURE InsertTransaction
+    @UserID INT,
+    @SportID INT,
+    @AmountPaid DECIMAL(10, 2),
+    @DateAndTime DATETIME,
+    @CashierName NVARCHAR(255),
+    @DiscountPercentage DECIMAL(5, 2)
+AS
+BEGIN
+    DECLARE @Price DECIMAL(10, 2);
+    DECLARE @DiscountAmount DECIMAL(10, 2);
+    DECLARE @DiscountedPrice DECIMAL(10, 2);
+    
+    -- Get the price of the sport
+    SELECT @Price = Price FROM Sports WHERE SportID = @SportID;
+    
+    -- Calculate the discount amount and discounted price
+    SET @DiscountAmount = (@Price * @DiscountPercentage) / 100;
+    SET @DiscountedPrice = @Price - @DiscountAmount;
+    
+    -- Calculate the remaining amount
+    DECLARE @RemainingAmount DECIMAL(10, 2);
+    SET @RemainingAmount = @DiscountedPrice - @AmountPaid;
+    
+    -- Insert the transaction
+    INSERT INTO Transactions (UserID, SportID, AmountPaid, RemainingAmount, DateAndTime, CashierName, DiscountPercentage)
+    VALUES (@UserID, @SportID, @AmountPaid, @RemainingAmount, @DateAndTime, @CashierName, @DiscountPercentage);
+END;
+
+
+
+
+.
+
+
+
+
+
+
+
+-- Index on DateAndTime for better performance in date-based queries
+CREATE INDEX IX_Transactions_DateAndTime ON Transactions (DateAndTime);
+
+
+CREATE TABLE UserChanges (
+    ChangeID INT PRIMARY KEY IDENTITY,
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    ChangeDate DATETIME DEFAULT GETDATE(),
+    ChangedBy NVARCHAR(50),
+    ChangeDescription NVARCHAR(MAX)
+);
+
+
+--CREATE VIEW vw_TransactionReport AS
+--SELECT 
+  --  T.TransactionID,
+  --  U.Name AS UserName,
+  --  S.SportName,
+  --  T.AmountPaid,
+  --  T.RemainingAmount,
+ --   T.DateAndTime,
+ --   T.CashierName,
+ --   T.DiscountPercentage
+--FROM Transactions T
+--JOIN Users U ON T.UserID = U.UserID
+--JOIN Sports S ON T.SportID = S.SportID;
+
+
+
+-- Procedure to update a transaction
+CREATE PROCEDURE UpdateTransaction
+    @TransactionID INT,
+    @UserID INT,
+    @SportID INT,
+    @AmountPaid DECIMAL(10, 2),
+    @DateAndTime DATETIME,
+    @CashierName NVARCHAR(255),
+    @DiscountPercentage DECIMAL(5, 2)
+AS
+BEGIN
+    DECLARE @Price DECIMAL(10, 2);
+    DECLARE @DiscountAmount DECIMAL(10, 2);
+    DECLARE @DiscountedPrice DECIMAL(10, 2);
+    
+    -- Get the price of the sport
+    SELECT @Price = Price FROM Sports WHERE SportID = @SportID;
+    
+    -- Calculate the discount amount and discounted price
+    SET @DiscountAmount = (@Price * @DiscountPercentage) / 100;
+    SET @DiscountedPrice = @Price - @DiscountAmount;
+    
+    -- Calculate the remaining amount
+    DECLARE @RemainingAmount DECIMAL(10, 2);
+    SET @RemainingAmount = @DiscountedPrice - @AmountPaid;
+    
+    -- Update the transaction
+    UPDATE Transactions
+    SET UserID = @UserID,
+        SportID = @SportID,
+        AmountPaid = @AmountPaid,
+        RemainingAmount = @RemainingAmount,
+        DateAndTime = @DateAndTime,
+        CashierName = @CashierName,
+        DiscountPercentage = @DiscountPercentage
+    WHERE TransactionID = @TransactionID;
+END;
+
+
+
+CREATE PROCEDURE GetTransactionsByDate
+    @StartDate DATETIME,
+    @EndDate DATETIME
+AS
+BEGIN
+    SELECT 
+        t.TransactionID,
+        u.Name AS UserName,
+        s.SportName AS SportName,
+        t.AmountPaid,
+        t.RemainingAmount,
+        t.DateAndTime,
+        t.CashierName,
+        t.DiscountPercentage
+    FROM Transactions t
+    INNER JOIN Users u ON t.UserID = u.UserID
+    INNER JOIN Sports s ON t.SportID = s.SportID
+    WHERE t.DateAndTime >= @StartDate AND t.DateAndTime <= @EndDate
+    ORDER BY t.DateAndTime;
+END;
+
+
+
+
+. edit 
+
+ CREATE OR ALTER VIEW vw_TransactionReport AS
+SELECT 
+    T.TransactionID,
+    U.Name AS UserName,
+    U.CheckNumber,
+    S.SportName,
+    S.Price AS SportPrice,
+    U.MobileNumber,
+    U.UserID AS UserID,         -- Include UserID explicitly if you need it
+    T.AmountPaid,
+    T.RemainingAmount,
+    T.DiscountPercentage,
+    T.DateAndTime,
+    T.CashierName,
+    T.Notes               -- Ensure Notes column is included
+FROM 
+    Transactions T
+INNER JOIN 
+    Users U ON T.UserID = U.UserID
+INNER JOIN 
+    Sports S ON T.SportID = S.SportID;
+
+
+
+
+--------------------------------------------------------------------------------------------------------
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY IDENTITY,
+    Name NVARCHAR(100),
+    CheckNumber NVARCHAR(50),
+    MobileNumber NVARCHAR(50),
+    Category NVARCHAR(50),
+    ID NVARCHAR(50),
+    ProfileImage VARBINARY(MAX),
+    DateUpdated DATETIME DEFAULT GETDATE()
+);
+
+CREATE TABLE Transactions (
+    TransactionID INT PRIMARY KEY IDENTITY,
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    SportID INT FOREIGN KEY REFERENCES Sports(SportID),
+    AmountPaid DECIMAL(10, 2),
+    RemainingAmount DECIMAL(10, 2),
+    DateAndTime DATETIME,
+    CashierName NVARCHAR(255),
+    DiscountPercentage DECIMAL(5, 2) NULL
+);
+
+
+CREATE INDEX IX_Users_MembershipID ON Users (ID);
+CREATE INDEX IX_Users_MobileNumber ON Users (MobileNumber);
+
+
+-- Index on DateAndTime for better performance in date-based queries
+CREATE INDEX IX_Transactions_DateAndTime ON Transactions (DateAndTime);
+
+
+
+CREATE TABLE UserChanges (
+    ChangeID INT PRIMARY KEY IDENTITY,
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    ChangeDate DATETIME DEFAULT GETDATE(),
+    ChangedBy NVARCHAR(50),
+    ChangeDescription NVARCHAR(MAX)
+);
+
+
+ALTER PROCEDURE InsertTransaction
+    @UserID INT,
+    @SportID INT,
+    @AmountPaid DECIMAL(10, 2),
+    @DateAndTime DATETIME,
+    @CashierName NVARCHAR(255),
+    @DiscountPercentage DECIMAL(5, 2),
+    @Notes NVARCHAR(MAX) -- Add this line
+AS
+BEGIN
+    DECLARE @Price DECIMAL(10, 2);
+    DECLARE @DiscountAmount DECIMAL(10, 2);
+    DECLARE @DiscountedPrice DECIMAL(10, 2);
+    
+    -- Get the price of the sport
+    SELECT @Price = Price FROM Sports WHERE SportID = @SportID;
+    
+    -- Calculate the discount amount and discounted price
+    SET @DiscountAmount = (@Price * @DiscountPercentage) / 100;
+    SET @DiscountedPrice = @Price - @DiscountAmount;
+    
+    -- Calculate the remaining amount
+    DECLARE @RemainingAmount DECIMAL(10, 2);
+    SET @RemainingAmount = @DiscountedPrice - @AmountPaid;
+    
+    -- Insert the transaction
+    INSERT INTO Transactions (UserID, SportID, AmountPaid, RemainingAmount, DateAndTime, CashierName, DiscountPercentage, Notes) -- Add Notes column
+    VALUES (@UserID, @SportID, @AmountPaid, @RemainingAmount, @DateAndTime, @CashierName, @DiscountPercentage, @Notes);
+END;
+
+
+
+
+
+
+ ALTER VIEW vw_TransactionReport AS
+SELECT 
+    T.TransactionID,
+    U.Name AS UserName,
+    U.CheckNumber,
+    S.SportName,
+    S.Price AS SportPrice,
+    U.MobileNumber,
+    U.UserID AS UserID,         -- Include UserID explicitly if you need it
+    T.AmountPaid,
+    T.RemainingAmount,
+    T.DiscountPercentage,
+    T.DateAndTime,
+    T.CashierName,
+    T.Notes               -- Ensure Notes column is included
+FROM 
+    Transactions T
+INNER JOIN 
+    Users U ON T.UserID = U.UserID
+INNER JOIN 
+    Sports S ON T.SportID = S.SportID;
+
+
+	ALTER TABLE Transactions
+ADD Notes NVARCHAR(MAX);
+
+-- Procedure to update a transaction
+CREATE PROCEDURE UpdateTransaction
+    @TransactionID INT,
+    @UserID INT,
+    @SportID INT,
+    @AmountPaid DECIMAL(10, 2),
+    @DateAndTime DATETIME,
+    @CashierName NVARCHAR(255),
+    @DiscountPercentage DECIMAL(5, 2)
+AS
+BEGIN
+    DECLARE @Price DECIMAL(10, 2);
+    DECLARE @DiscountAmount DECIMAL(10, 2);
+    DECLARE @DiscountedPrice DECIMAL(10, 2);
+    
+    -- Get the price of the sport
+    SELECT @Price = Price FROM Sports WHERE SportID = @SportID;
+    
+    -- Calculate the discount amount and discounted price
+    SET @DiscountAmount = (@Price * @DiscountPercentage) / 100;
+    SET @DiscountedPrice = @Price - @DiscountAmount;
+    
+    -- Calculate the remaining amount
+    DECLARE @RemainingAmount DECIMAL(10, 2);
+    SET @RemainingAmount = @DiscountedPrice - @AmountPaid;
+    
+    -- Update the transaction
+    UPDATE Transactions
+    SET UserID = @UserID,
+        SportID = @SportID,
+        AmountPaid = @AmountPaid,
+        RemainingAmount = @RemainingAmount,
+        DateAndTime = @DateAndTime,
+        CashierName = @CashierName,
+        DiscountPercentage = @DiscountPercentage
+    WHERE TransactionID = @TransactionID;
+END;
+
+--------------------------------------------------------------------------------------------

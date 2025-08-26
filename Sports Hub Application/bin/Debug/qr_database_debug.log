@@ -1,0 +1,11 @@
+2025-05-06 18:19:17,482 - INFO - Created local directory at C:\Users\SELIM\Desktop\QRCodeSubscriptions
+2025-05-06 18:19:17,501 - INFO - Server path is accessible: \\192.168.50.5\e\QRCG.KPL\QRCodeSubscriptions
+2025-05-06 18:19:17,630 - DEBUG - STREAM b'IHDR' 16 13
+2025-05-06 18:19:17,631 - DEBUG - STREAM b'pHYs' 41 9
+2025-05-06 18:19:17,631 - DEBUG - STREAM b'IDAT' 62 1048576
+2025-05-06 18:19:17,776 - INFO - Saved QR code locally at: C:\Users\SELIM\Desktop\QRCodeSubscriptions\Test Selim_20250506181917_qr.png
+2025-05-06 18:19:17,805 - INFO - Saved QR code on server at: \\192.168.50.5\e\QRCG.KPL\QRCodeSubscriptions\Test Selim_20250506181917_qr.png
+2025-05-06 18:19:17,805 - DEBUG - Subscription data: ('Test Selim', '121212121211', '11111111111', 'œ—Ã… 1', 'ﬂ—… ﬁœ„ ÃÊ·œ‰ ·Ìœ—', '111', '2025-05-06', '‘Â—', '2025-05-31', '«·Œ„Ì”', '1', '4', '1', 'C:\\Users\\SELIM\\Desktop\\QRCodeSubscriptions\\Test Selim_20250506181917_qr.png', '\\\\192.168.50.5\\e\\QRCG.KPL\\QRCodeSubscriptions\\Test Selim_20250506181917_qr.png', 'ss', 'Mohammed-Selim')
+2025-05-06 18:19:17,817 - DEBUG - Successfully added subscription with ID: 37
+2025-05-06 18:19:17,817 - DEBUG - Database add_subscription result: 37
+2025-05-06 18:19:17,817 - INFO - Successfully added subscription to database with ID: 37

@@ -1,0 +1,383 @@
+CREATE TABLE Sports (
+    SportID INT PRIMARY KEY IDENTITY,
+    SportName NVARCHAR(100),
+    MemberPrice DECIMAL(10, 2),
+    CivilianPrice DECIMAL(10, 2),
+    Degree1Price DECIMAL(10, 2),
+    MilitaryPrice DECIMAL(10, 2)
+);
+
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY IDENTITY,
+    Name NVARCHAR(100) NOT NULL,
+    CheckNumber NVARCHAR(50) NOT NULL,
+    MobileNumber NVARCHAR(50) NOT NULL,
+    Category NVARCHAR(50) NOT NULL,
+    ID NVARCHAR(50) NOT NULL,
+    ProfileImage VARBINARY(MAX),
+    DateUpdated DATETIME DEFAULT GETDATE()
+);
+
+
+CREATE TABLE Transactions (
+    TransactionID INT PRIMARY KEY IDENTITY,
+    UserID INT FOREIGN KEY REFERENCES Users(UserID),
+    SportID INT FOREIGN KEY REFERENCES Sports(SportID),
+    AmountPaid DECIMAL(10, 2) NOT NULL,
+    RemainingAmount DECIMAL(10, 2) NOT NULL,
+    DateAndTime DATETIME DEFAULT GETDATE(),
+    CashierName NVARCHAR(255) NOT NULL,
+    DiscountPercentage DECIMAL(5, 2) CHECK (DiscountPercentage >= 0 AND DiscountPercentage <= 100) NULL
+);
+
+
+-- Indexes for performance
+CREATE INDEX IDX_Users_MobileNumber ON Users (MobileNumber);
+CREATE INDEX IDX_Transactions_DateAndTime ON Transactions (DateAndTime);
+
+ALTER TABLE Transactions
+ADD Notes NVARCHAR(MAX);
+
+Create PROCEDURE InsertTransaction
+    @UserID INT,
+    @SportID INT,
+    @AmountPaid DECIMAL(10, 2),
+    @DateAndTime DATETIME,
+    @CashierName NVARCHAR(255),
+    @DiscountPercentage DECIMAL(5, 2),
+    @Notes NVARCHAR(MAX)
+AS
+BEGIN
+    -- Start a transaction
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Validate the discount percentage
+        IF @DiscountPercentage < 0 OR @DiscountPercentage > 100
+        BEGIN
+            THROW 50000, 'Discount percentage must be between 0 and 100.', 1;
+        END
+
+        -- Validate the amount paid
+        IF @AmountPaid < 0
+        BEGIN
+            THROW 50001, 'Amount paid cannot be negative.', 1;
+        END
+
+        DECLARE @Category NVARCHAR(50);
+        DECLARE @Price DECIMAL(10, 2);
+        DECLARE @DiscountAmount DECIMAL(10, 2);
+        DECLARE @DiscountedPrice DECIMAL(10, 2);
+        DECLARE @RemainingAmount DECIMAL(10, 2);
+
+        -- Get the user's category
+        SELECT @Category = Category FROM Users WHERE UserID = @UserID;
+
+        IF @Category IS NULL
+        BEGIN
+            THROW 50004, 'Invalid UserID.', 1;
+        END
+
+        -- Get the price of the sport based on the category
+        IF @Category = 'عضو'
+        BEGIN
+            SELECT @Price = MemberPrice FROM Sports WHERE SportID = @SportID;
+        END
+        ELSE IF @Category = 'مدني'
+        BEGIN
+            SELECT @Price = CivilianPrice FROM Sports WHERE SportID = @SportID;
+        END
+        ELSE IF @Category = 'درجة 1'
+        BEGIN
+            SELECT @Price = Degree1Price FROM Sports WHERE SportID = @SportID;
+        END
+        ELSE IF @Category = 'جيش'
+        BEGIN
+            SELECT @Price = MilitaryPrice FROM Sports WHERE SportID = @SportID;
+        END
+        ELSE
+        BEGIN
+            THROW 50005, 'Invalid Category.', 1;
+        END
+
+        IF @Price IS NULL
+        BEGIN
+            THROW 50002, 'Invalid SportID.', 1;
+        END
+
+        -- Calculate the discount amount and discounted price
+        SET @DiscountAmount = (@Price * @DiscountPercentage) / 100;
+        SET @DiscountedPrice = @Price - @DiscountAmount;
+
+        -- Calculate the remaining amount
+        SET @RemainingAmount = @DiscountedPrice - @AmountPaid;
+
+        -- Insert the transaction
+        INSERT INTO Transactions (UserID, SportID, AmountPaid, RemainingAmount, DateAndTime, CashierName, DiscountPercentage, Notes)
+        VALUES (@UserID, @SportID, @AmountPaid, @RemainingAmount, @DateAndTime, @CashierName, @DiscountPercentage, @Notes);
+
+        -- Commit the transaction
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Rollback the transaction if any error occurs
+        ROLLBACK TRANSACTION;
+        -- Return the error message
+        THROW;
+    END CATCH
+END;
+
+
+CREATE FUNCTION dbo.NormalizeArabicText (@text NVARCHAR(MAX))
+RETURNS NVARCHAR(MAX)
+AS
+BEGIN
+    -- Replace different forms of Arabic characters with their normalized forms
+    RETURN REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+        @text,
+        N'أ', N'ا'),   -- Normalize 'أ' to 'ا'
+        N'إ', N'ا'),   -- Normalize 'إ' to 'ا'
+        N'آ', N'ا'),   -- Normalize 'آ' to 'ا'
+        N'ى', N'ي'),   -- Normalize 'ى' to 'ي'
+        N'ئ', N'ي'),   -- Normalize 'ئ' to 'ي'
+        N'ة', N'ه')    -- Normalize 'ة' to 'ه'
+END
+
+
+CREATE FUNCTION dbo.ReverseNormalizeArabicText (@text NVARCHAR(MAX))
+RETURNS NVARCHAR(MAX)
+AS
+BEGIN
+    -- Replace normalized characters with their original forms
+    RETURN REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+        @text,
+        N'ا', N'أ'),   -- Reverse normalize 'ا' to 'أ'
+        N'ا', N'إ'),   -- Reverse normalize 'ا' to 'إ'
+        N'ا', N'آ'),   -- Reverse normalize 'ا' to 'آ'
+        N'ي', N'ى'),   -- Reverse normalize 'ي' to 'ى'
+        N'ي', N'ئ'),   -- Reverse normalize 'ي' to 'ئ'
+        N'ه', N'ة')    -- Reverse normalize 'ه' to 'ة'
+END
+
+CREATE PROCEDURE GetTransactionsByDate
+    @StartDate DATETIME,
+    @EndDate DATETIME
+AS
+BEGIN
+    SELECT 
+        t.TransactionID,
+        u.Name AS UserName,
+        s.SportName AS SportName,
+        t.AmountPaid,
+        t.RemainingAmount,
+        t.DateAndTime,
+        t.CashierName,
+        t.DiscountPercentage
+    FROM Transactions t
+    INNER JOIN Users u ON t.UserID = u.UserID
+    INNER JOIN Sports s ON t.SportID = s.SportID
+    WHERE t.DateAndTime >= @StartDate AND t.DateAndTime <= @EndDate
+    ORDER BY t.DateAndTime;
+END;
+
+
+
+
+
+
+  Create VIEW vw_TransactionReport AS
+SELECT 
+    T.TransactionID AS TransactionID,
+    U.UserID AS UserID,
+    U.Name AS UserName,
+    U.CheckNumber AS CheckNumber,
+    S.SportName AS SportName,
+    CASE
+        WHEN U.Category = 'عضو' THEN S.MemberPrice
+        WHEN U.Category = 'مدني' THEN S.CivilianPrice
+        WHEN U.Category = 'درجة 1' THEN S.Degree1Price
+        WHEN U.Category = 'جيش' THEN S.MilitaryPrice
+        ELSE NULL
+    END AS SportPrice,
+    U.Category AS Category,
+    U.MobileNumber AS MobileNumber,
+    T.AmountPaid AS AmountPaid,
+    T.RemainingAmount AS RemainingAmount,
+    T.DiscountPercentage AS Discount,
+    T.DateAndTime AS DateAndTime,
+    T.CashierName AS CashierName,
+    T.Notes AS Notes
+FROM 
+    Transactions T
+INNER JOIN 
+    Users U ON T.UserID = U.UserID
+INNER JOIN 
+    Sports S ON T.SportID = S.SportID;
+
+
+	CREATE TABLE CashierDetails (
+    CashierID INT IDENTITY(1,1) PRIMARY KEY,
+    Username NVARCHAR(50) NOT NULL UNIQUE,
+    PasswordHash NVARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Roles (
+    RoleID INT IDENTITY(1,1) PRIMARY KEY,
+    RoleName NVARCHAR(50) NOT NULL UNIQUE
+);
+
+INSERT INTO Roles (RoleName) VALUES ('Cashier');
+INSERT INTO Roles (RoleName) VALUES ('Admin');
+INSERT INTO Roles (RoleName) VALUES ('Control');
+
+
+ALTER TABLE CashierDetails
+ADD RoleID INT FOREIGN KEY REFERENCES Roles(RoleID) NOT NULL DEFAULT 1;
+
+
+
+
+	DROP FUNCTION IF EXISTS dbo.NormalizeArabicText;
+
+	DROP FUNCTION IF EXISTS dbo.ReverseNormalizeArabicText;
+
+
+
+	Edit -----------------------------
+
+
+ ALTER TABLE Transactions
+ADD CheckNumber NVARCHAR(50);
+
+
+UPDATE Transactions
+SET CheckNumber = u.CheckNumber
+FROM Transactions t
+JOIN Users u ON t.UserID = u.UserID;
+
+ALTER TABLE Users
+DROP COLUMN CheckNumber;
+
+
+Alter PROCEDURE InsertTransaction
+    @UserID INT,
+    @SportID INT,
+    @AmountPaid DECIMAL(10, 2),
+    @DateAndTime DATETIME,
+    @CashierName NVARCHAR(255),
+    @DiscountPercentage DECIMAL(5, 2),
+    @Notes NVARCHAR(MAX),
+    @CheckNumber NVARCHAR(50) -- Add CheckNumber parameter
+AS
+BEGIN
+    -- Start a transaction
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Validate the discount percentage
+        IF @DiscountPercentage < 0 OR @DiscountPercentage > 100
+        BEGIN
+            THROW 50000, 'Discount percentage must be between 0 and 100.', 1;
+        END
+
+        -- Validate the amount paid
+        IF @AmountPaid < 0
+        BEGIN
+            THROW 50001, 'Amount paid cannot be negative.', 1;
+        END
+
+        DECLARE @Category NVARCHAR(50);
+        DECLARE @Price DECIMAL(10, 2);
+        DECLARE @DiscountAmount DECIMAL(10, 2);
+        DECLARE @DiscountedPrice DECIMAL(10, 2);
+        DECLARE @RemainingAmount DECIMAL(10, 2);
+
+        -- Get the user's category
+        SELECT @Category = Category FROM Users WHERE UserID = @UserID;
+
+        IF @Category IS NULL
+        BEGIN
+            THROW 50004, 'Invalid UserID.', 1;
+        END
+
+        -- Get the price of the sport based on the category
+        IF @Category = 'عضو'
+        BEGIN
+            SELECT @Price = MemberPrice FROM Sports WHERE SportID = @SportID;
+        END
+        ELSE IF @Category = 'مدني'
+        BEGIN
+            SELECT @Price = CivilianPrice FROM Sports WHERE SportID = @SportID;
+        END
+        ELSE IF @Category = 'درجة 1'
+        BEGIN
+            SELECT @Price = Degree1Price FROM Sports WHERE SportID = @SportID;
+        END
+        ELSE IF @Category = 'جيش'
+        BEGIN
+            SELECT @Price = MilitaryPrice FROM Sports WHERE SportID = @SportID;
+        END
+        ELSE
+        BEGIN
+            THROW 50005, 'Invalid Category.', 1;
+        END
+
+        IF @Price IS NULL
+        BEGIN
+            THROW 50002, 'Invalid SportID.', 1;
+        END
+
+        -- Calculate the discount amount and discounted price
+        SET @DiscountAmount = (@Price * @DiscountPercentage) / 100;
+        SET @DiscountedPrice = @Price - @DiscountAmount;
+
+        -- Calculate the remaining amount
+        SET @RemainingAmount = @DiscountedPrice - @AmountPaid;
+
+        -- Insert the transaction
+        INSERT INTO Transactions (UserID, SportID, AmountPaid, RemainingAmount, DateAndTime, CashierName, DiscountPercentage, Notes, CheckNumber)
+        VALUES (@UserID, @SportID, @AmountPaid, @RemainingAmount, @DateAndTime, @CashierName, @DiscountPercentage, @Notes, @CheckNumber);
+
+        -- Commit the transaction
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Rollback the transaction if any error occurs
+        ROLLBACK TRANSACTION;
+        -- Return the error message
+        THROW;
+    END CATCH
+END;
+
+
+Alter VIEW vw_TransactionReport AS
+SELECT 
+    T.TransactionID,
+    T.UserID,
+    U.Name AS UserName,
+    T.CheckNumber,
+    S.SportName,
+    CASE 
+        WHEN U.Category = 'عضو' THEN S.MemberPrice
+        WHEN U.Category = 'مدني' THEN S.CivilianPrice
+        WHEN U.Category = 'درجة 1' THEN S.Degree1Price
+        WHEN U.Category = 'جيش' THEN S.MilitaryPrice
+        ELSE NULL
+    END AS SportPrice,
+    U.Category,
+    U.MobileNumber,
+    T.AmountPaid,
+    T.RemainingAmount,
+    T.DiscountPercentage AS DiscountPercentage,
+    T.DateAndTime,
+    T.CashierName,
+    T.Notes
+FROM 
+    Transactions T
+JOIN 
+    Users U ON T.UserID = U.UserID
+JOIN 
+    Sports S ON T.SportID = S.SportID;
+
+
+--------------------------

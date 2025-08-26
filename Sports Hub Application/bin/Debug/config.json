@@ -1,0 +1,14 @@
+{
+    "server_path": "\\\\192.168.50.5\\e\\QRCG.KPL",
+    "db_server": "192.168.50.5",
+    "db_name": "QRSubscriptions",
+    "db_user": "sa",
+    "db_password": "comsys@123",
+    "use_windows_auth": false,
+    "qr_folder": "QRCodeSubscriptions",
+    "watermark": "watermark.png",
+    "icon": "logoICO.ico",
+    "database_version": 2,
+    "connection_timeout": 30,
+    "connection_pool_size": 5
+}
