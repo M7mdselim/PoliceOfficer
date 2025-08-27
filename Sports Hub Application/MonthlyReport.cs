@@ -102,50 +102,64 @@ namespace Mixed_Gym_Application
         {
 
             string query = @"
-    SELECT 
-        T.TransactionID,
-        T.UserID,
-        T.UserName,
-        T.CheckNumber,
-        T.SportName,
-        T.SportPrice,  -- This column now reflects the correct price based on user category
-        T.Category,
-        T.MobileNumber,
-        T.AmountPaid,
-        T.RemainingAmount,
-        T.DiscountPercentage,
-        T.VATAmount,  -- Already calculated in the view
-        T.TotalPriceWithVAT,  -- Total price including VAT (with discount applied)
-        T.DateAndTime,
-        T.CashierName,
-        T.Notes
-    FROM 
-        vw_TransactionReport T
-    WHERE 
-       YEAR(T.DateAndTime) = @Year AND MONTH(T.DateAndTime) = @Month
-    UNION ALL
-    SELECT 
-        NULL AS TransactionID,
-        NULL AS UserID,
-        'Total' AS UserName,
-        NULL AS CheckNumber,
-        NULL AS SportName,
-        SUM(T.SportPrice) AS SportPrice,
-        NULL AS Category,
-        NULL AS MobileNumber,
-        SUM(T.AmountPaid) AS AmountPaid,
-        SUM(T.RemainingAmount) AS RemainingAmount,
-        NULL AS DiscountPercentage,
-        SUM(T.VATAmount) AS VATAmount,  -- Sum VAT for the total row
-        SUM(T.TotalPriceWithVAT) AS TotalPriceWithVAT,  -- Sum TotalPriceWithVAT for the total row
-        NULL AS DateAndTime,
-        NULL AS CashierName,
-        NULL AS Notes
-    FROM 
-        vw_TransactionReport T
-    WHERE 
-        YEAR(T.DateAndTime) = @Year AND MONTH(T.DateAndTime) = @Month
-            ";
+SELECT 
+    P.PrisonerID,
+    P.FullName,
+    P.ReservationNumber,
+    P.CaseID,
+    P.DangerousLevel,
+    P.PrisonerStatus,
+    P.Accused,
+    P.PrinciplesType,
+    P.ServiceTime,
+    P.HospitalDate,
+    P.LeaveDate,
+    P.NIDNumber,
+    P.CriminalRecord,
+    P.ImprisonmentDetails,
+    P.SecurityRevealed,
+    P.CensorshipInfo,
+    P.Notes,
+    P.CreatedDate,
+    P.LastModified,
+    P.CreatedBy,
+    P.ModifiedBy
+FROM 
+    vw_PrisonerReport P
+WHERE 
+    YEAR(P.CreatedDate) = @Year 
+    AND MONTH(P.CreatedDate) = @Month
+
+UNION ALL
+
+SELECT
+    NULL AS PrisonerID,
+    'Total Prisoners' AS FullName,       
+    CAST(COUNT(*) AS NVARCHAR(10)) AS ReservationNumber, 
+    NULL AS CaseID,
+    NULL AS DangerousLevel,
+    NULL AS PrisonerStatus,
+    NULL AS Accused,
+    NULL AS PrinciplesType,
+    NULL AS ServiceTime,
+    NULL AS HospitalDate,
+    NULL AS LeaveDate,
+    NULL AS NIDNumber,
+    NULL AS CriminalRecord,
+    NULL AS ImprisonmentDetails,
+    NULL AS SecurityRevealed,
+    NULL AS CensorshipInfo,
+    NULL AS Notes,
+    NULL AS CreatedDate,
+    NULL AS LastModified,
+    NULL AS CreatedBy,
+    NULL AS ModifiedBy
+FROM 
+    vw_PrisonerReport P
+WHERE 
+    YEAR(P.CreatedDate) = @Year 
+    AND MONTH(P.CreatedDate) = @Month
+";
 
             using (SqlConnection connection = new SqlConnection(DatabaseConfig.connectionString))
             {
@@ -163,66 +177,77 @@ namespace Mixed_Gym_Application
                             dataTable.Load(reader);
                             transactionsGridView.DataSource = dataTable;
 
-                            // Optionally customize column headers
-                            transactionsGridView.Columns["UserName"].HeaderText = "User Name";
-                            transactionsGridView.Columns["SportName"].HeaderText = "Sport Name";
+                            // ✅ Customize headers in Arabic
+                            transactionsGridView.Columns["FullName"].HeaderText = "الاسم";
+                            transactionsGridView.Columns["ReservationNumber"].HeaderText = "رقم الحجز";
+                            transactionsGridView.Columns["CaseID"].HeaderText = "رقم القضية";
+                            transactionsGridView.Columns["DangerousLevel"].HeaderText = "درجة الخطورة";
+                            transactionsGridView.Columns["PrisonerStatus"].HeaderText = "الحالة";
+                            transactionsGridView.Columns["Accused"].HeaderText = "التهمه";
+                            transactionsGridView.Columns["PrinciplesType"].HeaderText = "مبدأ الحبس";
+                            transactionsGridView.Columns["ServiceTime"].HeaderText = "مده الحكم";
+                            transactionsGridView.Columns["HospitalDate"].HeaderText = "تاريخ المستشفى";
+                            transactionsGridView.Columns["LeaveDate"].HeaderText = "تاريخ الخروج";
+                            transactionsGridView.Columns["NIDNumber"].HeaderText = "رقم الهوية";
 
-                            // Ensure UserID column is hidden
-                            transactionsGridView.Columns["UserID"].Visible = false;
+                            // ✅ New fields
+                            transactionsGridView.Columns["CriminalRecord"].HeaderText = "الفيش الجنائي";
+                            transactionsGridView.Columns["ImprisonmentDetails"].HeaderText = "نماذج الحبس";
+                            transactionsGridView.Columns["SecurityRevealed"].HeaderText = "كشف أمن عام";
+                            transactionsGridView.Columns["CensorshipInfo"].HeaderText = "خطاب الرقابة";
+                            transactionsGridView.Columns["Notes"].HeaderText = "ملاحظات";
+
+                            transactionsGridView.Columns["CreatedDate"].HeaderText = "تاريخ الإنشاء";
+                            transactionsGridView.Columns["LastModified"].HeaderText = "آخر تعديل";
+                            transactionsGridView.Columns["CreatedBy"].HeaderText = "تم الإنشاء بواسطة";
+                            transactionsGridView.Columns["ModifiedBy"].HeaderText = "تم التعديل بواسطة";
+
+                            // Hide internal ID
+                            transactionsGridView.Columns["PrisonerID"].Visible = false;
+
+                            // Arabic-friendly font
+                            transactionsGridView.DefaultCellStyle.Font = new Font("Tahoma", 10);
                         }
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("An error occurred while loading transactions: " + ex.Message);
+                        MessageBox.Show("An error occurred while loading prisoners: " + ex.Message);
                     }
                 }
             }
         }
+
 
         private async void transactionsGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (e.RowIndex >= 0 && e.RowIndex < transactionsGridView.Rows.Count)
             {
-                // Ensure the UserID column exists and is not empty
-                if (transactionsGridView.Rows[e.RowIndex].Cells["UserID"].Value != DBNull.Value)
-                {
-                    int userId = Convert.ToInt32(transactionsGridView.Rows[e.RowIndex].Cells["UserID"].Value);
+                DataGridViewRow row = transactionsGridView.Rows[e.RowIndex];
 
-                    using (SqlConnection connection = new SqlConnection(DatabaseConfig.connectionString))
-                    {
-                        Image profileImage = await GetUserProfileImageAsync(userId, connection);
+                string prisonerId = row.Cells["PrisonerID"].Value?.ToString();
+                if (string.IsNullOrEmpty(prisonerId))
+                    return; // skip if it's the "إجمالي السجناء" row
 
-                        if (profileImage != null)
-                        {
-                            // Create a form to display the image
-                            Form imageForm = new Form
-                            {
-                                Width = 400,
-                                Height = 400,
-                                StartPosition = FormStartPosition.CenterScreen,
-                                Text = "User Profile Image"
-                            };
-                            PictureBox pictureBox = new PictureBox
-                            {
-                                Dock = DockStyle.Fill,
-                                Image = profileImage,
-                                SizeMode = PictureBoxSizeMode.Zoom
-                            };
-                            imageForm.Controls.Add(pictureBox);
-                            imageForm.ShowDialog();
-                        }
-                        else
-                        {
-                            MessageBox.Show("No profile image found for this user.");
-                        }
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("User ID is missing for this row.");
-                }
+                string fullName = row.Cells["FullName"].Value?.ToString();
+                string criminalRecord = row.Cells["CriminalRecord"].Value?.ToString();
+                string imprisonmentDetails = row.Cells["ImprisonmentDetails"].Value?.ToString();
+                string securityRevealed = row.Cells["SecurityRevealed"].Value?.ToString();
+                string censorshipInfo = row.Cells["CensorshipInfo"].Value?.ToString();
+                string notes = row.Cells["Notes"].Value?.ToString();
+
+                string details =
+                    $"👤 الاسم: {fullName}\n" +
+                    $"🆔 رقم السجين: {prisonerId}\n\n" +
+                    $"📜 الفيش الجنائي:\n{criminalRecord}\n\n" +
+                    $"⛓️ نماذج الحبس:\n{imprisonmentDetails}\n\n" +
+                    $"🔒 كشف أمن عام:\n{securityRevealed}\n\n" +
+                    $"📝 خطاب الرقابة:\n{censorshipInfo}\n\n" +
+                    $"📌 ملاحظات:\n{notes}";
+
+                MessageBox.Show(details, "تفاصيل السجين", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
 
         private async Task<Image> GetUserProfileImageAsync(int userId, SqlConnection connection)
         {

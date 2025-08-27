@@ -523,6 +523,7 @@
             this.nidnumber.StateCommon.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.nidnumber.TabIndex = 55;
             this.nidnumber.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.nidnumber.TextChanged += new System.EventHandler(this.nidnumber_TextChanged);
             // 
             // servicetimetxt
             // 

@@ -24,11 +24,12 @@ namespace Mixed_Gym_Application
         {
             InitializeComponent();
             currentUsername = username;
-           
+            this.nidnumber.Leave += new System.EventHandler(this.nidnumber_Leave);
+
+
             this.Text = $"Prison Management System - Welcome {username}";
         }
 
-      
 
         private void addprisonerbtn_Click(object sender, EventArgs e)
         {
@@ -39,41 +40,82 @@ namespace Mixed_Gym_Application
                     using (SqlConnection connection = new SqlConnection(connectionString))
                     {
                         connection.Open();
-                        string query = @"INSERT INTO Prisoner 
-                            (FullName, ReservationNumber, CaseID, DangerousLevel, PrisonerStatus, 
-                             Accused, PrinciplesType, ServiceTime, HospitalDate, LeaveDate, 
-                             NIDNumber, CriminalRecord, ImprisonmentDetails, SecurityRevealed, 
-                             CensorshipInfo, Notes, CreatedBy) 
-                            VALUES 
-                            (@FullName, @ReservationNumber, @CaseID, @DangerousLevel, @PrisonerStatus, 
-                             @Accused, @PrinciplesType, @ServiceTime, @HospitalDate, @LeaveDate, 
-                             @NIDNumber, @CriminalRecord, @ImprisonmentDetails, @SecurityRevealed, 
-                             @CensorshipInfo, @Notes, @CreatedBy)";
 
-                        using (SqlCommand command = new SqlCommand(query, connection))
+                        int prisonerInfoId;
+
+                        // 1) Check if PrisonerInfo already exists by NIDNumber
+                        string checkQuery = "SELECT PrisonerInfoID FROM PrisonerInfo WHERE NIDNumber = @NIDNumber";
+                        using (SqlCommand checkCmd = new SqlCommand(checkQuery, connection))
                         {
-                            command.Parameters.AddWithValue("@FullName", fullNametxt.Text.Trim());
-                            command.Parameters.AddWithValue("@ReservationNumber", reservationnumber.Text.Trim());
-                            command.Parameters.AddWithValue("@CaseID", caseid.Text.Trim());
-                            command.Parameters.AddWithValue("@DangerousLevel", dangerouslevelcombo.SelectedItem?.ToString() ?? "");
-                            command.Parameters.AddWithValue("@PrisonerStatus", prisonerstatus.SelectedItem?.ToString() ?? "");
-                            command.Parameters.AddWithValue("@Accused", accusedtxt.Text.Trim());
-                            command.Parameters.AddWithValue("@PrinciplesType", principlestxt.Text);
-                            command.Parameters.AddWithValue("@ServiceTime", servicetimetxt.Text);
-                            command.Parameters.AddWithValue("@HospitalDate", hospitaldate.Value);
-                            command.Parameters.AddWithValue("@LeaveDate", leavedate.Value);
-                            command.Parameters.AddWithValue("@NIDNumber", nidnumber.Text.Trim());
-                            command.Parameters.AddWithValue("@CriminalRecord", criminalrecordtxt.Text.Trim());
-                            command.Parameters.AddWithValue("@ImprisonmentDetails", Imprisonmenttxt.Text.Trim());
-                            command.Parameters.AddWithValue("@SecurityRevealed", securityrevealedtxt.Text.Trim());
-                            command.Parameters.AddWithValue("@CensorshipInfo", Censorshiptxt.Text.Trim());
-                            command.Parameters.AddWithValue("@Notes", notestxt.Text.Trim());
-                            command.Parameters.AddWithValue("@CreatedBy", currentUsername);
+                            checkCmd.Parameters.AddWithValue("@NIDNumber", nidnumber.Text.Trim());
+                            object existingId = checkCmd.ExecuteScalar();
 
-                            int result = command.ExecuteNonQuery();
+                            if (existingId != null) // already exists
+                            {
+                                prisonerInfoId = Convert.ToInt32(existingId);
+                            }
+                            else
+                            {
+                                // Insert new PrisonerInfo
+                                string insertPrisonerInfo = @"
+                            INSERT INTO PrisonerInfo (FullName, NIDNumber, DangerousLevel, PrisonerStatus, CreatedBy)
+                            VALUES (@FullName, @NIDNumber, @DangerousLevel, @PrisonerStatus, @CreatedBy);
+                            SELECT SCOPE_IDENTITY();";
+
+                                using (SqlCommand cmdInfo = new SqlCommand(insertPrisonerInfo, connection))
+                                {
+                                    cmdInfo.Parameters.AddWithValue("@FullName", fullNametxt.Text.Trim());
+                                    cmdInfo.Parameters.AddWithValue("@NIDNumber", nidnumber.Text.Trim());
+                                    cmdInfo.Parameters.AddWithValue("@DangerousLevel", dangerouslevelcombo.SelectedItem?.ToString() ?? "");
+                                    cmdInfo.Parameters.AddWithValue("@PrisonerStatus", prisonerstatus.SelectedItem?.ToString() ?? "");
+                                    cmdInfo.Parameters.AddWithValue("@CreatedBy", currentUsername);
+
+                                    prisonerInfoId = Convert.ToInt32(cmdInfo.ExecuteScalar());
+                                }
+                            }
+                        }
+
+                        // 2) Insert into Prisoner table
+                        string insertPrisoner = @"
+                    INSERT INTO Prisoner 
+                    (PrisonerInfoID, FullName, ReservationNumber, CaseID, DangerousLevel, PrisonerStatus, 
+                     Accused, PrinciplesType, ServiceTime, HospitalDate, LeaveDate, 
+                     NIDNumber, CriminalRecord, ImprisonmentDetails, SecurityRevealed, 
+                     CensorshipInfo, Notes, CreatedBy) 
+                    VALUES 
+                    (@PrisonerInfoID, @FullName, @ReservationNumber, @CaseID, @DangerousLevel, @PrisonerStatus, 
+                     @Accused, @PrinciplesType, @ServiceTime, @HospitalDate, @LeaveDate, 
+                     @NIDNumber, @CriminalRecord, @ImprisonmentDetails, @SecurityRevealed, 
+                     @CensorshipInfo, @Notes, @CreatedBy)";
+
+                        using (SqlCommand cmdPrisoner = new SqlCommand(insertPrisoner, connection))
+                        {
+                            cmdPrisoner.Parameters.AddWithValue("@PrisonerInfoID", prisonerInfoId);
+                            cmdPrisoner.Parameters.AddWithValue("@FullName", fullNametxt.Text.Trim());
+                            cmdPrisoner.Parameters.AddWithValue("@ReservationNumber", reservationnumber.Text.Trim());
+                            cmdPrisoner.Parameters.AddWithValue("@CaseID", caseid.Text.Trim());
+                            cmdPrisoner.Parameters.AddWithValue("@DangerousLevel", dangerouslevelcombo.SelectedItem?.ToString() ?? "");
+                            cmdPrisoner.Parameters.AddWithValue("@PrisonerStatus", prisonerstatus.SelectedItem?.ToString() ?? "");
+                            cmdPrisoner.Parameters.AddWithValue("@Accused", accusedtxt.Text.Trim());
+                            cmdPrisoner.Parameters.AddWithValue("@PrinciplesType", principlestxt.Text);
+                            cmdPrisoner.Parameters.AddWithValue("@ServiceTime", servicetimetxt.Text);
+                            cmdPrisoner.Parameters.AddWithValue("@HospitalDate", hospitaldate.Value);
+                            cmdPrisoner.Parameters.AddWithValue("@LeaveDate", leavedate.Value);
+                            cmdPrisoner.Parameters.AddWithValue("@NIDNumber", nidnumber.Text.Trim());
+                            cmdPrisoner.Parameters.AddWithValue("@CriminalRecord", criminalrecordtxt.Text.Trim());
+                            cmdPrisoner.Parameters.AddWithValue("@ImprisonmentDetails", Imprisonmenttxt.Text.Trim());
+                            cmdPrisoner.Parameters.AddWithValue("@SecurityRevealed", securityrevealedtxt.Text.Trim());
+                            cmdPrisoner.Parameters.AddWithValue("@CensorshipInfo", Censorshiptxt.Text.Trim());
+                            cmdPrisoner.Parameters.AddWithValue("@Notes", notestxt.Text.Trim());
+                            cmdPrisoner.Parameters.AddWithValue("@CreatedBy", currentUsername);
+
+                            int result = cmdPrisoner.ExecuteNonQuery();
                             if (result > 0)
                             {
                                 MessageBox.Show("Prisoner added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                fullNametxt.ReadOnly = false;
+                                dangerouslevelcombo.Enabled = true;
+                                prisonerstatus.Enabled = true;
                                 ResetForm();
                             }
                             else
@@ -89,6 +131,7 @@ namespace Mixed_Gym_Application
                 }
             }
         }
+
 
         private bool ValidateForm()
         {
@@ -201,6 +244,90 @@ namespace Mixed_Gym_Application
         private void Cashier_Load(object sender, EventArgs e)
         {
             cashiernamelabel.Text= currentUsername;
+
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "SELECT DISTINCT NIDNumber FROM PrisonerInfo WHERE NIDNumber IS NOT NULL";
+
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            AutoCompleteStringCollection nidList = new AutoCompleteStringCollection();
+
+                            while (reader.Read())
+                            {
+                                nidList.Add(reader["NIDNumber"].ToString());
+                            }
+
+                            nidnumber.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+                            nidnumber.AutoCompleteSource = AutoCompleteSource.CustomSource;
+                            nidnumber.AutoCompleteCustomSource = nidList;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading NID suggestions: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void nidnumber_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(nidnumber.Text))
+                return;
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = @"SELECT FullName, DangerousLevel, PrisonerStatus 
+                             FROM PrisonerInfo 
+                             WHERE NIDNumber = @NIDNumber";
+
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@NIDNumber", nidnumber.Text.Trim());
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                // Fill fields
+                                fullNametxt.Text = reader["FullName"].ToString();
+                                dangerouslevelcombo.SelectedItem = reader["DangerousLevel"].ToString();
+                                prisonerstatus.SelectedItem = reader["PrisonerStatus"].ToString();
+
+                                // Lock them
+                                fullNametxt.ReadOnly = true;
+                                dangerouslevelcombo.Enabled = false;
+                                prisonerstatus.Enabled = false;
+                            }
+                            else
+                            {
+                                // No existing NID → unlock fields to allow new input
+                                fullNametxt.ReadOnly = false;
+                                dangerouslevelcombo.Enabled = true;
+                                prisonerstatus.Enabled = true;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error retrieving prisoner info: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void nidnumber_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

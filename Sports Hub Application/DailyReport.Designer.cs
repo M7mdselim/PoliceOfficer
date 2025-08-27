@@ -28,7 +28,7 @@ namespace Mixed_Gym_Application
             // loadReportButton
             // 
             this.loadReportButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.loadReportButton.Font = new System.Drawing.Font("PT Bold Heading", 15.75F);
+            this.loadReportButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F);
             this.loadReportButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
             this.loadReportButton.Location = new System.Drawing.Point(722, 529);
             this.loadReportButton.Name = "loadReportButton";
@@ -40,8 +40,7 @@ namespace Mixed_Gym_Application
             // 
             // transactionsGridView
             // 
-            this.transactionsGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.transactionsGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
+            this.transactionsGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.transactionsGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.transactionsGridView.Location = new System.Drawing.Point(10, 86);
             this.transactionsGridView.Name = "transactionsGridView";
@@ -55,18 +54,18 @@ namespace Mixed_Gym_Application
             // 
             this.titleLabel.AutoSize = true;
             this.titleLabel.BackColor = System.Drawing.Color.Transparent;
-            this.titleLabel.Font = new System.Drawing.Font("PT Bold Heading", 21.75F);
+            this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F);
             this.titleLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
             this.titleLabel.Location = new System.Drawing.Point(320, -4);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(281, 52);
+            this.titleLabel.Size = new System.Drawing.Size(223, 33);
             this.titleLabel.TabIndex = 3;
             this.titleLabel.Text = "تقرير يومي جيم ميكس";
             // 
             // PrintButton
             // 
             this.PrintButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.PrintButton.Font = new System.Drawing.Font("PT Bold Heading", 15.75F);
+            this.PrintButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F);
             this.PrintButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
             this.PrintButton.Location = new System.Drawing.Point(12, 529);
             this.PrintButton.Name = "PrintButton";

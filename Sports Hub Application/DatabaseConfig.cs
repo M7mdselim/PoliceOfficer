@@ -37,8 +37,9 @@ public static class DatabaseConfig
         //}
 
 
-        connectionString = $"Data Source=Mohammed-selim;Initial Catalog=MixedGymDB;Integrated Security=True;Encrypt=False";
+       // connectionString = $"Data Source=Mohammed-selim;Initial Catalog=MixedGymDB;Integrated Security=True;Encrypt=False";
+        connectionString = $"Data Source=Desktop-Q5l24on;Initial Catalog=MixedGymDB;Integrated Security=True;Encrypt=False";
 
-           //  connectionString = $"Data Source=192.168.50.5;Initial Catalog=MixedGymDB;User Id=sa;Password=comsys@123;Encrypt=False";
+        //  connectionString = $"Data Source=192.168.50.5;Initial Catalog=MixedGymDB;User Id=sa;Password=comsys@123;Encrypt=False";
     }
 }

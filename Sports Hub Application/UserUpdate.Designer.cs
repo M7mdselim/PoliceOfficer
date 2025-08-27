@@ -45,7 +45,7 @@
             // loadtbtn
             // 
             this.loadtbtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.loadtbtn.Font = new System.Drawing.Font("PT Bold Heading", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
+            this.loadtbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
             this.loadtbtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
             this.loadtbtn.Location = new System.Drawing.Point(662, 474);
             this.loadtbtn.Margin = new System.Windows.Forms.Padding(2);
@@ -54,7 +54,7 @@
             this.loadtbtn.TabIndex = 26;
             this.loadtbtn.Text = "بحث";
             this.loadtbtn.UseVisualStyleBackColor = false;
-            this.loadtbtn.Click += new System.EventHandler(this.loadbtn_Click);
+            this.loadtbtn.Click += new System.EventHandler(this.loadtbtn_Click);
             // 
             // backButton
             // 
@@ -74,18 +74,18 @@
             // 
             this.titleLabel.AutoSize = true;
             this.titleLabel.BackColor = System.Drawing.Color.Transparent;
-            this.titleLabel.Font = new System.Drawing.Font("PT Bold Heading", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
+            this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
             this.titleLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
             this.titleLabel.Location = new System.Drawing.Point(267, 19);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(345, 67);
+            this.titleLabel.Size = new System.Drawing.Size(287, 42);
             this.titleLabel.TabIndex = 28;
             this.titleLabel.Text = "تعديل بيانات الشخصية";
             // 
             // updatebtn
             // 
             this.updatebtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.updatebtn.Font = new System.Drawing.Font("PT Bold Heading", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
+            this.updatebtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
             this.updatebtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
             this.updatebtn.Location = new System.Drawing.Point(21, 474);
             this.updatebtn.Margin = new System.Windows.Forms.Padding(2);
@@ -107,7 +107,7 @@
             // updatetransbtn
             // 
             this.updatetransbtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.updatetransbtn.Font = new System.Drawing.Font("PT Bold Heading", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
+            this.updatetransbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
             this.updatetransbtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
             this.updatetransbtn.Location = new System.Drawing.Point(704, 9);
             this.updatetransbtn.Margin = new System.Windows.Forms.Padding(2);
@@ -124,19 +124,17 @@
             this.nametxt.Name = "nametxt";
             this.nametxt.Size = new System.Drawing.Size(274, 20);
             this.nametxt.TabIndex = 35;
-            this.nametxt.TextChanged += new System.EventHandler(this.nametxt_TextChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("PT Bold Heading", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
             this.label1.Location = new System.Drawing.Point(366, 474);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(135, 29);
+            this.label1.Size = new System.Drawing.Size(117, 20);
             this.label1.TabIndex = 36;
             this.label1.Text = "بحث عن طريق الاسم";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // UserUpdate
             // 
@@ -157,7 +155,6 @@
             this.Name = "UserUpdate";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Sign in";
-            this.Load += new System.EventHandler(this.Loginform_Load);
             ((System.ComponentModel.ISupportInitialize)(this.usersDataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

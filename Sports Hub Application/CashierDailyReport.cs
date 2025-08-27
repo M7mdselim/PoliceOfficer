@@ -55,6 +55,7 @@ namespace Mixed_Gym_Application
         private async Task LoadTransactionsAsync(DateTime date, string username)
         {
             string query = @"
+   
     SELECT 
         P.PrisonerID,
         P.FullName,
@@ -68,6 +69,11 @@ namespace Mixed_Gym_Application
         P.HospitalDate,
         P.LeaveDate,
         P.NIDNumber,
+        P.CriminalRecord,
+        P.ImprisonmentDetails,
+        P.SecurityRevealed,
+        P.CensorshipInfo,
+        P.Notes,
         P.CreatedDate,
         P.LastModified,
         P.CreatedBy,
@@ -82,8 +88,8 @@ namespace Mixed_Gym_Application
 
     SELECT
         NULL AS PrisonerID,
-        'إجمالي السجناء' AS FullName,       -- just the label
-        CAST(COUNT(*) AS NVARCHAR(10)) AS ReservationNumber, -- total count under ReservationNumber
+        'إجمالي السجناء' AS FullName,       
+        CAST(COUNT(*) AS NVARCHAR(10)) AS ReservationNumber, 
         NULL AS CaseID,
         NULL AS DangerousLevel,
         NULL AS PrisonerStatus,
@@ -93,6 +99,11 @@ namespace Mixed_Gym_Application
         NULL AS HospitalDate,
         NULL AS LeaveDate,
         NULL AS NIDNumber,
+        NULL AS CriminalRecord,
+        NULL AS ImprisonmentDetails,
+        NULL AS SecurityRevealed,
+        NULL AS CensorshipInfo,
+        NULL AS Notes,
         NULL AS CreatedDate,
         NULL AS LastModified,
         NULL AS CreatedBy,
@@ -102,6 +113,8 @@ namespace Mixed_Gym_Application
     WHERE 
         (@CreatedDate IS NULL OR CAST(P.CreatedDate AS DATE) = @CreatedDate)
         AND (@CreatedBy IS NULL OR P.CreatedBy = @CreatedBy)
+;
+
 ";
 
             using (SqlConnection connection = new SqlConnection(DatabaseConfig.connectionString))
@@ -127,8 +140,14 @@ namespace Mixed_Gym_Application
                             transactionsGridView.Columns["DangerousLevel"].HeaderText = "درجة الخطورة";
                             transactionsGridView.Columns["PrisonerStatus"].HeaderText = "الحالة";
                             transactionsGridView.Columns["Accused"].HeaderText = "التهمه";
-                            transactionsGridView.Columns["PrinciplesType"].HeaderText = "نوع المبادئ";
-                            transactionsGridView.Columns["ServiceTime"].HeaderText = "مدة الخدمة";
+                            transactionsGridView.Columns["PrinciplesType"].HeaderText = "مبدأ الحبس";
+                            // ✅ New translations
+                            transactionsGridView.Columns["CriminalRecord"].HeaderText = "الفيش الجنائي";
+                            transactionsGridView.Columns["ImprisonmentDetails"].HeaderText = "نماذج الحبس";
+                            transactionsGridView.Columns["SecurityRevealed"].HeaderText = "كشف أمن عام";
+                            transactionsGridView.Columns["CensorshipInfo"].HeaderText = "خطاب الرقابة";
+                            transactionsGridView.Columns["Notes"].HeaderText = "ملاحظات";
+                            transactionsGridView.Columns["ServiceTime"].HeaderText = "مده الحكم";
                             transactionsGridView.Columns["HospitalDate"].HeaderText = "تاريخ المستشفى";
                             transactionsGridView.Columns["LeaveDate"].HeaderText = "تاريخ الخروج";
                             transactionsGridView.Columns["NIDNumber"].HeaderText = "رقم الهوية";
@@ -157,97 +176,84 @@ namespace Mixed_Gym_Application
 
         private async void transactionsGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (e.RowIndex >= 0 && e.RowIndex < transactionsGridView.Rows.Count)
             {
-                // Ensure the UserID column exists and is not empty
-                if (transactionsGridView.Rows[e.RowIndex].Cells["UserID"].Value != DBNull.Value)
-                {
-                    int userId = Convert.ToInt32(transactionsGridView.Rows[e.RowIndex].Cells["UserID"].Value);
+                DataGridViewRow row = transactionsGridView.Rows[e.RowIndex];
 
-                    using (SqlConnection connection = new SqlConnection(DatabaseConfig.connectionString))
-                    {
-                        Image profileImage = await GetUserProfileImageAsync(userId, connection);
+                string prisonerId = row.Cells["PrisonerID"].Value?.ToString();
+                if (string.IsNullOrEmpty(prisonerId))
+                    return; // skip if it's the "إجمالي السجناء" row
 
-                        if (profileImage != null)
-                        {
-                            // Create a form to display the image
-                            Form imageForm = new Form
-                            {
-                                Width = 400,
-                                Height = 400,
-                                StartPosition = FormStartPosition.CenterScreen,
-                                Text = "User Profile Image"
-                            };
-                            PictureBox pictureBox = new PictureBox
-                            {
-                                Dock = DockStyle.Fill,
-                                Image = profileImage,
-                                SizeMode = PictureBoxSizeMode.Zoom
-                            };
-                            imageForm.Controls.Add(pictureBox);
-                            imageForm.ShowDialog();
-                        }
-                        else
-                        {
-                            MessageBox.Show("No profile image found for this user.");
-                        }
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("User ID is missing for this row.");
-                }
+                string fullName = row.Cells["FullName"].Value?.ToString();
+                string criminalRecord = row.Cells["CriminalRecord"].Value?.ToString();
+                string imprisonmentDetails = row.Cells["ImprisonmentDetails"].Value?.ToString();
+                string securityRevealed = row.Cells["SecurityRevealed"].Value?.ToString();
+                string censorshipInfo = row.Cells["CensorshipInfo"].Value?.ToString();
+                string notes = row.Cells["Notes"].Value?.ToString();
+
+                string details =
+                    $"👤 الاسم: {fullName}\n" +
+                    $"🆔 رقم السجين: {prisonerId}\n\n" +
+                    $"📜 الفيش الجنائي:\n{criminalRecord}\n\n" +
+                    $"⛓️ نماذج الحبس:\n{imprisonmentDetails}\n\n" +
+                    $"🔒 كشف أمن عام:\n{securityRevealed}\n\n" +
+                    $"📝 خطاب الرقابة:\n{censorshipInfo}\n\n" +
+                    $"📌 ملاحظات:\n{notes}";
+
+                MessageBox.Show(details, "تفاصيل السجين", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
-        private async Task<Image> GetUserProfileImageAsync(int userId, SqlConnection connection)
-        {
-            string query = "SELECT ProfileImage FROM Users WHERE UserID = @UserID";
 
-            using (SqlCommand command = new SqlCommand(query, connection))
-            {
-                command.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
 
-                try
-                {
-                    await connection.OpenAsync();
-                    object result = await command.ExecuteScalarAsync();
+        //private async Task<Image> GetUserProfileImageAsync(int userId, SqlConnection connection)
+        //{
+        //    string query = "SELECT ProfileImage FROM Users WHERE UserID = @UserID";
 
-                    if (result != DBNull.Value && result != null)
-                    {
-                        byte[] imageData = result as byte[];
-                        if (imageData != null && imageData.Length > 0)
-                        {
-                            using (MemoryStream ms = new MemoryStream(imageData))
-                            {
-                                try
-                                {
-                                    return Image.FromStream(ms);
-                                }
-                                catch (ArgumentException ex)
-                                {
-                                    MessageBox.Show("Invalid image data: " + ex.Message);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("Profile image data is empty.");
-                        }
-                    }
+        //    using (SqlCommand command = new SqlCommand(query, connection))
+        //    {
+        //        command.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
 
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("An error occurred while retrieving the profile image: " + ex.Message);
-                }
-            }
+        //        try
+        //        {
+        //            await connection.OpenAsync();
+        //            object result = await command.ExecuteScalarAsync();
 
-            transactionsGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            transactionsGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+        //            if (result != DBNull.Value && result != null)
+        //            {
+        //                byte[] imageData = result as byte[];
+        //                if (imageData != null && imageData.Length > 0)
+        //                {
+        //                    using (MemoryStream ms = new MemoryStream(imageData))
+        //                    {
+        //                        try
+        //                        {
+        //                            return Image.FromStream(ms);
+        //                        }
+        //                        catch (ArgumentException ex)
+        //                        {
+        //                            MessageBox.Show("Invalid image data: " + ex.Message);
+        //                        }
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    MessageBox.Show("Profile image data is empty.");
+        //                }
+        //            }
 
-            return null;
-        }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show("An error occurred while retrieving the profile image: " + ex.Message);
+        //        }
+        //    }
+
+        //    transactionsGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        //    transactionsGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+        //    return null;
+        //}
 
         private void DailyReport_Load_1(object sender, EventArgs e)
         {

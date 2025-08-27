@@ -1,30 +1,86 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "E:\\Police Officer App\\",
+  "WorkspaceRootPath": "D:\\Github\\PoliceOfficer\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|e:\\police officer app\\sports hub application\\cashierdailyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\cashierdailyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|d:\\github\\policeofficer\\sports hub application\\updatetransaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\updatetransaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|E:\\Police Officer App\\sports hub application\\cashierdailyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|d:\\github\\policeofficer\\sports hub application\\monthlyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\monthlyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|d:\\github\\policeofficer\\sports hub application\\monthlyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\monthlyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|d:\\github\\policeofficer\\sports hub application\\updatetransaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\updatetransaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|d:\\github\\policeofficer\\sports hub application\\userupdate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\userupdate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|d:\\github\\policeofficer\\sports hub application\\userupdate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\userupdate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|d:\\github\\policeofficer\\sports hub application\\updatetransaction.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\updatetransaction.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|d:\\github\\policeofficer\\sports hub application\\userupdate.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\userupdate.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|d:\\github\\policeofficer\\sports hub application\\customerreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\customerreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|D:\\Github\\PoliceOfficer\\sports hub application\\cashierdailyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\cashierdailyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|e:\\police officer app\\sports hub application\\cashier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|d:\\github\\policeofficer\\sports hub application\\customerreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\customerreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|d:\\github\\policeofficer\\sports hub application\\customerreport.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\customerreport.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|D:\\Github\\PoliceOfficer\\sports hub application\\cashier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\cashier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|e:\\police officer app\\sports hub application\\cashier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|D:\\Github\\PoliceOfficer\\sports hub application\\cashier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\cashier.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|E:\\Police Officer App\\sports hub application\\cashier.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\cashier.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|d:\\github\\policeofficer\\sports hub application\\dailyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\dailyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|e:\\police officer app\\sports hub application\\databaseconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|d:\\github\\policeofficer\\sports hub application\\dailyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\dailyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|d:\\github\\policeofficer\\sports hub application\\changepass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\changepass.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|d:\\github\\policeofficer\\sports hub application\\cashierdailyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\cashierdailyreport.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|D:\\Github\\PoliceOfficer\\sports hub application\\databaseconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\databaseconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|D:\\Github\\PoliceOfficer\\sports hub application\\cashier.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DA7B957-19A0-4BF5-A2CE-454616D8E108}|Sports Hub Application\\MixedGym.csproj|solutionrelative:sports hub application\\cashier.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,15 +90,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{e5c86464-96be-4d7c-9a8b-abcb3bbf5f92}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             },
             {
               "$type": "Bookmark",
@@ -51,78 +103,254 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "CashierDailyReport.cs",
-              "DocumentMoniker": "E:\\Police Officer App\\Sports Hub Application\\CashierDailyReport.cs",
-              "RelativeDocumentMoniker": "Sports Hub Application\\CashierDailyReport.cs",
-              "ToolTip": "E:\\Police Officer App\\Sports Hub Application\\CashierDailyReport.cs*",
-              "RelativeToolTip": "Sports Hub Application\\CashierDailyReport.cs*",
-              "ViewState": "AgIAACsAAAAAAAAAAAAiwDYAAAAwAAAAAAAAAA==",
+              "Title": "UpdateTransaction.cs",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\UpdateTransaction.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\UpdateTransaction.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\UpdateTransaction.cs",
+              "RelativeToolTip": "Sports Hub Application\\UpdateTransaction.cs",
+              "ViewState": "AgIAAHsAAAAAAAAAAAAiwJMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-26T19:56:21.291Z",
+              "WhenOpened": "2025-08-27T00:08:11.626Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "DatabaseConfig.cs",
-              "DocumentMoniker": "E:\\Police Officer App\\Sports Hub Application\\DatabaseConfig.cs",
-              "RelativeDocumentMoniker": "Sports Hub Application\\DatabaseConfig.cs",
-              "ToolTip": "E:\\Police Officer App\\Sports Hub Application\\DatabaseConfig.cs",
-              "RelativeToolTip": "Sports Hub Application\\DatabaseConfig.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAowCcAAAAzAAAAAAAAAA==",
+              "DocumentIndex": 7,
+              "Title": "UserUpdate.Designer.cs",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\UserUpdate.Designer.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\UserUpdate.Designer.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\UserUpdate.Designer.cs",
+              "RelativeToolTip": "Sports Hub Application\\UserUpdate.Designer.cs",
+              "ViewState": "AgIAAI8AAAAAAAAAAAAAAJ0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-26T18:51:55.706Z",
+              "WhenOpened": "2025-08-26T23:57:52.281Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "Cashier.Designer.cs",
-              "DocumentMoniker": "E:\\Police Officer App\\Sports Hub Application\\Cashier.Designer.cs",
-              "RelativeDocumentMoniker": "Sports Hub Application\\Cashier.Designer.cs",
-              "ToolTip": "E:\\Police Officer App\\Sports Hub Application\\Cashier.Designer.cs",
-              "RelativeToolTip": "Sports Hub Application\\Cashier.Designer.cs",
-              "ViewState": "AgIAALgDAAAAAAAAAAArwNQDAAAAAAAAAAAAAA==",
+              "Title": "UserUpdate.cs",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\UserUpdate.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\UserUpdate.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\UserUpdate.cs",
+              "RelativeToolTip": "Sports Hub Application\\UserUpdate.cs",
+              "ViewState": "AgIAAOsAAAAAAAAAAAAjwP8AAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-20T14:00:23.244Z",
+              "WhenOpened": "2025-08-26T23:55:14.522Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "CashierDailyReport.cs [Design]",
-              "DocumentMoniker": "E:\\Police Officer App\\Sports Hub Application\\CashierDailyReport.cs",
-              "RelativeDocumentMoniker": "Sports Hub Application\\CashierDailyReport.cs",
-              "ToolTip": "E:\\Police Officer App\\Sports Hub Application\\CashierDailyReport.cs [Design]*",
-              "RelativeToolTip": "Sports Hub Application\\CashierDailyReport.cs [Design]*",
+              "DocumentIndex": 5,
+              "Title": "UserUpdate.cs [Design]",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\UserUpdate.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\UserUpdate.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\UserUpdate.cs [Design]",
+              "RelativeToolTip": "Sports Hub Application\\UserUpdate.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-11-20T14:06:11.127Z",
+              "WhenOpened": "2025-08-26T23:55:06.844Z",
               "EditorCaption": " [Design]"
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Cashier.cs",
-              "DocumentMoniker": "E:\\Police Officer App\\Sports Hub Application\\Cashier.cs",
+              "Title": "MonthlyReport.cs [Design]",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\MonthlyReport.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\MonthlyReport.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\MonthlyReport.cs [Design]",
+              "RelativeToolTip": "Sports Hub Application\\MonthlyReport.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-26T23:21:57.091Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MonthlyReport.cs",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\MonthlyReport.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\MonthlyReport.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\MonthlyReport.cs",
+              "RelativeToolTip": "Sports Hub Application\\MonthlyReport.cs",
+              "ViewState": "AgIAALoAAAAAAAAAAAAjwC4BAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-26T23:22:00.856Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "UpdateTransaction.cs [Design]",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\UpdateTransaction.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\UpdateTransaction.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\UpdateTransaction.cs [Design]",
+              "RelativeToolTip": "Sports Hub Application\\UpdateTransaction.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-27T00:08:07.392Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "UpdateTransaction.Designer.cs",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\UpdateTransaction.Designer.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\UpdateTransaction.Designer.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\UpdateTransaction.Designer.cs",
+              "RelativeToolTip": "Sports Hub Application\\UpdateTransaction.Designer.cs",
+              "ViewState": "AgIAAIsAAAAAAAAAAAAjwJcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-27T00:11:07.259Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "CustomerReport.cs",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\CustomerReport.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\CustomerReport.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\CustomerReport.cs",
+              "RelativeToolTip": "Sports Hub Application\\CustomerReport.cs",
+              "ViewState": "AgIAALAAAAAAAAAAAAAAwMIAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-26T23:32:04.188Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "CustomerReport.cs [Design]",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\CustomerReport.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\CustomerReport.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\CustomerReport.cs [Design]",
+              "RelativeToolTip": "Sports Hub Application\\CustomerReport.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-26T22:11:51.167Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Cashier.cs [Design]",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\Cashier.cs",
               "RelativeDocumentMoniker": "Sports Hub Application\\Cashier.cs",
-              "ToolTip": "E:\\Police Officer App\\Sports Hub Application\\Cashier.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\Cashier.cs [Design]",
+              "RelativeToolTip": "Sports Hub Application\\Cashier.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-26T15:25:29.032Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Cashier.cs",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\Cashier.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\Cashier.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\Cashier.cs",
               "RelativeToolTip": "Sports Hub Application\\Cashier.cs",
-              "ViewState": "AgIAAJ0AAAAAAAAAAAAqwKYAAAAZAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABoAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-08-26T15:25:47.703Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Cashier.cs [Design]",
-              "DocumentMoniker": "E:\\Police Officer App\\Sports Hub Application\\Cashier.cs",
-              "RelativeDocumentMoniker": "Sports Hub Application\\Cashier.cs",
-              "ToolTip": "E:\\Police Officer App\\Sports Hub Application\\Cashier.cs [Design]",
-              "RelativeToolTip": "Sports Hub Application\\Cashier.cs [Design]",
+              "DocumentIndex": 9,
+              "Title": "CashierDailyReport.cs [Design]",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\CashierDailyReport.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\CashierDailyReport.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\CashierDailyReport.cs [Design]",
+              "RelativeToolTip": "Sports Hub Application\\CashierDailyReport.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-26T15:25:29.032Z",
+              "WhenOpened": "2024-11-20T14:06:11.127Z",
               "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "CustomerReport.Designer.cs",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\CustomerReport.Designer.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\CustomerReport.Designer.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\CustomerReport.Designer.cs",
+              "RelativeToolTip": "Sports Hub Application\\CustomerReport.Designer.cs",
+              "ViewState": "AgIAANEAAAAAAAAAAAAMwPMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-26T23:39:47.85Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ChangePass.cs [Design]",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\ChangePass.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\ChangePass.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\ChangePass.cs [Design]",
+              "RelativeToolTip": "Sports Hub Application\\ChangePass.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-26T22:11:47.805Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "DailyReport.cs [Design]",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\DailyReport.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\DailyReport.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\DailyReport.cs [Design]",
+              "RelativeToolTip": "Sports Hub Application\\DailyReport.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-26T22:12:56.101Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "DailyReport.cs",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\DailyReport.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\DailyReport.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\DailyReport.cs",
+              "RelativeToolTip": "Sports Hub Application\\DailyReport.cs",
+              "ViewState": "AgIAAKcAAAAAAAAAAAAjwLAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-26T22:14:46.334Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "DatabaseConfig.cs",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\DatabaseConfig.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\DatabaseConfig.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\DatabaseConfig.cs",
+              "RelativeToolTip": "Sports Hub Application\\DatabaseConfig.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAiwCcAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-26T18:51:55.706Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "CashierDailyReport.cs",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\CashierDailyReport.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\CashierDailyReport.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\CashierDailyReport.cs",
+              "RelativeToolTip": "Sports Hub Application\\CashierDailyReport.cs",
+              "ViewState": "AgIAAGkAAAAAAAAAAAAMwHsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-26T19:56:21.291Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Cashier.Designer.cs",
+              "DocumentMoniker": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\Cashier.Designer.cs",
+              "RelativeDocumentMoniker": "Sports Hub Application\\Cashier.Designer.cs",
+              "ToolTip": "D:\\Github\\PoliceOfficer\\Sports Hub Application\\Cashier.Designer.cs",
+              "RelativeToolTip": "Sports Hub Application\\Cashier.Designer.cs",
+              "ViewState": "AgIAALgDAAAAAAAAAAArwNQDAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-11-20T14:00:23.244Z",
+              "EditorCaption": ""
             }
           ]
         },

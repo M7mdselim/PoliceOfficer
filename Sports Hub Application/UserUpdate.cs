@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Printing;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ClosedXML.Excel;
 
 namespace Mixed_Gym_Application
 {
@@ -24,16 +20,14 @@ namespace Mixed_Gym_Application
 
         public UserUpdate(string username)
         {
-
             InitializeComponent();
 
             _username = username;
             ConnectionString = DatabaseConfig.connectionString;
 
-            // Initialize controls only after form is fully initialized
+            // Initialize DataGridView and BindingSource
             InitializeControls();
 
-            // Store initial size and location of all controls after the form is loaded
             _initialFormWidth = this.Width;
             _initialFormHeight = this.Height;
 
@@ -43,50 +37,26 @@ namespace Mixed_Gym_Application
                 Control c = this.Controls[i];
                 _controlsInfo[i] = new ControlInfo(c.Left, c.Top, c.Width, c.Height, c.Font.Size);
             }
+            usersDataGridView.EditingControlShowing += usersDataGridView_EditingControlShowing;
 
-            // Set event handler for form resize
             this.Resize += Home_Resize;
-            usersDataGridView.CellDoubleClick += usersDataGridView_CellDoubleClick;
-            nametxt.Leave += nametxt_Leave;
-            ConfigureNameAutoComplete();
-            DataGridViewButtonColumn deleteButtonColumn = new DataGridViewButtonColumn();
-            deleteButtonColumn.Name = "deleteColumn";
-            deleteButtonColumn.HeaderText = "";
-            deleteButtonColumn.Text = "مسح";
-            deleteButtonColumn.UseColumnTextForButtonValue = true;
-            usersDataGridView.Columns.Insert(0, deleteButtonColumn);
-
-
-
-
-
-
         }
-        private void usersDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {  // Handle cell content click event here
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+
+        private void InitializeControls()
+        {
+            bindingSource = new BindingSource();
+
+            if (usersDataGridView == null)
             {
-                DataGridViewCell cell = usersDataGridView[e.ColumnIndex, e.RowIndex];
-
-            }
-
-            if (e.RowIndex >= 0 && usersDataGridView.Columns[e.ColumnIndex] is DataGridViewButtonColumn)
-            {
-                // Ask for confirmation
-                DialogResult result = MessageBox.Show("Are you sure you want to delete this user?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (result == DialogResult.Yes)
-                {
-                    // Remove the row from the DataGridView
-                    usersDataGridView.Rows.RemoveAt(e.RowIndex);
-
-                    // Save changes to the database
-                    UpdateData();
-                }
+                usersDataGridView = new DataGridView();
+                usersDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                usersDataGridView.Dock = DockStyle.Fill;
+                usersDataGridView.DataSource = bindingSource;
+                this.Controls.Add(usersDataGridView);
             }
         }
-    
 
-    private void Home_Resize(object sender, EventArgs e)
+        private void Home_Resize(object sender, EventArgs e)
         {
             float widthRatio = this.Width / _initialFormWidth;
             float heightRatio = this.Height / _initialFormHeight;
@@ -105,7 +75,6 @@ namespace Mixed_Gym_Application
                 control.Width = (int)(controlInfo.Width * widthRatio);
                 control.Height = (int)(controlInfo.Height * heightRatio);
 
-                // Adjust font size
                 control.Font = new Font(control.Font.FontFamily, controlInfo.FontSize * Math.Min(widthRatio, heightRatio));
             }
         }
@@ -128,338 +97,138 @@ namespace Mixed_Gym_Application
             }
         }
 
-        private void InitializeControls()
-        {
-            // Initialize BindingSource
-            bindingSource = new BindingSource();
+        // inside PrisonerInfoUpdate class
 
-            if (usersDataGridView == null)
-            {
-                usersDataGridView = new DataGridView();
-                usersDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                usersDataGridView.Height = 400;
-                usersDataGridView.Top = 10;
-                usersDataGridView.Left = 10;
-                usersDataGridView.Width = this.ClientSize.Width - 20;
-                usersDataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-                usersDataGridView.DataSource = bindingSource;
-                this.Controls.Add(usersDataGridView);
-            }
-        }
-
-
-        // Other methods remain unchanged
-
-
-        private void ConfigureNameAutoComplete()
-        {
-            AutoCompleteStringCollection autoCompleteCollection = new AutoCompleteStringCollection();
-            string query = "SELECT Name FROM Users";
-
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
-            {
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    try
-                    {
-                        connection.Open();
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                string name = reader.GetString(0);
-                                // Add both normalized and reverse-normalized versions to the collection
-                                autoCompleteCollection.Add(NormalizeArabicText(name));
-                                autoCompleteCollection.Add(ReverseNormalizeArabicText(name));
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("An error occurred: " + ex.Message);
-                    }
-                }
-            }
-
-            nametxt.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            nametxt.AutoCompleteSource = AutoCompleteSource.CustomSource;
-            nametxt.AutoCompleteCustomSource = autoCompleteCollection;
-
-            nametxt.KeyDown += Nametxt_KeyDown;
-        }
-
-      
-
-
-        private string NormalizeArabicText(string text)
-        {
-            if (string.IsNullOrWhiteSpace(text))
-                return text;
-
-            return text
-                .Replace('أ', 'ا')  // Normalize 'أ' to 'ا'
-                .Replace('إ', 'ا')  // Normalize 'إ' to 'ا'
-                .Replace('آ', 'ا')  // Normalize 'آ' to 'ا'
-                .Replace('ى', 'ي')  // Normalize 'ى' to 'ي'
-              
-                .Replace('ة', 'ه')  // Normalize 'ة' to 'ه'
-                .Replace('ؤ', 'و'); // Normalize 'ؤ' to 'و'
-        }
-
-
-        private string ReverseNormalizeArabicText(string text)
-        {
-            if (string.IsNullOrWhiteSpace(text))
-                return text; // Return input as is if it's null or empty
-
-            // Perform reverse normalization
-            return text
-                .Replace('ا', 'أ')  // Reverse normalize 'ا' to 'أ'
-                .Replace('ا', 'إ')  // Reverse normalize 'ا' to 'إ'
-                .Replace('ا', 'آ')  // Reverse normalize 'ا' to 'آ'
-                .Replace('ي', 'ى')  // Reverse normalize 'ي' to 'ى'
-            
-                .Replace('ه', 'ة')  // Reverse normalize 'ه' to 'ة'
-                .Replace('و', 'ؤ'); // Reverse normalize 'و' to 'ؤ'
-        }
-
-
-
-
-
-
-
-
-        private async Task SearchUserByNameAsync(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                
-                return;
-            }
-
-            // Normalize the input name
-            string normalizedInput = NormalizeArabicText(name);
-            Debug.WriteLine($"Normalized Input: {normalizedInput}");
-
-            string query = @"
-    SELECT ID, Mobilenumber, Name, Category, ProfileImage 
-    FROM Users 
-    WHERE dbo.NormalizeArabicText(Name) LIKE '%' + dbo.NormalizeArabicText(@Name) + '%'
-    ORDER BY DateUpdated DESC";
-
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
-            {
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    // Pass the normalized input to the query
-                    command.Parameters.AddWithValue("@Name", normalizedInput);
-
-                    Debug.WriteLine($"Query: {query}");
-                    Debug.WriteLine($"Parameter @Name: {normalizedInput}");
-
-                    try
-                    {
-                        await connection.OpenAsync();
-                        using (SqlDataReader reader = await command.ExecuteReaderAsync()) ;
-                        
-                           
-                    }
-                    catch (SqlException ex)
-                    {
-                        MessageBox.Show("A SQL error occurred: " + ex.Message);
-                        Debug.WriteLine($"SQL Exception: {ex.Message}");
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("An error occurred: " + ex.Message);
-                        Debug.WriteLine($"Exception: {ex.Message}");
-                    }
-                }
-            }
-        }
-
-
-
-
-
-
-
-        private async void Nametxt_KeyDown(object sender, KeyEventArgs e)
-        {
-            // Check if the Enter key was pressed
-            if (e.KeyCode == Keys.Enter)
-            {
-                // Avoid processing when the suggestions are not visible
-                if (nametxt.AutoCompleteMode != AutoCompleteMode.None)
-                {
-                    e.SuppressKeyPress = true; // Prevent the default behavior of the Enter key
-                    await SearchUserByNameAsync(nametxt.Text);
-                }
-            }
-        }
-
-
-
-
-
-
-        private void loadbtn_Click(object sender, EventArgs e)
-        {
-            LoadData();
-        }
-
-        private void updatebtn_Click_1(object sender, EventArgs e)
-        {
-            UpdateData();
-        }
-
-        private void LoadData(string nameFilter = null)
+        // === Load PrisonerInfo data ===
+        private void LoadData(string filterName = null, string filterNID = null)
         {
             try
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    string query = "SELECT TOP 100 * FROM Users";
+                    string query = @"SELECT PrisonerInfoID, FullName, NIDNumber, DangerousLevel, PrisonerStatus, CreatedDate, LastModified, CreatedBy, ModifiedBy
+                             FROM PrisonerInfo";
 
-                    if (!string.IsNullOrEmpty(nameFilter))
+                    if (!string.IsNullOrEmpty(filterName))
                     {
-                        // Normalize the search filter
-                        string normalizedFilter = NormalizeArabicText(nameFilter);
-                        query += " WHERE Name LIKE @NameFilter";
+                        query += " WHERE FullName LIKE @NameFilter";
+                    }
+                    else if (!string.IsNullOrEmpty(filterNID))
+                    {
+                        query += " WHERE NIDNumber LIKE @NIDFilter";
                     }
 
-                    query += " ORDER BY DateUpdated DESC";
+                    query += " ORDER BY LastModified DESC";
 
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter(query, connection);
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
 
-                    if (!string.IsNullOrEmpty(nameFilter))
+                    if (!string.IsNullOrEmpty(filterName))
+                        adapter.SelectCommand.Parameters.AddWithValue("@NameFilter", "%" + filterName + "%");
+                    if (!string.IsNullOrEmpty(filterNID))
+                        adapter.SelectCommand.Parameters.AddWithValue("@NIDFilter", "%" + filterNID + "%");
+
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+
+                    bindingSource.DataSource = dt;
+                    usersDataGridView.DataSource = bindingSource;
+
+                    // Make some columns read-only
+                    usersDataGridView.Columns["PrisonerInfoID"].ReadOnly = true;
+                    usersDataGridView.Columns["CreatedDate"].ReadOnly = true;
+                    usersDataGridView.Columns["CreatedBy"].ReadOnly = true;
+
+                    // Replace DangerousLevel column with ComboBox
+                    if (usersDataGridView.Columns.Contains("DangerousLevel"))
                     {
-                        dataAdapter.SelectCommand.Parameters.AddWithValue("@NameFilter", "%" + NormalizeArabicText(nameFilter) + "%");
+                        DataGridViewComboBoxColumn comboDanger = new DataGridViewComboBoxColumn();
+                        comboDanger.DataPropertyName = "DangerousLevel";
+                        comboDanger.HeaderText = "DangerousLevel";
+                        comboDanger.Items.AddRange("أ", "ب", "ج");
+
+                        int index = usersDataGridView.Columns["DangerousLevel"].Index;
+                        usersDataGridView.Columns.Remove("DangerousLevel");
+                        usersDataGridView.Columns.Insert(index, comboDanger);
                     }
 
-                    DataTable dataTable = new DataTable();
-                    dataAdapter.Fill(dataTable);
-
-                    if (usersDataGridView != null)
+                    // Replace PrisonerStatus column with ComboBox
+                    if (usersDataGridView.Columns.Contains("PrisonerStatus"))
                     {
-                        bindingSource.DataSource = dataTable;
-                        usersDataGridView.DataSource = bindingSource;
+                        DataGridViewComboBoxColumn comboStatus = new DataGridViewComboBoxColumn();
+                        comboStatus.DataPropertyName = "PrisonerStatus";
+                        comboStatus.HeaderText = "PrisonerStatus";
+                        comboStatus.Items.AddRange("حبس احتياطي", "حكم عليه", "اخلاء سبيل");
 
-                        // Set specific columns to read-only
-                        usersDataGridView.Columns["UserID"].ReadOnly = true;
-                        usersDataGridView.Columns["DateUpdated"].ReadOnly = true;
-
-                        // Auto size columns to fit data
-                        usersDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                        usersDataGridView.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader);
+                        int index = usersDataGridView.Columns["PrisonerStatus"].Index;
+                        usersDataGridView.Columns.Remove("PrisonerStatus");
+                        usersDataGridView.Columns.Insert(index, comboStatus);
                     }
                 }
-                MessageBox.Show("Data loaded successfully.");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred while loading data: " + ex.Message);
+                MessageBox.Show("Error while loading data: " + ex.Message);
             }
         }
-
-
-
-
-
+        private void usersDataGridView_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            if (usersDataGridView.CurrentRow != null &&
+                usersDataGridView.CurrentRow.IsNewRow)
+            {
+                // If it's the new row, force the column to be simple textbox instead of combo
+                if (e.Control is ComboBox combo)
+                {
+                    combo.DropDownStyle = ComboBoxStyle.DropDown; // behaves like textbox
+                    combo.Items.Clear(); // remove predefined values
+                }
+            }
+        }
+        // === Update back to DB ===
         private void UpdateData()
         {
             try
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    SqlDataAdapter dataAdapter = new SqlDataAdapter("SELECT  * From Users", connection);
-                    SqlCommandBuilder commandBuilder = new SqlCommandBuilder(dataAdapter);
-                    DataTable dataTable = (DataTable)bindingSource?.DataSource;
+                    SqlDataAdapter adapter = new SqlDataAdapter("SELECT PrisonerInfoID, FullName, NIDNumber, DangerousLevel, PrisonerStatus, CreatedDate, LastModified, CreatedBy, ModifiedBy FROM PrisonerInfo", connection);
+                    SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
 
-                    if (dataTable != null)
+                    // Override UpdateCommand to always update ModifiedBy + LastModified
+                    adapter.UpdateCommand = new SqlCommand(
+                        @"UPDATE PrisonerInfo
+                  SET FullName = @FullName,
+                      NIDNumber = @NIDNumber,
+                      DangerousLevel = @DangerousLevel,
+                      PrisonerStatus = @PrisonerStatus,
+                      LastModified = GETDATE(),
+                      ModifiedBy = @ModifiedBy
+                  WHERE PrisonerInfoID = @PrisonerInfoID", connection);
+
+                    adapter.UpdateCommand.Parameters.Add("@FullName", SqlDbType.NVarChar, 200, "FullName");
+                    adapter.UpdateCommand.Parameters.Add("@NIDNumber", SqlDbType.NVarChar, 50, "NIDNumber");
+                    adapter.UpdateCommand.Parameters.Add("@DangerousLevel", SqlDbType.NVarChar, 5, "DangerousLevel");
+                    adapter.UpdateCommand.Parameters.Add("@PrisonerStatus", SqlDbType.NVarChar, 100, "PrisonerStatus");
+                    adapter.UpdateCommand.Parameters.Add("@PrisonerInfoID", SqlDbType.Int, 0, "PrisonerInfoID").SourceVersion = DataRowVersion.Original;
+
+                    // always use current username
+                    adapter.UpdateCommand.Parameters.AddWithValue("@ModifiedBy", _username);
+
+                    DataTable dt = (DataTable)bindingSource.DataSource;
+                    if (dt != null)
                     {
-                        dataAdapter.UpdateCommand = commandBuilder.GetUpdateCommand();
-                        dataAdapter.Update(dataTable);
+                        adapter.Update(dt);
                     }
                 }
-                MessageBox.Show("Data updated successfully.");
+                MessageBox.Show("Prisoner info updated successfully.");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("An error occurred while updating data: " + ex.Message);
+                MessageBox.Show("Error while updating data: " + ex.Message);
             }
         }
 
+        // === Button Events ===
 
-        private void usersDataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
-            {
-                // Check if the double-clicked column is ProfileImage
-                if (usersDataGridView.Columns[e.ColumnIndex].Name == "ProfileImage")
-                {
-                    // Get the image data from the cell
-                    object cellValue = usersDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
-                    if (cellValue != null && cellValue is byte[] imageData && imageData.Length > 0)
-                    {
-                        try
-                        {
-                            using (MemoryStream ms = new MemoryStream(imageData))
-                            {
-                                Image image = Image.FromStream(ms);
-
-                                using (Form imageForm = new Form())
-                                {
-                                    PictureBox pictureBox = new PictureBox
-                                    {
-                                        Image = image,
-                                        Dock = DockStyle.Fill,
-                                        SizeMode = PictureBoxSizeMode.Zoom
-                                    };
-                                    imageForm.Controls.Add(pictureBox);
-                                    imageForm.Width = 800;  // Adjust size as needed
-                                    imageForm.Height = 600; // Adjust size as needed
-                                    imageForm.Text = "Profile Image";
-                                    imageForm.ShowDialog();
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("An error occurred while displaying the image: " + ex.Message);
-                        }
-                    }
-                    else
-                    {
-                        MessageBox.Show("No image data available or image data is invalid.");
-                    }
-                }
-            }
-        }
-
-
-
-
-        private void Loginform_Load(object sender, EventArgs e)
-        {
-
-
-
-
-            // Ensure that the DataGridView and buttons are correctly wired up if not done in the designer
-            if (usersDataGridView != null)
-            {
-                usersDataGridView.CellContentClick += usersDataGridView_CellContentClick;
-
-
-
-            }
-            else
-            {
-                MessageBox.Show("DataGridView not found. Ensure it is placed correctly in the form.");
-            }
-        }
 
         private void backButton_Click(object sender, EventArgs e)
         {
@@ -469,32 +238,22 @@ namespace Mixed_Gym_Application
             this.Close();
         }
 
+        private void loadtbtn_Click(object sender, EventArgs e)
+        {
+            LoadData();
+        }
 
-
-
-
+        private void updatebtn_Click_1(object sender, EventArgs e)
+        {
+            UpdateData();
+        }
 
         private void updatetransbtn_Click(object sender, EventArgs e)
         {
             this.Hide();
-            UpdateTransaction trans = new UpdateTransaction(_username);
-            trans.ShowDialog();
+            UpdateTransaction updates = new UpdateTransaction(_username);
+            updates.ShowDialog();
             this.Close();
-        }
-
-        private void nametxt_TextChanged(object sender, EventArgs e)
-        {
-           
-        }
-
-        private void nametxt_Leave(object sender, EventArgs e)
-        {
-            LoadData(nametxt.Text);
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

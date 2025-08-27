@@ -14,7 +14,6 @@ namespace Mixed_Gym_Application
             this.PrintButton = new System.Windows.Forms.Button();
             this.ExportToExcelButton = new System.Windows.Forms.Button();
             this.CashierNametxt = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.backButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.transactionsGridView)).BeginInit();
             this.SuspendLayout();
@@ -29,7 +28,7 @@ namespace Mixed_Gym_Application
             // loadReportButton
             // 
             this.loadReportButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.loadReportButton.Font = new System.Drawing.Font("PT Bold Heading", 15.75F);
+            this.loadReportButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F);
             this.loadReportButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
             this.loadReportButton.Location = new System.Drawing.Point(722, 515);
             this.loadReportButton.Name = "loadReportButton";
@@ -56,20 +55,20 @@ namespace Mixed_Gym_Application
             // 
             this.titleLabel.AutoSize = true;
             this.titleLabel.BackColor = System.Drawing.Color.Transparent;
-            this.titleLabel.Font = new System.Drawing.Font("PT Bold Heading", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
+            this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
             this.titleLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.titleLabel.Location = new System.Drawing.Point(351, -3);
+            this.titleLabel.Location = new System.Drawing.Point(392, 12);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(217, 52);
+            this.titleLabel.Size = new System.Drawing.Size(169, 33);
             this.titleLabel.TabIndex = 3;
-            this.titleLabel.Text = "تقرير كاشير يومي";
+            this.titleLabel.Text = "تقرير امين يومي";
             this.titleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.titleLabel.Click += new System.EventHandler(this.titleLabel_Click);
             // 
             // PrintButton
             // 
             this.PrintButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.PrintButton.Font = new System.Drawing.Font("PT Bold Heading", 15.75F);
+            this.PrintButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F);
             this.PrintButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
             this.PrintButton.Location = new System.Drawing.Point(12, 515);
             this.PrintButton.Name = "PrintButton";
@@ -99,19 +98,6 @@ namespace Mixed_Gym_Application
             this.CashierNametxt.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.CashierNametxt.TextChanged += new System.EventHandler(this.CashierNametxt_TextChanged);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Century Schoolbook", 21.75F, System.Drawing.FontStyle.Bold);
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.label1.Location = new System.Drawing.Point(370, 49);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(189, 34);
-            this.label1.TabIndex = 46;
-            this.label1.Text = "Mixed GYM";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // backButton
             // 
             this.backButton.BackColor = System.Drawing.Color.Transparent;
@@ -130,7 +116,6 @@ namespace Mixed_Gym_Application
             // 
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(922, 601);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.CashierNametxt);
             this.Controls.Add(this.ExportToExcelButton);
             this.Controls.Add(this.backButton);
@@ -158,6 +143,5 @@ namespace Mixed_Gym_Application
         private Button backButton;
         private Button ExportToExcelButton;
         private TextBox CashierNametxt;
-        private Label label1;
     }
 }
