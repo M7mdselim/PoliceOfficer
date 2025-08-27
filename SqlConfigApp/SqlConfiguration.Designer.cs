@@ -35,6 +35,7 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.windowsauthnbtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtServerName
@@ -70,11 +71,11 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(266, 227);
+            this.btnSave.Location = new System.Drawing.Point(205, 200);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.Size = new System.Drawing.Size(188, 23);
             this.btnSave.TabIndex = 7;
-            this.btnSave.Text = "Save";
+            this.btnSave.Text = "Save SQL Authentication";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
@@ -96,11 +97,22 @@
             this.label3.TabIndex = 9;
             this.label3.Text = "Password";
             // 
+            // windowsauthnbtn
+            // 
+            this.windowsauthnbtn.Location = new System.Drawing.Point(435, 74);
+            this.windowsauthnbtn.Name = "windowsauthnbtn";
+            this.windowsauthnbtn.Size = new System.Drawing.Size(165, 23);
+            this.windowsauthnbtn.TabIndex = 10;
+            this.windowsauthnbtn.Text = "Save Windows Authentication";
+            this.windowsauthnbtn.UseVisualStyleBackColor = true;
+            this.windowsauthnbtn.Click += new System.EventHandler(this.windowsauthnbtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(612, 450);
+            this.Controls.Add(this.windowsauthnbtn);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.btnSave);
@@ -125,6 +137,7 @@
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button windowsauthnbtn;
     }
 }
 

@@ -14,15 +14,17 @@ namespace Mixed_Gym_Application
             this.PrintButton = new System.Windows.Forms.Button();
             this.backButton = new System.Windows.Forms.Button();
             this.ExportToExcelButton = new System.Windows.Forms.Button();
+            this.columnnamecombobox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.searchtxt = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.transactionsGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // datePicker
             // 
-            this.datePicker.Location = new System.Drawing.Point(389, 553);
+            this.datePicker.Location = new System.Drawing.Point(389, 521);
             this.datePicker.Name = "datePicker";
-            this.datePicker.Size = new System.Drawing.Size(251, 20);
+            this.datePicker.Size = new System.Drawing.Size(223, 20);
             this.datePicker.TabIndex = 0;
             // 
             // loadReportButton
@@ -56,11 +58,11 @@ namespace Mixed_Gym_Application
             this.titleLabel.BackColor = System.Drawing.Color.Transparent;
             this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F);
             this.titleLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.titleLabel.Location = new System.Drawing.Point(320, -4);
+            this.titleLabel.Location = new System.Drawing.Point(333, 25);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(223, 33);
+            this.titleLabel.Size = new System.Drawing.Size(246, 33);
             this.titleLabel.TabIndex = 3;
-            this.titleLabel.Text = "تقرير يومي جيم ميكس";
+            this.titleLabel.Text = "تقرير يومي قسم الشرطه";
             // 
             // PrintButton
             // 
@@ -78,7 +80,7 @@ namespace Mixed_Gym_Application
             // backButton
             // 
             this.backButton.BackColor = System.Drawing.Color.Transparent;
-            this.backButton.BackgroundImage = global::Mixed_Gym_Application.Properties.Resources.icons8_back_button_502;
+            this.backButton.BackgroundImage = global::Police_officer_Application.Properties.Resources.icons8_back_button_502;
             this.backButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.backButton.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold);
             this.backButton.ForeColor = System.Drawing.Color.IndianRed;
@@ -91,7 +93,7 @@ namespace Mixed_Gym_Application
             // 
             // ExportToExcelButton
             // 
-            this.ExportToExcelButton.Location = new System.Drawing.Point(282, 553);
+            this.ExportToExcelButton.Location = new System.Drawing.Point(205, 553);
             this.ExportToExcelButton.Name = "ExportToExcelButton";
             this.ExportToExcelButton.Size = new System.Drawing.Size(70, 23);
             this.ExportToExcelButton.TabIndex = 22;
@@ -99,23 +101,40 @@ namespace Mixed_Gym_Application
             this.ExportToExcelButton.UseVisualStyleBackColor = true;
             this.ExportToExcelButton.Click += new System.EventHandler(this.ExportToExcelButton_Click);
             // 
+            // columnnamecombobox
+            // 
+            this.columnnamecombobox.FormattingEnabled = true;
+            this.columnnamecombobox.Location = new System.Drawing.Point(553, 555);
+            this.columnnamecombobox.Name = "columnnamecombobox";
+            this.columnnamecombobox.Size = new System.Drawing.Size(163, 21);
+            this.columnnamecombobox.TabIndex = 42;
+            this.columnnamecombobox.SelectedIndexChanged += new System.EventHandler(this.columnnamecombobox_SelectedIndexChanged);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Century Schoolbook", 21.75F, System.Drawing.FontStyle.Bold);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.label1.Location = new System.Drawing.Point(365, 45);
+            this.label1.Location = new System.Drawing.Point(630, 520);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(189, 34);
-            this.label1.TabIndex = 48;
-            this.label1.Text = "Mixed GYM";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label1.Size = new System.Drawing.Size(86, 20);
+            this.label1.TabIndex = 41;
+            this.label1.Text = "بحث عن طريق";
+            // 
+            // searchtxt
+            // 
+            this.searchtxt.Location = new System.Drawing.Point(315, 556);
+            this.searchtxt.Name = "searchtxt";
+            this.searchtxt.Size = new System.Drawing.Size(162, 20);
+            this.searchtxt.TabIndex = 40;
+            this.searchtxt.TextChanged += new System.EventHandler(this.searchtxt_TextChanged);
             // 
             // DailyReport
             // 
             this.ClientSize = new System.Drawing.Size(911, 617);
+            this.Controls.Add(this.columnnamecombobox);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.searchtxt);
             this.Controls.Add(this.ExportToExcelButton);
             this.Controls.Add(this.backButton);
             this.Controls.Add(this.PrintButton);
@@ -141,6 +160,8 @@ namespace Mixed_Gym_Application
         private Button PrintButton;
         private Button backButton;
         private Button ExportToExcelButton;
+        private ComboBox columnnamecombobox;
         private Label label1;
+        private TextBox searchtxt;
     }
 }

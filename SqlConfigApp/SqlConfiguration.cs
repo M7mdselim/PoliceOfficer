@@ -30,5 +30,25 @@ namespace SqlConfigApp
         {
 
         }
+
+        private void windowsauthnbtn_Click(object sender, EventArgs e)
+        {
+            // Example saving to a config file
+            string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MyApp", "config.txt");
+            Directory.CreateDirectory(Path.GetDirectoryName(configPath)); // Ensure the directory exists
+
+            // ✅ Save Windows Authentication connection string format
+            string connectionString = $"Server={txtServerName.Text};Database=master;Integrated Security=True;";
+
+            File.WriteAllLines(configPath, new[] {
+        txtServerName.Text,
+        "WindowsAuth",  // flag to indicate mode
+        connectionString
+    });
+
+            MessageBox.Show("Configuration saved with Windows Authentication.");
+            this.Close();
+        }
+
     }
 }

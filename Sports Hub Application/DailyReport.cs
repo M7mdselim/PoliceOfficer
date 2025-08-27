@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Math;
 
 namespace Mixed_Gym_Application
 {
@@ -20,10 +21,10 @@ namespace Mixed_Gym_Application
 
         private string _username;
 
+        private BindingSource bindingSource = new BindingSource();
 
-       
 
-       
+
 
         public DailyReport(string username)
         {
@@ -34,7 +35,7 @@ namespace Mixed_Gym_Application
             // Store initial form size
             _initialFormWidth = this.Width;
             _initialFormHeight = this.Height;
-
+            transactionsGridView.DataSource = bindingSource;
             // Store initial size and location of all controls
             _controlsInfo = new ControlInfo[this.Controls.Count];
             for (int i = 0; i < this.Controls.Count; i++)
@@ -53,67 +54,69 @@ namespace Mixed_Gym_Application
             DateTime selectedDate = datePicker.Value.Date;
             await LoadTransactionsAsync(selectedDate);
         }
-        private async Task LoadTransactionsAsync(DateTime? date)
+        private async Task LoadTransactionsAsync(DateTime? date, string columnName = null, string searchValue = null)
         {
             string query = @"
-        SELECT 
-            P.PrisonerID,
-            P.FullName,
-            P.ReservationNumber,
-            P.CaseID,
-            P.DangerousLevel,
-            P.PrisonerStatus,
-            P.Accused,
-            P.PrinciplesType,
-            P.ServiceTime,
-            P.HospitalDate,
-            P.LeaveDate,
-            P.NIDNumber,
-            P.CriminalRecord,
-            P.ImprisonmentDetails,
-            P.SecurityRevealed,
-            P.CensorshipInfo,
-            P.Notes,
-            P.CreatedDate,
-            P.LastModified,
-            P.CreatedBy,
-            P.ModifiedBy
-        FROM 
-            vw_PrisonerReport P
-        WHERE 
-            (@CreatedDate IS NULL OR CAST(P.CreatedDate AS DATE) = @CreatedDate)
-            
+    SELECT 
+        P.PrisonerID,
+        P.FullName,
+        P.ReservationNumber,
+        P.CaseID,
+        P.DangerousLevel,
+        P.PrisonerStatus,
+        P.Accused,
+        P.PrinciplesType,
+        P.ServiceTime,
+        P.HospitalDate,
+        P.LeaveDate,
+        P.NIDNumber,
+        P.CriminalRecord,
+        P.ImprisonmentDetails,
+        P.SecurityRevealed,
+        P.CensorshipInfo,
+        P.Notes,
+        P.CreatedDate,
+        P.LastModified,
+        P.CreatedBy,
+        P.ModifiedBy
+    FROM vw_PrisonerReport P
+    WHERE 
+        (@CreatedDate IS NULL OR CAST(P.CreatedDate AS DATE) = @CreatedDate)
+        AND (@SearchValue IS NULL OR {0} LIKE @SearchValue)
 
-        UNION ALL
+    UNION ALL
 
-        SELECT
-            NULL AS PrisonerID,
-            'Total Abused' AS FullName,       
-            CAST(COUNT(*) AS NVARCHAR(10)) AS ReservationNumber, 
-            NULL AS CaseID,
-            NULL AS DangerousLevel,
-            NULL AS PrisonerStatus,
-            NULL AS Accused,
-            NULL AS PrinciplesType,
-            NULL AS ServiceTime,
-            NULL AS HospitalDate,
-            NULL AS LeaveDate,
-            NULL AS NIDNumber,
-            NULL AS CriminalRecord,
-            NULL AS ImprisonmentDetails,
-            NULL AS SecurityRevealed,
-            NULL AS CensorshipInfo,
-            NULL AS Notes,
-            NULL AS CreatedDate,
-            NULL AS LastModified,
-            NULL AS CreatedBy,
-            NULL AS ModifiedBy
-        FROM 
-            vw_PrisonerReport P
-        WHERE 
-            (@CreatedDate IS NULL OR CAST(P.CreatedDate AS DATE) = @CreatedDate)
-            
+    SELECT
+        NULL AS PrisonerID,
+        'Total Abused' AS FullName,       
+        CAST(COUNT(*) AS NVARCHAR(10)) AS ReservationNumber, 
+        NULL AS CaseID,
+        NULL AS DangerousLevel,
+        NULL AS PrisonerStatus,
+        NULL AS Accused,
+        NULL AS PrinciplesType,
+        NULL AS ServiceTime,
+        NULL AS HospitalDate,
+        NULL AS LeaveDate,
+        NULL AS NIDNumber,
+        NULL AS CriminalRecord,
+        NULL AS ImprisonmentDetails,
+        NULL AS SecurityRevealed,
+        NULL AS CensorshipInfo,
+        NULL AS Notes,
+        NULL AS CreatedDate,
+        NULL AS LastModified,
+        NULL AS CreatedBy,
+        NULL AS ModifiedBy
+    FROM vw_PrisonerReport P
+    WHERE 
+        (@CreatedDate IS NULL OR CAST(P.CreatedDate AS DATE) = @CreatedDate)
+        AND (@SearchValue IS NULL OR {0} LIKE @SearchValue)
     ";
+
+            // ✅ لو المستخدم محدد عمود للبحث هنبدله مكان {0}
+            string safeColumn = string.IsNullOrEmpty(columnName) ? "P.FullName" : columnName;
+            query = string.Format(query, safeColumn);
 
             using (SqlConnection connection = new SqlConnection(DatabaseConfig.connectionString))
             {
@@ -121,6 +124,10 @@ namespace Mixed_Gym_Application
                 {
                     command.Parameters.AddWithValue("@CreatedDate", (object)date ?? DBNull.Value);
 
+                    if (!string.IsNullOrEmpty(searchValue))
+                        command.Parameters.AddWithValue("@SearchValue", "%" + searchValue + "%");
+                    else
+                        command.Parameters.AddWithValue("@SearchValue", DBNull.Value);
 
                     try
                     {
@@ -131,7 +138,7 @@ namespace Mixed_Gym_Application
                             dataTable.Load(reader);
                             transactionsGridView.DataSource = dataTable;
 
-                            // ✅ Customize headers in Arabic
+                            // ✅ تعديل العناوين بالعربي (زي ما عندك)
                             transactionsGridView.Columns["FullName"].HeaderText = "الاسم";
                             transactionsGridView.Columns["ReservationNumber"].HeaderText = "رقم الحجز";
                             transactionsGridView.Columns["CaseID"].HeaderText = "رقم القضية";
@@ -144,7 +151,6 @@ namespace Mixed_Gym_Application
                             transactionsGridView.Columns["LeaveDate"].HeaderText = "تاريخ الخروج";
                             transactionsGridView.Columns["NIDNumber"].HeaderText = "رقم الهوية";
 
-                            // ✅ New fields
                             transactionsGridView.Columns["CriminalRecord"].HeaderText = "الفيش الجنائي";
                             transactionsGridView.Columns["ImprisonmentDetails"].HeaderText = "نماذج الحبس";
                             transactionsGridView.Columns["SecurityRevealed"].HeaderText = "كشف أمن عام";
@@ -156,10 +162,7 @@ namespace Mixed_Gym_Application
                             transactionsGridView.Columns["CreatedBy"].HeaderText = "تم الإنشاء بواسطة";
                             transactionsGridView.Columns["ModifiedBy"].HeaderText = "تم التعديل بواسطة";
 
-                            // Hide internal ID
                             transactionsGridView.Columns["PrisonerID"].Visible = false;
-
-                            // Arabic-friendly font
                             transactionsGridView.DefaultCellStyle.Font = new Font("Tahoma", 10);
                         }
                     }
@@ -170,6 +173,7 @@ namespace Mixed_Gym_Application
                 }
             }
         }
+
 
 
 
@@ -255,7 +259,7 @@ namespace Mixed_Gym_Application
 
         private void DailyReport_Load_1(object sender, EventArgs e)
         {
-            // Additional initialization if needed
+            LoadColumnsToComboBox();// Additional initialization if needed
         }
 
         private void DailyReport_Resize(object sender, EventArgs e)
@@ -542,6 +546,60 @@ namespace Mixed_Gym_Application
             cashierDailyReport.ShowDialog();
             this.Close();
         }
+
+
+        private Dictionary<string, string> columnMap = new Dictionary<string, string>
+        {
+            { "الاسم", "FullName" },
+            { "الرقم القومي", "NIDNumber" },
+            { "درجة الخطورة", "DangerousLevel" },
+            { "الحالة", "PrisonerStatus" },
+            { "رقم الحجز", "ReservationNumber" },
+            { "رقم القضية", "CaseID" },
+            { "التهمه", "Accused" },
+            { "مبدأ الحبس", "PrinciplesType" },
+            { "مده الحكم", "ServiceTime" },
+            { "تاريخ المستشفى", "HospitalDate" },
+            { "تاريخ الخروج", "LeaveDate" },
+            { "الفيش الجنائي", "CriminalRecord" },
+            { "نماذج الحبس", "ImprisonmentDetails" },
+            { "كشف أمن عام", "SecurityRevealed" },
+            { "خطاب الرقابة", "CensorshipInfo" },
+            { "ملاحظات", "Notes" }
+        };
+        private void LoadColumnsToComboBox()
+        {
+            columnnamecombobox.Items.Clear();
+            foreach (var col in columnMap.Keys)
+            {
+                columnnamecombobox.Items.Add(col);
+            }
+            if (columnnamecombobox.Items.Count > 0)
+                columnnamecombobox.SelectedIndex = 0;
+        }
+
+        private async void searchtxt_TextChanged(object sender, EventArgs e)
+        {
+            if (columnnamecombobox.SelectedItem == null)
+                return;
+
+            string selectedArabic = columnnamecombobox.SelectedItem.ToString();
+            string columnName = columnMap[selectedArabic];
+            string searchValue = searchtxt.Text.Trim();
+
+            DateTime? selectedDate = datePicker.Value.Date;
+
+            // ✅ Reuse the same function with UNION ALL
+            await LoadTransactionsAsync(selectedDate, columnName, searchValue);
+        }
+
+
+        private void columnnamecombobox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+       
     }
 }
     

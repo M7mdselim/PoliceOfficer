@@ -12,34 +12,32 @@ public static class DatabaseConfig
 
     private static void LoadSqlConfiguration()
     {
-        //string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MyApp", "config.txt");
+        string configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MyApp", "config.txt");
 
-        //if (File.Exists(configPath))
-        //{
-        //    var lines = File.ReadAllLines(configPath);
-        //    if (lines.Length >= 3)
-        //    {
-        //        string serverName = lines[0];
-        //        string username = lines[1];
-        //        string password = lines[2];
-        //     //connectionString = $"Data Source=DESKTOP-64N23O5;Initial Catalog=MixedGymDB;Integrated Security=True;Encrypt=False";
+        if (!File.Exists(configPath))
+            throw new FileNotFoundException("The configuration file was not found.");
 
-        //     connectionString = $"Data Source={serverName};Initial Catalog=MixedGymDB;User Id={username};Password={password};Encrypt=False";
-        //    }
-        //    else
-        //    {
-        //        throw new InvalidOperationException("The configuration file is invalid.");
-        //    }
-        //}
-        //else
-        //{
-        //    throw new FileNotFoundException("The configuration file was not found.");
-        //}
+        var lines = File.ReadAllLines(configPath);
 
+        if (lines.Length < 3)
+            throw new InvalidOperationException("The configuration file is invalid.");
 
-       // connectionString = $"Data Source=Mohammed-selim;Initial Catalog=MixedGymDB;Integrated Security=True;Encrypt=False";
-        connectionString = $"Data Source=Desktop-Q5l24on;Initial Catalog=MixedGymDB;Integrated Security=True;Encrypt=False";
+        string serverName = lines[0];
+        string modeOrUsername = lines[1]; // Can be "WindowsAuth" or a username
+        string passwordOrConnection = lines[2]; // Password or full connection string (for WindowsAuth)
 
-        //  connectionString = $"Data Source=192.168.50.5;Initial Catalog=MixedGymDB;User Id=sa;Password=comsys@123;Encrypt=False";
+        if (modeOrUsername.Equals("WindowsAuth", StringComparison.OrdinalIgnoreCase))
+        {
+            // Windows Authentication
+            connectionString = $"Data Source={serverName};Initial Catalog=PoliceOfficerDB;Integrated Security=True;Encrypt=False";
+        }
+        else
+        {
+            // SQL Server Authentication
+            string username = modeOrUsername;
+            string password = passwordOrConnection;
+
+            connectionString = $"Data Source={serverName};Initial Catalog=PoliceOfficerDB;User Id={username};Password={password};Encrypt=False";
+        }
     }
 }

@@ -97,7 +97,7 @@
             this.backbtn.StateCommon.Back.Color1 = System.Drawing.Color.Transparent;
             this.backbtn.StateCommon.Back.Color2 = System.Drawing.Color.Transparent;
             this.backbtn.StateCommon.Back.ColorAngle = 45F;
-            this.backbtn.StateCommon.Back.Image = global::Mixed_Gym_Application.Properties.Resources.icons8_back_button_502;
+            this.backbtn.StateCommon.Back.Image = global::Police_officer_Application.Properties.Resources.icons8_back_button_502;
             this.backbtn.StateCommon.Back.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Stretch;
             this.backbtn.StateCommon.Border.Color1 = System.Drawing.Color.Transparent;
             this.backbtn.StateCommon.Border.Color2 = System.Drawing.Color.Transparent;
@@ -136,6 +136,7 @@
             this.backbtn.StateTracking.Border.Width = 1;
             this.backbtn.TabIndex = 82;
             this.backbtn.Values.Text = "";
+            this.backbtn.Click += new System.EventHandler(this.backbtn_Click);
             // 
             // label1
             // 
@@ -1032,7 +1033,7 @@
             this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "Cashier";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "صفحه الكاشير";
+            this.Text = "صفحه الادخال";
             this.Load += new System.EventHandler(this.Cashier_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dangerouslevelcombo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.prisonerstatus)).EndInit();

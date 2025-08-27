@@ -38,16 +38,16 @@
             this.label4 = new System.Windows.Forms.Label();
             this.signupbtn = new ComponentFactory.Krypton.Toolkit.KryptonButton();
             this.kryptonSeparator1 = new ComponentFactory.Krypton.Toolkit.KryptonSeparator();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.confirmpasstxt = new ComponentFactory.Krypton.Toolkit.KryptonTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.rolecombo = new ComponentFactory.Krypton.Toolkit.KryptonComboBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.homebackbtn = new System.Windows.Forms.LinkLabel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonSeparator1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rolecombo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // kryptonPalette1
@@ -104,9 +104,9 @@
             this.Headerlabel.Location = new System.Drawing.Point(423, 12);
             this.Headerlabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.Headerlabel.Name = "Headerlabel";
-            this.Headerlabel.Size = new System.Drawing.Size(231, 24);
+            this.Headerlabel.Size = new System.Drawing.Size(135, 24);
             this.Headerlabel.TabIndex = 0;
-            this.Headerlabel.Text = "Sport\'s Hub Dar Eldyafa";
+            this.Headerlabel.Text = "Police Officer";
             // 
             // captionlabel
             // 
@@ -258,18 +258,6 @@
             | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
             this.kryptonSeparator1.TabIndex = 1;
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Gainsboro;
-            this.pictureBox1.BackgroundImage = global::Mixed_Gym_Application.Properties.Resources.Fun_run_people_logo__1_;
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(390, 421);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 8;
-            this.pictureBox1.TabStop = false;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -318,10 +306,10 @@
             // 
             this.rolecombo.DropDownWidth = 82;
             this.rolecombo.Items.AddRange(new object[] {
-            "Cashier",
-            "CashierDiscount",
-            "Admin",
-            "Control"});
+            "امين",
+            "امين+",
+            "ادمن",
+            "كنترول"});
             this.rolecombo.Location = new System.Drawing.Point(427, 307);
             this.rolecombo.Name = "rolecombo";
             this.rolecombo.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Office2010Black;
@@ -338,6 +326,7 @@
             this.rolecombo.StateCommon.ComboBox.Content.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rolecombo.StateCommon.ComboBox.Content.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.rolecombo.TabIndex = 46;
+            this.rolecombo.SelectedIndexChanged += new System.EventHandler(this.rolecombo_SelectedIndexChanged);
             // 
             // linkLabel1
             // 
@@ -366,6 +355,18 @@
             this.homebackbtn.Text = "رجوع للصفحه الرئيسيه";
             this.homebackbtn.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.homebackbtn.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.homebackbtn_LinkClicked);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Gainsboro;
+            this.pictureBox1.BackgroundImage = global::Police_officer_Application.Properties.Resources.images;
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(390, 381);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 8;
+            this.pictureBox1.TabStop = false;
             // 
             // SignUp
             // 
@@ -398,8 +399,8 @@
             this.Text = "Sign Up ";
             this.Load += new System.EventHandler(this.SignUp_Load);
             ((System.ComponentModel.ISupportInitialize)(this.kryptonSeparator1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rolecombo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

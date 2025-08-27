@@ -255,5 +255,10 @@ namespace Mixed_Gym_Application
             updates.ShowDialog();
             this.Close();
         }
+
+        private void UserUpdate_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

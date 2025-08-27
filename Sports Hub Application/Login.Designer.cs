@@ -95,12 +95,12 @@
             this.Headerlabel.BackColor = System.Drawing.Color.White;
             this.Headerlabel.Font = new System.Drawing.Font("Elephant", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Headerlabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.Headerlabel.Location = new System.Drawing.Point(123, 2);
+            this.Headerlabel.Location = new System.Drawing.Point(125, 2);
             this.Headerlabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.Headerlabel.Name = "Headerlabel";
-            this.Headerlabel.Size = new System.Drawing.Size(128, 25);
+            this.Headerlabel.Size = new System.Drawing.Size(134, 25);
             this.Headerlabel.TabIndex = 0;
-            this.Headerlabel.Text = "Mixed GYM";
+            this.Headerlabel.Text = "حفظ بيانات المتهمين";
             this.Headerlabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Usertxt
@@ -260,7 +260,7 @@
             // infobtn
             // 
             this.infobtn.AutoSize = true;
-            this.infobtn.Location = new System.Drawing.Point(345, 2);
+            this.infobtn.Location = new System.Drawing.Point(347, 6);
             this.infobtn.Name = "infobtn";
             this.infobtn.OverrideDefault.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
             this.infobtn.OverrideDefault.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
@@ -275,11 +275,11 @@
             this.infobtn.OverrideDefault.Border.Rounding = 18;
             this.infobtn.OverrideDefault.Border.Width = 1;
             this.infobtn.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.ProfessionalSystem;
-            this.infobtn.Size = new System.Drawing.Size(26, 25);
+            this.infobtn.Size = new System.Drawing.Size(26, 26);
             this.infobtn.StateCommon.Back.Color1 = System.Drawing.Color.Transparent;
             this.infobtn.StateCommon.Back.Color2 = System.Drawing.Color.Transparent;
             this.infobtn.StateCommon.Back.ColorAngle = 45F;
-            this.infobtn.StateCommon.Back.Image = global::Mixed_Gym_Application.Properties.Resources.pngtree_info_vector_icon_png_image_470297;
+            this.infobtn.StateCommon.Back.Image = global::Police_officer_Application.Properties.Resources.pngtree_info_vector_icon_png_image_470297;
             this.infobtn.StateCommon.Back.ImageStyle = ComponentFactory.Krypton.Toolkit.PaletteImageStyle.Stretch;
             this.infobtn.StateCommon.Border.Color1 = System.Drawing.Color.Transparent;
             this.infobtn.StateCommon.Border.Color2 = System.Drawing.Color.Transparent;
@@ -323,21 +323,22 @@
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.DimGray;
-            this.pictureBox1.BackgroundImage = global::Mixed_Gym_Application.Properties.Resources.App_Poster1;
+            this.pictureBox1.BackgroundImage = global::Police_officer_Application.Properties.Resources.images;
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Location = new System.Drawing.Point(65, 35);
+            this.pictureBox1.Location = new System.Drawing.Point(56, 30);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(243, 199);
+            this.pictureBox1.Size = new System.Drawing.Size(265, 204);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 8;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(374, 407);
+            this.ClientSize = new System.Drawing.Size(379, 407);
             this.Controls.Add(this.infobtn);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label2);

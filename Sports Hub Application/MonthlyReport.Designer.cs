@@ -32,7 +32,10 @@ namespace Mixed_Gym_Application
             this.PrintButton = new System.Windows.Forms.Button();
             this.backButton = new System.Windows.Forms.Button();
             this.ExportToExcelButton = new System.Windows.Forms.Button();
+            this.columnnamecombobox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.searchtxt = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.transactionsGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -40,17 +43,17 @@ namespace Mixed_Gym_Application
             // 
             this.datePicker.CustomFormat = "MMMM yyyy";
             this.datePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.datePicker.Location = new System.Drawing.Point(355, 518);
+            this.datePicker.Location = new System.Drawing.Point(282, 502);
             this.datePicker.Margin = new System.Windows.Forms.Padding(2);
             this.datePicker.Name = "datePicker";
-            this.datePicker.Size = new System.Drawing.Size(244, 20);
+            this.datePicker.Size = new System.Drawing.Size(127, 20);
             this.datePicker.TabIndex = 0;
             this.datePicker.ValueChanged += new System.EventHandler(this.datePicker_ValueChanged);
             // 
             // loadReportButton
             // 
             this.loadReportButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.loadReportButton.Font = new System.Drawing.Font("PT Bold Heading", 15.75F);
+            this.loadReportButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F);
             this.loadReportButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
             this.loadReportButton.Location = new System.Drawing.Point(669, 491);
             this.loadReportButton.Margin = new System.Windows.Forms.Padding(2);
@@ -79,18 +82,18 @@ namespace Mixed_Gym_Application
             // 
             this.titleLabel.AutoSize = true;
             this.titleLabel.BackColor = System.Drawing.Color.Transparent;
-            this.titleLabel.Font = new System.Drawing.Font("PT Bold Heading", 21.75F);
+            this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F);
             this.titleLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.titleLabel.Location = new System.Drawing.Point(283, 0);
+            this.titleLabel.Location = new System.Drawing.Point(304, 27);
             this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(290, 52);
+            this.titleLabel.Size = new System.Drawing.Size(261, 33);
             this.titleLabel.TabIndex = 4;
-            this.titleLabel.Text = "تقرير شهري جيم ميكس";
+            this.titleLabel.Text = "تقرير شهري قسم الشرطه";
             // 
             // PrintButton
             // 
             this.PrintButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.PrintButton.Font = new System.Drawing.Font("PT Bold Heading", 15.75F);
+            this.PrintButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F);
             this.PrintButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
             this.PrintButton.Location = new System.Drawing.Point(9, 494);
             this.PrintButton.Name = "PrintButton";
@@ -103,7 +106,7 @@ namespace Mixed_Gym_Application
             // backButton
             // 
             this.backButton.BackColor = System.Drawing.Color.White;
-            this.backButton.BackgroundImage = global::Mixed_Gym_Application.Properties.Resources.icons8_back_button_502;
+            this.backButton.BackgroundImage = global::Police_officer_Application.Properties.Resources.icons8_back_button_502;
             this.backButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.backButton.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold);
             this.backButton.ForeColor = System.Drawing.Color.IndianRed;
@@ -116,7 +119,7 @@ namespace Mixed_Gym_Application
             // 
             // ExportToExcelButton
             // 
-            this.ExportToExcelButton.Location = new System.Drawing.Point(252, 518);
+            this.ExportToExcelButton.Location = new System.Drawing.Point(192, 502);
             this.ExportToExcelButton.Name = "ExportToExcelButton";
             this.ExportToExcelButton.Size = new System.Drawing.Size(70, 23);
             this.ExportToExcelButton.TabIndex = 24;
@@ -124,25 +127,54 @@ namespace Mixed_Gym_Application
             this.ExportToExcelButton.UseVisualStyleBackColor = true;
             this.ExportToExcelButton.Click += new System.EventHandler(this.ExportToExcelButton_Click_1);
             // 
+            // columnnamecombobox
+            // 
+            this.columnnamecombobox.FormattingEnabled = true;
+            this.columnnamecombobox.Location = new System.Drawing.Point(485, 530);
+            this.columnnamecombobox.Name = "columnnamecombobox";
+            this.columnnamecombobox.Size = new System.Drawing.Size(163, 21);
+            this.columnnamecombobox.TabIndex = 45;
+            this.columnnamecombobox.SelectedIndexChanged += new System.EventHandler(this.columnnamecombobox_SelectedIndexChanged);
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Font = new System.Drawing.Font("Century Schoolbook", 21.75F, System.Drawing.FontStyle.Bold);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.label1.Location = new System.Drawing.Point(337, 50);
+            this.label1.Location = new System.Drawing.Point(562, 495);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(189, 34);
-            this.label1.TabIndex = 47;
-            this.label1.Text = "Mixed GYM";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label1.Size = new System.Drawing.Size(86, 20);
+            this.label1.TabIndex = 44;
+            this.label1.Text = "بحث عن طريق";
+            // 
+            // searchtxt
+            // 
+            this.searchtxt.Location = new System.Drawing.Point(247, 531);
+            this.searchtxt.Name = "searchtxt";
+            this.searchtxt.Size = new System.Drawing.Size(162, 20);
+            this.searchtxt.TabIndex = 43;
+            this.searchtxt.TextChanged += new System.EventHandler(this.searchtxt_TextChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
+            this.label2.Location = new System.Drawing.Point(414, 502);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(32, 20);
+            this.label2.TabIndex = 46;
+            this.label2.Text = "شهر";
             // 
             // MonthlyReport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(860, 583);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.columnnamecombobox);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.searchtxt);
             this.Controls.Add(this.ExportToExcelButton);
             this.Controls.Add(this.backButton);
             this.Controls.Add(this.PrintButton);
@@ -166,6 +198,9 @@ namespace Mixed_Gym_Application
         private Button PrintButton;
         private Button backButton;
         private Button ExportToExcelButton;
+        private ComboBox columnnamecombobox;
         private Label label1;
+        private TextBox searchtxt;
+        private Label label2;
     }
 }

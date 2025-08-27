@@ -98,10 +98,15 @@ namespace Mixed_Gym_Application
             await LoadTransactionsAsync(selectedDate);
         }
 
-        private async Task LoadTransactionsAsync(DateTime date)
+        private async Task LoadTransactionsAsync(DateTime date, string columnName = null, string searchValue = null)
         {
+            string filterCondition = "";
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                filterCondition = $" AND {columnName} LIKE @SearchValue";
+            }
 
-            string query = @"
+            string query = $@"
 SELECT 
     P.PrisonerID,
     P.FullName,
@@ -129,12 +134,13 @@ FROM
 WHERE 
     YEAR(P.CreatedDate) = @Year 
     AND MONTH(P.CreatedDate) = @Month
+    {filterCondition}
 
 UNION ALL
 
 SELECT
     NULL AS PrisonerID,
-    'Total Prisoners' AS FullName,       
+    N'إجمالي السجناء' AS FullName,        -- Arabic total row
     CAST(COUNT(*) AS NVARCHAR(10)) AS ReservationNumber, 
     NULL AS CaseID,
     NULL AS DangerousLevel,
@@ -159,6 +165,7 @@ FROM
 WHERE 
     YEAR(P.CreatedDate) = @Year 
     AND MONTH(P.CreatedDate) = @Month
+    {filterCondition}
 ";
 
             using (SqlConnection connection = new SqlConnection(DatabaseConfig.connectionString))
@@ -167,6 +174,9 @@ WHERE
                 {
                     command.Parameters.AddWithValue("@Year", date.Year);
                     command.Parameters.AddWithValue("@Month", date.Month);
+
+                    if (!string.IsNullOrEmpty(searchValue))
+                        command.Parameters.AddWithValue("@SearchValue", "%" + searchValue + "%");
 
                     try
                     {
@@ -177,7 +187,7 @@ WHERE
                             dataTable.Load(reader);
                             transactionsGridView.DataSource = dataTable;
 
-                            // ✅ Customize headers in Arabic
+                            // ✅ Arabic column headers
                             transactionsGridView.Columns["FullName"].HeaderText = "الاسم";
                             transactionsGridView.Columns["ReservationNumber"].HeaderText = "رقم الحجز";
                             transactionsGridView.Columns["CaseID"].HeaderText = "رقم القضية";
@@ -188,15 +198,12 @@ WHERE
                             transactionsGridView.Columns["ServiceTime"].HeaderText = "مده الحكم";
                             transactionsGridView.Columns["HospitalDate"].HeaderText = "تاريخ المستشفى";
                             transactionsGridView.Columns["LeaveDate"].HeaderText = "تاريخ الخروج";
-                            transactionsGridView.Columns["NIDNumber"].HeaderText = "رقم الهوية";
-
-                            // ✅ New fields
+                            transactionsGridView.Columns["NIDNumber"].HeaderText = "الرقم القومي";
                             transactionsGridView.Columns["CriminalRecord"].HeaderText = "الفيش الجنائي";
                             transactionsGridView.Columns["ImprisonmentDetails"].HeaderText = "نماذج الحبس";
                             transactionsGridView.Columns["SecurityRevealed"].HeaderText = "كشف أمن عام";
                             transactionsGridView.Columns["CensorshipInfo"].HeaderText = "خطاب الرقابة";
                             transactionsGridView.Columns["Notes"].HeaderText = "ملاحظات";
-
                             transactionsGridView.Columns["CreatedDate"].HeaderText = "تاريخ الإنشاء";
                             transactionsGridView.Columns["LastModified"].HeaderText = "آخر تعديل";
                             transactionsGridView.Columns["CreatedBy"].HeaderText = "تم الإنشاء بواسطة";
@@ -205,17 +212,18 @@ WHERE
                             // Hide internal ID
                             transactionsGridView.Columns["PrisonerID"].Visible = false;
 
-                            // Arabic-friendly font
+                            // ✅ Arabic-friendly font
                             transactionsGridView.DefaultCellStyle.Font = new Font("Tahoma", 10);
                         }
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("An error occurred while loading prisoners: " + ex.Message);
+                        MessageBox.Show("An error occurred while loading monthly prisoners: " + ex.Message);
                     }
                 }
             }
         }
+
 
 
         private async void transactionsGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -300,7 +308,7 @@ WHERE
         }
         private void MonthlyReport_Load(object sender, EventArgs e)
         {
-            // Additional initialization if needed
+            LoadColumnsToComboBox();// Additional initialization if needed
         }
 
         private void transactionsGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -318,19 +326,26 @@ WHERE
 
         private Dictionary<string, string> columnHeaderMappings = new Dictionary<string, string>
 {
-   { "TransactionID", "ID" },
-    { "UserName", "الاسم" },
-    { "CheckNumber", "رقم الايصال" },
-    { "SportName", "النشاط" },
-    { "SportPrice", "سعر النشاط" },
-    { "Category", "الفئه" },
-    { "MobileNumber", "تليفون" },
-    { "AmountPaid", "مدفوع" },
-    { "RemainingAmount", "متبقي" },
-    { "DiscountPercentage", "%" },
-    { "DateAndTime", "تاريخ" },
-    { "CashierName", "كاشير" },
-    { "Notes", "ملحوظه" }
+    { "FullName", "الاسم" },
+    { "ReservationNumber", "رقم الحجز" },
+    { "CaseID", "رقم القضية" },
+    { "DangerousLevel", "درجة الخطورة" },
+    { "PrisonerStatus", "الحالة" },
+    { "Accused", "التهمه" },
+    { "PrinciplesType", "مبدأ الحبس" },
+    { "ServiceTime", "مده الحكم" },
+    { "HospitalDate", "تاريخ المستشفى" },
+    { "LeaveDate", "تاريخ الخروج" },
+    { "NIDNumber", "رقم الهوية" },
+    { "CriminalRecord", "الفيش الجنائي" },
+    { "ImprisonmentDetails", "نماذج الحبس" },
+    { "SecurityRevealed", "كشف أمن عام" },
+    { "CensorshipInfo", "خطاب الرقابة" },
+    { "Notes", "ملاحظات" },
+    { "CreatedDate", "تاريخ الإنشاء" },
+    { "LastModified", "آخر تعديل" },
+    { "CreatedBy", "تم الإنشاء بواسطة" },
+    { "ModifiedBy", "تم التعديل بواسطة" }
 };
 
         private Dictionary<string, object> printDataContainer = new Dictionary<string, object>();
@@ -471,7 +486,7 @@ WHERE
             {
                 saveFileDialog.Filter = "Excel Files|*.xlsx";
                 saveFileDialog.Title = "Save as Excel File";
-                saveFileDialog.FileName = "DailyReport.xlsx";
+                saveFileDialog.FileName = "MonthlyReport.xlsx";
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
@@ -522,7 +537,58 @@ WHERE
             }
         }
 
-        
+        private Dictionary<string, string> columnMap = new Dictionary<string, string>
+        {
+            { "الاسم", "FullName" },
+            { "الرقم القومي", "NIDNumber" },
+            { "درجة الخطورة", "DangerousLevel" },
+            { "الحالة", "PrisonerStatus" },
+            { "رقم الحجز", "ReservationNumber" },
+            { "رقم القضية", "CaseID" },
+            { "التهمه", "Accused" },
+            { "مبدأ الحبس", "PrinciplesType" },
+            { "مده الحكم", "ServiceTime" },
+            { "تاريخ المستشفى", "HospitalDate" },
+            { "تاريخ الخروج", "LeaveDate" },
+            { "الفيش الجنائي", "CriminalRecord" },
+            { "نماذج الحبس", "ImprisonmentDetails" },
+            { "كشف أمن عام", "SecurityRevealed" },
+            { "خطاب الرقابة", "CensorshipInfo" },
+            { "ملاحظات", "Notes" }
+        };
+        private void LoadColumnsToComboBox()
+        {
+            columnnamecombobox.Items.Clear();
+            foreach (var col in columnMap.Keys)
+            {
+                columnnamecombobox.Items.Add(col);
+            }
+            if (columnnamecombobox.Items.Count > 0)
+                columnnamecombobox.SelectedIndex = 0;
+        }
+
+        private async void searchtxt_TextChanged(object sender, EventArgs e)
+        {
+            if (columnnamecombobox.SelectedItem == null)
+                return;
+
+            string selectedArabic = columnnamecombobox.SelectedItem.ToString();
+            string columnName = columnMap[selectedArabic];
+            string searchValue = searchtxt.Text.Trim();
+
+            DateTime selectedDate = datePicker.Value.Date;
+
+            // ✅ Reuse the same function with UNION ALL
+            await LoadTransactionsAsync(selectedDate, columnName, searchValue);
+        }
+
+
+        private void columnnamecombobox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+       
     }
 }
 

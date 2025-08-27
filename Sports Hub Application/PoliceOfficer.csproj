@@ -8,8 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{4DA7B957-19A0-4BF5-A2CE-454616D8E108}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Mixed_Gym_Application</RootNamespace>
-    <AssemblyName>Mixed Gym</AssemblyName>
+    <RootNamespace>Police_officer_Application</RootNamespace>
+    <AssemblyName>PoliceOfficer</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -57,7 +57,7 @@
     </Win32Resource>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>logoo.ico</ApplicationIcon>
+    <ApplicationIcon>Egyptian_Police_Emblem.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <NoWin32Manifest>true</NoWin32Manifest>
@@ -192,6 +192,11 @@
     <Compile Include="ChangePass.Designer.cs">
       <DependentUpon>ChangePass.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SignUp.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -255,11 +260,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="SportshubDBDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -344,20 +344,17 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Fun-run-people-logo.ico" />
+    <Content Include="Egyptian_Police_Emblem.ico" />
     <Content Include="logoo.ico" />
+    <None Include="Resources\images1.jpg" />
+    <None Include="Resources\images.jpg" />
     <None Include="Resources\pngtree-info-vector-icon-png-image_470297.jpg" />
     <None Include="Resources\icons8-back-button-502.png" />
     <None Include="Resources\icons8-back-button-501.png" />
     <None Include="Resources\icons8-back-button-50.png" />
     <None Include="Resources\Picture1513461.png" />
     <None Include="Resources\Picture151346.png" />
-    <None Include="Resources\App Poster.jpg" />
-    <None Include="Resources\App Poster.png" />
-    <None Include="Resources\2.png" />
-    <None Include="Resources\153-1531682_open-red-back-button-png.png" />
     <Content Include="Resources\187803-200.png" />
-    <None Include="Resources\Fun run people logo %281%29.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

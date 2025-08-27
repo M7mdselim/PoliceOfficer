@@ -122,10 +122,10 @@ namespace Mixed_Gym_Application
             // Map role names to role IDs
             Dictionary<string, int> roleMapping = new Dictionary<string, int>
     {
-        { "Cashier", 1 },
-        { "CashierDiscount", 2 },
-        { "Admin", 3 },
-        { "Control", 4 }
+        { "امين", 1 },
+        { "امين+", 2 },
+        { "ادمن", 3 },
+        { "كنترول", 4 }
     };
 
             // Get the selected role name
@@ -229,6 +229,11 @@ namespace Mixed_Gym_Application
         }
 
         private void usertxt_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rolecombo_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }

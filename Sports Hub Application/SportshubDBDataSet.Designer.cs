@@ -10,7 +10,7 @@
 
 #pragma warning disable 1591
 
-namespace Mixed_Gym_Application {
+namespace Police_officer_Application {
     
     
     /// <summary>
@@ -1506,7 +1506,7 @@ namespace Mixed_Gym_Application {
         }
     }
 }
-namespace Mixed_Gym_Application.SportshubDBDataSetTableAdapters {
+namespace Police_officer_Application.SportshubDBDataSetTableAdapters {
     
     
     /// <summary>
@@ -1704,7 +1704,7 @@ SELECT TransactionID, UserID, SportID, AmountPaid, RemainingAmount, DateAndTime,
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = global::Mixed_Gym_Application.Properties.Settings.Default.SportshubDBConnectionString;
+            this._connection.ConnectionString = global::Police_officer_Application.Properties.Settings.Default.SportshubDBConnectionString;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2206,7 +2206,7 @@ SELECT TransactionID, UserID, SportID, AmountPaid, RemainingAmount, DateAndTime,
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
         private void InitConnection() {
             this._connection = new global::System.Data.SqlClient.SqlConnection();
-            this._connection.ConnectionString = global::Mixed_Gym_Application.Properties.Settings.Default.SportshubDBConnectionString;
+            this._connection.ConnectionString = global::Police_officer_Application.Properties.Settings.Default.SportshubDBConnectionString;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

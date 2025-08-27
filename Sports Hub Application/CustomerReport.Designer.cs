@@ -178,6 +178,7 @@ namespace Mixed_Gym_Application
             this.printButton.TabIndex = 13;
             this.printButton.Text = "طباعة";
             this.printButton.UseVisualStyleBackColor = false;
+            this.printButton.Click += new System.EventHandler(this.printButton_Click);
             // 
             // ExportToExcelButton
             // 
@@ -187,6 +188,7 @@ namespace Mixed_Gym_Application
             this.ExportToExcelButton.TabIndex = 25;
             this.ExportToExcelButton.Text = "استخراج ";
             this.ExportToExcelButton.UseVisualStyleBackColor = true;
+            this.ExportToExcelButton.Click += new System.EventHandler(this.ExportToExcelButton_Click);
             // 
             // clearbtn
             // 
@@ -200,11 +202,12 @@ namespace Mixed_Gym_Application
             this.clearbtn.TabIndex = 26;
             this.clearbtn.Text = "مسح ";
             this.clearbtn.UseVisualStyleBackColor = false;
+            this.clearbtn.Click += new System.EventHandler(this.clearbtn_Click);
             // 
             // backButton
             // 
             this.backButton.BackColor = System.Drawing.Color.Transparent;
-            this.backButton.BackgroundImage = global::Mixed_Gym_Application.Properties.Resources.icons8_back_button_502;
+            this.backButton.BackgroundImage = global::Police_officer_Application.Properties.Resources.icons8_back_button_502;
             this.backButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.backButton.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold);
             this.backButton.ForeColor = System.Drawing.Color.IndianRed;
@@ -213,6 +216,7 @@ namespace Mixed_Gym_Application
             this.backButton.Size = new System.Drawing.Size(70, 63);
             this.backButton.TabIndex = 22;
             this.backButton.UseVisualStyleBackColor = false;
+            this.backButton.Click += new System.EventHandler(this.backButton_Click);
             // 
             // CustomerReport
             // 
@@ -239,7 +243,7 @@ namespace Mixed_Gym_Application
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "CustomerReport";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Customer Report";
+            this.Text = "تقرير متهم";
             this.Load += new System.EventHandler(this.CustomerReport_Load);
             ((System.ComponentModel.ISupportInitialize)(this.prisonerinfoprisonersgridview)).EndInit();
             this.ResumeLayout(false);

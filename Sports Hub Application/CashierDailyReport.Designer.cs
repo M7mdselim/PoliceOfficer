@@ -101,7 +101,7 @@ namespace Mixed_Gym_Application
             // backButton
             // 
             this.backButton.BackColor = System.Drawing.Color.Transparent;
-            this.backButton.BackgroundImage = global::Mixed_Gym_Application.Properties.Resources.icons8_back_button_502;
+            this.backButton.BackgroundImage = global::Police_officer_Application.Properties.Resources.icons8_back_button_502;
             this.backButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.backButton.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold);
             this.backButton.ForeColor = System.Drawing.Color.IndianRed;
@@ -127,7 +127,7 @@ namespace Mixed_Gym_Application
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "CashierDailyReport";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Spot Check";
+            this.Text = "تقرير امين يومي";
             this.Load += new System.EventHandler(this.DailyReport_Load_1);
             ((System.ComponentModel.ISupportInitialize)(this.transactionsGridView)).EndInit();
             this.ResumeLayout(false);

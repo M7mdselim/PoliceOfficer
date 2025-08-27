@@ -59,7 +59,7 @@
             // backButton
             // 
             this.backButton.BackColor = System.Drawing.Color.Transparent;
-            this.backButton.BackgroundImage = global::Mixed_Gym_Application.Properties.Resources.icons8_back_button_502;
+            this.backButton.BackgroundImage = global::Police_officer_Application.Properties.Resources.icons8_back_button_502;
             this.backButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.backButton.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold);
             this.backButton.ForeColor = System.Drawing.Color.IndianRed;
@@ -155,6 +155,7 @@
             this.Name = "UserUpdate";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Sign in";
+            this.Load += new System.EventHandler(this.UserUpdate_Load);
             ((System.ComponentModel.ISupportInitialize)(this.usersDataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

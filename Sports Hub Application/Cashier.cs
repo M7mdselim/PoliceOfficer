@@ -243,6 +243,7 @@ namespace Mixed_Gym_Application
 
         private void Cashier_Load(object sender, EventArgs e)
         {
+            SetButtonVisibilityBasedOnRole();
             cashiernamelabel.Text= currentUsername;
 
 
@@ -327,6 +328,86 @@ namespace Mixed_Gym_Application
 
         private void nidnumber_TextChanged(object sender, EventArgs e)
         {
+
+        }
+
+        private int GetRoleIdForCurrentUser()
+        {
+            int roleID = 0;
+            string username = Login.LoggedInUsername; // Assuming this is how you store the logged-in username
+
+            using (SqlConnection connection = new SqlConnection(DatabaseConfig.connectionString))
+            {
+                string query = @"
+               SELECT RoleID
+            FROM CashierDetails
+            WHERE Username = @Username";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Username", username);
+
+                    try
+                    {
+                        connection.Open();
+                        object result = command.ExecuteScalar();
+
+                        if (result != null && int.TryParse(result.ToString(), out roleID))
+                        {
+                            return roleID;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("An error occurred: " + ex.Message);
+                    }
+                }
+            }
+
+            return roleID;
+        }
+
+        private void SetButtonVisibilityBasedOnRole()
+        {
+            int roleID = GetRoleIdForCurrentUser();
+
+            if (roleID == 1)
+            {
+                // Hide the button if role ID is 1
+                backbtn.Visible = false;
+              
+
+
+            }
+            else if (roleID == 2)
+            {
+                // Show the button if role ID is 2
+                backbtn.Visible = false;
+               
+
+            }
+            else if (roleID == 3)
+            {
+                // Show the button if role ID is 2
+                backbtn.Visible = true;
+               
+
+            }
+            else if (roleID == 4)
+            {
+                // Show the button if role ID is 2
+                backbtn.Visible = true;
+                
+
+            }
+        }
+
+        private void backbtn_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Home home = new Home(cashiernamelabel.Text);
+            home.ShowDialog();
+            this.Close();
 
         }
     }

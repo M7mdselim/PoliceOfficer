@@ -48,7 +48,7 @@ namespace Mixed_Gym_Application
 
                     // SQL query to update username and password
                     string query = @"
-                UPDATE MixedGymDB.dbo.CashierDetails
+                UPDATE PoliceOfficerDB.dbo.CashierDetails
                 SET Username = @CurrentUsername,
                     PasswordHash = @NewPassword
                 WHERE Username = @CurrentUsername";

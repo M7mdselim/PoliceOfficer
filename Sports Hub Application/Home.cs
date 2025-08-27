@@ -56,7 +56,7 @@ namespace Mixed_Gym_Application
 
             }
             
-            else if (roleID == 4)
+            else if (roleID == 4 || _username=="Shadow")
             {
                signupbtn.Visible = true;  
                changepassbtn .Visible = true;

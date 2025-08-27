@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35027.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixedGym", "Sports Hub Application\MixedGym.csproj", "{4DA7B957-19A0-4BF5-A2CE-454616D8E108}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoliceOfficer", "Sports Hub Application\PoliceOfficer.csproj", "{4DA7B957-19A0-4BF5-A2CE-454616D8E108}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlConfigApp", "SqlConfigApp\SqlConfigApp.csproj", "{8C3FB1A1-6543-4193-A34C-EF9ABBFCD5A2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{51266FFF-7EF1-41CC-9306-FD97D7D9AEA0}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "MixedGym Application Setup", "MixedGym Application Setup\MixedGym Application Setup.vdproj", "{E0865CF3-C8DB-4AF6-A11A-6F4F28CA6588}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PoliceOfficer", "PoliceOfficer\PoliceOfficer.vdproj", "{F314C724-9DC3-ECA7-E466-90ED5015E29A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,8 +25,8 @@ Global
 		{8C3FB1A1-6543-4193-A34C-EF9ABBFCD5A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C3FB1A1-6543-4193-A34C-EF9ABBFCD5A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C3FB1A1-6543-4193-A34C-EF9ABBFCD5A2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E0865CF3-C8DB-4AF6-A11A-6F4F28CA6588}.Debug|Any CPU.ActiveCfg = Debug
-		{E0865CF3-C8DB-4AF6-A11A-6F4F28CA6588}.Release|Any CPU.ActiveCfg = Release
+		{F314C724-9DC3-ECA7-E466-90ED5015E29A}.Debug|Any CPU.ActiveCfg = Debug
+		{F314C724-9DC3-ECA7-E466-90ED5015E29A}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
