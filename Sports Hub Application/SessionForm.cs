@@ -9,32 +9,33 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ClosedXML.Excel;
-using static System.ComponentModel.Design.ObjectSelectorEditor;
-using UglyToad.PdfPig.Core;
-using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Math;
 
 namespace Mixed_Gym_Application
 {
-    public partial class MonthlyReport : Form
+    public partial class SessionForm : Form
     {
-
-
-
         private float _initialFormWidth;
         private float _initialFormHeight;
         private ControlInfo[] _controlsInfo;
+
         private string _username;
-        public MonthlyReport(string username)
+
+        private BindingSource bindingSource = new BindingSource();
+
+
+
+
+        public SessionForm(string username)
         {
+
+
+
             InitializeComponent();
-            // Set UserID column to be invisible initially
-            //transactionsGridView.Columns["UserID"].Visible = false;
-
-
-
+            // Store initial form size
             _initialFormWidth = this.Width;
             _initialFormHeight = this.Height;
-
+            transactionsGridView.DataSource = bindingSource;
             // Store initial size and location of all controls
             _controlsInfo = new ControlInfo[this.Controls.Count];
             for (int i = 0; i < this.Controls.Count; i++)
@@ -44,12 +45,235 @@ namespace Mixed_Gym_Application
             }
 
             // Set event handler for form resize
-            this.Resize += Home_Resize;
+            this.Resize += DailyReport_Resize;
             _username = username;
         }
 
+        private async void loadReportButton_Click(object sender, EventArgs e)
+        {
+            DateTime selectedDate = datePicker.Value.Date;
 
-        private void Home_Resize(object sender, EventArgs e)
+            if (columnnamecombobox.SelectedItem != null)
+            {
+                string selectedArabic = columnnamecombobox.SelectedItem.ToString();
+                string columnName = columnMap[selectedArabic];
+                await LoadTransactionsAsync(selectedDate, columnName);
+            }
+            else
+            {
+                await LoadTransactionsAsync(selectedDate, "CreatedDate");
+            }
+        }
+
+        private async Task LoadTransactionsAsync(DateTime? date, string columnName = null)
+        {
+            string query = @"
+        SELECT 
+            P.PrisonerID,
+            P.FullName,
+            P.ReservationNumber,
+            P.CaseID,
+            P.diseasestatus,
+            P.DangerousLevel,
+            P.PrisonerStatus,
+            P.Accused,
+            P.PrinciplesType,
+            P.NextSession,
+            P.ServiceTime,
+            P.HospitalDate,
+            P.LeaveDate,
+            P.NIDNumber,
+            P.CriminalRecord,
+            P.ImprisonmentDetails,
+            P.SecurityRevealed,
+            P.CensorshipInfo,
+            P.Notes,
+            P.DepositPlace,
+            P.CreatedDate,
+            P.LastModified,
+            P.CreatedBy,
+            P.ModifiedBy
+        FROM vw_PrisonerReport P
+        WHERE (@SelectedDate IS NULL OR CAST({0} AS DATE) = @SelectedDate)
+
+        UNION ALL
+
+        SELECT
+            NULL AS PrisonerID,
+            N'إجمالي السجناء' AS FullName,       
+            CAST(COUNT(*) AS NVARCHAR(10)) AS ReservationNumber, 
+            NULL AS CaseID,
+            NULL as diseasestatus,
+            NULL AS DangerousLevel,
+            NULL AS PrisonerStatus,
+            NULL AS Accused,
+            NULL AS PrinciplesType,
+            NULL AS NextSession,
+            NULL AS ServiceTime,
+            NULL AS HospitalDate,
+            NULL AS LeaveDate,
+            NULL AS NIDNumber,
+            NULL AS CriminalRecord,
+            NULL AS ImprisonmentDetails,
+            NULL AS SecurityRevealed,
+            NULL AS CensorshipInfo,
+            NULL AS Notes,
+            NULL AS DepositPlace,
+            NULL AS CreatedDate,
+            NULL AS LastModified,
+            NULL AS CreatedBy,
+            NULL AS ModifiedBy
+        FROM vw_PrisonerReport P
+        WHERE (@SelectedDate IS NULL OR CAST({0} AS DATE) = @SelectedDate);
+    ";
+
+            // ✅ Default to CreatedDate if nothing chosen
+            string safeColumn = string.IsNullOrEmpty(columnName) ? "CreatedDate" : columnName;
+            query = string.Format(query, safeColumn);
+
+            using (SqlConnection connection = new SqlConnection(DatabaseConfig.connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@SelectedDate", (object)date ?? DBNull.Value);
+
+                    try
+                    {
+                        await connection.OpenAsync();
+                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                        {
+                            DataTable dataTable = new DataTable();
+                            dataTable.Load(reader);
+                            transactionsGridView.DataSource = dataTable;
+
+                            // ✅ Arabic headers
+                            transactionsGridView.Columns["FullName"].HeaderText = "الاسم";
+                            transactionsGridView.Columns["ReservationNumber"].HeaderText = "رقم الحجز";
+                            transactionsGridView.Columns["CaseID"].HeaderText = "رقم القضية";
+                            transactionsGridView.Columns["DangerousLevel"].HeaderText = "درجة الخطورة";
+                            transactionsGridView.Columns["PrisonerStatus"].HeaderText = "الحالة";
+                            transactionsGridView.Columns["Accused"].HeaderText = "التهمه";
+                            transactionsGridView.Columns["PrinciplesType"].HeaderText = "مبدأ الحبس";
+                            transactionsGridView.Columns["NextSession"].HeaderText = "الجلسه القادمه";
+                            transactionsGridView.Columns["ServiceTime"].HeaderText = "مده الحكم";
+                            transactionsGridView.Columns["HospitalDate"].HeaderText = "تاريخ المستشفى";
+                            transactionsGridView.Columns["LeaveDate"].HeaderText = "تاريخ الخروج";
+                            transactionsGridView.Columns["NIDNumber"].HeaderText = "رقم الهوية";
+                            transactionsGridView.Columns["diseasestatus"].HeaderText = "الحاله المرضيه";
+                            transactionsGridView.Columns["CriminalRecord"].HeaderText = "الفيش الجنائي";
+                            transactionsGridView.Columns["ImprisonmentDetails"].HeaderText = "نماذج الحبس";
+                            transactionsGridView.Columns["SecurityRevealed"].HeaderText = "كشف أمن عام";
+                            transactionsGridView.Columns["CensorshipInfo"].HeaderText = "خطاب الرقابة";
+                            transactionsGridView.Columns["Notes"].HeaderText = "ملاحظات";
+                            transactionsGridView.Columns["DepositPlace"].HeaderText = "مكان الايداع";
+                            transactionsGridView.Columns["CreatedDate"].HeaderText = "تاريخ الإنشاء";
+                            transactionsGridView.Columns["LastModified"].HeaderText = "آخر تعديل";
+                            transactionsGridView.Columns["CreatedBy"].HeaderText = "تم الإنشاء بواسطة";
+                            transactionsGridView.Columns["ModifiedBy"].HeaderText = "تم التعديل بواسطة";
+
+                            transactionsGridView.Columns["PrisonerID"].Visible = false;
+                            transactionsGridView.DefaultCellStyle.Font = new Font("Tahoma", 10);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("حدث خطأ أثناء تحميل السجناء: " + ex.Message);
+                    }
+                }
+            }
+        }
+
+
+
+
+
+
+
+        private async void transactionsGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < transactionsGridView.Rows.Count)
+            {
+                DataGridViewRow row = transactionsGridView.Rows[e.RowIndex];
+
+                string prisonerId = row.Cells["PrisonerID"].Value?.ToString();
+                if (string.IsNullOrEmpty(prisonerId))
+                    return; // skip if it's the "إجمالي السجناء" row
+
+                string fullName = row.Cells["FullName"].Value?.ToString();
+                string criminalRecord = row.Cells["CriminalRecord"].Value?.ToString();
+                string imprisonmentDetails = row.Cells["ImprisonmentDetails"].Value?.ToString();
+                string securityRevealed = row.Cells["SecurityRevealed"].Value?.ToString();
+                string censorshipInfo = row.Cells["CensorshipInfo"].Value?.ToString();
+                string notes = row.Cells["Notes"].Value?.ToString();
+
+                string details =
+                    $"👤 الاسم: {fullName}\n" +
+                    $"🆔 رقم السجين: {prisonerId}\n\n" +
+                    $"📜 الفيش الجنائي:\n{criminalRecord}\n\n" +
+                    $"⛓️ نماذج الحبس:\n{imprisonmentDetails}\n\n" +
+                    $"🔒 كشف أمن عام:\n{securityRevealed}\n\n" +
+                    $"📝 خطاب الرقابة:\n{censorshipInfo}\n\n" +
+                    $"📌 ملاحظات:\n{notes}";
+
+                MessageBox.Show(details, "تفاصيل السجين", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        //private async Task<Image> GetUserProfileImageAsync(int userId, SqlConnection connection)
+        //{
+        //    string query = "SELECT ProfileImage FROM Users WHERE UserID = @UserID";
+
+        //    using (SqlCommand command = new SqlCommand(query, connection))
+        //    {
+        //        command.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
+
+        //        try
+        //        {
+        //            await connection.OpenAsync();
+        //            object result = await command.ExecuteScalarAsync();
+
+        //            if (result != DBNull.Value && result != null)
+        //            {
+        //                byte[] imageData = result as byte[];
+        //                if (imageData != null && imageData.Length > 0)
+        //                {
+        //                    using (MemoryStream ms = new MemoryStream(imageData))
+        //                    {
+        //                        try
+        //                        {
+        //                            return Image.FromStream(ms);
+        //                        }
+        //                        catch (ArgumentException ex)
+        //                        {
+        //                            MessageBox.Show("Invalid image data: " + ex.Message);
+        //                        }
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    MessageBox.Show("Profile image data is empty.");
+        //                }
+        //            }
+
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show("An error occurred while retrieving the profile image: " + ex.Message);
+        //        }
+        //    }
+
+        //    transactionsGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        //    transactionsGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+
+        //    return null;
+        //}
+
+        private void DailyReport_Load_1(object sender, EventArgs e)
+        {
+            LoadColumnsToComboBox();// Additional initialization if needed
+        }
+
+        private void DailyReport_Resize(object sender, EventArgs e)
         {
             float widthRatio = this.Width / _initialFormWidth;
             float heightRatio = this.Height / _initialFormHeight;
@@ -90,252 +314,11 @@ namespace Mixed_Gym_Application
                 FontSize = fontSize;
             }
         }
-    
-
-    private async void loadReportButton_Click(object sender, EventArgs e)
-        {
-            DateTime selectedDate = datePicker.Value.Date;
-            await LoadTransactionsAsync(selectedDate);
-        }
-
-        private async Task LoadTransactionsAsync(DateTime date, string columnName = null, string searchValue = null)
-        {
-            string filterCondition = "";
-            bool isDateColumn = columnName == "CreatedDate" || columnName == "HospitalDate" || columnName == "LeaveDate" || columnName == "NextSession" || columnName == "PrinciplesType";
-
-            if (!string.IsNullOrEmpty(searchValue))
-            {
-                if (isDateColumn)
-                    filterCondition = $" AND CONVERT(NVARCHAR(10), {columnName}, 103) LIKE @SearchValue";
-                else
-                    filterCondition = $" AND {columnName} LIKE @SearchValue";
-            }
-
-            string query = $@"
-SELECT 
-    P.PrisonerID,
-    P.FullName,
-    P.ReservationNumber,
-    P.CaseID,
-    P.diseasestatus,
-    P.DangerousLevel,
-    P.PrisonerStatus,
-    P.Accused,
-    P.PrinciplesType,
-    P.NextSession,
-    P.ServiceTime,
-    P.HospitalDate,
-    P.LeaveDate,
-    P.NIDNumber,
-    P.CriminalRecord,
-    P.ImprisonmentDetails,
-    P.SecurityRevealed,
-    P.CensorshipInfo,
-    P.Notes,
-    P.DepositPlace,
-    P.CreatedDate,
-    P.LastModified,
-    P.CreatedBy,
-    P.ModifiedBy
-FROM 
-    vw_PrisonerReport P
-WHERE 
-    YEAR(P.CreatedDate) = @Year 
-    AND MONTH(P.CreatedDate) = @Month
-    {filterCondition}
-
-UNION ALL
-
-SELECT
-    NULL AS PrisonerID,
-    N'إجمالي السجناء' AS FullName,        
-    CAST(COUNT(*) AS NVARCHAR(10)) AS ReservationNumber, 
-    NULL AS CaseID,
-    NULL AS diseasestatus,
-    NULL AS DangerousLevel,
-    NULL AS PrisonerStatus,
-    NULL AS Accused,
-    NULL AS PrinciplesType,
-    NULL AS NextSession,
-    NULL AS ServiceTime,
-    NULL AS HospitalDate,
-    NULL AS LeaveDate,
-    NULL AS NIDNumber,
-    NULL AS CriminalRecord,
-    NULL AS ImprisonmentDetails,
-    NULL AS SecurityRevealed,
-    NULL AS CensorshipInfo,
-    NULL AS Notes,
-    NULL AS DepositPlace,
-    NULL AS CreatedDate,
-    NULL AS LastModified,
-    NULL AS CreatedBy,
-    NULL AS ModifiedBy
-FROM 
-    vw_PrisonerReport P
-WHERE 
-    YEAR(P.CreatedDate) = @Year 
-    AND MONTH(P.CreatedDate) = @Month
-    {filterCondition}
-";
-
-            using (SqlConnection connection = new SqlConnection(DatabaseConfig.connectionString))
-            {
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Year", date.Year);
-                    command.Parameters.AddWithValue("@Month", date.Month);
-
-                    if (!string.IsNullOrEmpty(searchValue))
-                        command.Parameters.AddWithValue("@SearchValue", "%" + searchValue + "%");
-
-                    try
-                    {
-                        await connection.OpenAsync();
-                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
-                        {
-                            DataTable dataTable = new DataTable();
-                            dataTable.Load(reader);
-                            transactionsGridView.DataSource = dataTable;
-
-                            // ✅ Arabic column headers
-                            transactionsGridView.Columns["FullName"].HeaderText = "الاسم";
-                            transactionsGridView.Columns["ReservationNumber"].HeaderText = "رقم الحجز";
-                            transactionsGridView.Columns["CaseID"].HeaderText = "رقم القضية";
-                            transactionsGridView.Columns["DangerousLevel"].HeaderText = "درجة الخطورة";
-                            transactionsGridView.Columns["PrisonerStatus"].HeaderText = "الحالة";
-                            transactionsGridView.Columns["Accused"].HeaderText = "التهمه";
-                            transactionsGridView.Columns["diseasestatus"].HeaderText = "الحاله المرضيه";
-                            transactionsGridView.Columns["PrinciplesType"].HeaderText = "مبدأ الحبس";
-                            transactionsGridView.Columns["NextSession"].HeaderText = "الجلسه القادمه";
-                            transactionsGridView.Columns["ServiceTime"].HeaderText = "مده الحكم";
-                            transactionsGridView.Columns["HospitalDate"].HeaderText = "تاريخ المستشفى";
-                            transactionsGridView.Columns["LeaveDate"].HeaderText = "تاريخ الخروج";
-                            transactionsGridView.Columns["NIDNumber"].HeaderText = "الرقم القومي";
-                            transactionsGridView.Columns["CriminalRecord"].HeaderText = "الفيش الجنائي";
-                            transactionsGridView.Columns["ImprisonmentDetails"].HeaderText = "نماذج الحبس";
-                            transactionsGridView.Columns["SecurityRevealed"].HeaderText = "كشف أمن عام";
-                            transactionsGridView.Columns["CensorshipInfo"].HeaderText = "خطاب الرقابة";
-                            transactionsGridView.Columns["Notes"].HeaderText = "ملاحظات";
-                            transactionsGridView.Columns["DepositPlace"].HeaderText = "مكان الايداع";
-                            transactionsGridView.Columns["CreatedDate"].HeaderText = "تاريخ الإنشاء";
-                            transactionsGridView.Columns["LastModified"].HeaderText = "آخر تعديل";
-                            transactionsGridView.Columns["CreatedBy"].HeaderText = "تم الإنشاء بواسطة";
-                            transactionsGridView.Columns["ModifiedBy"].HeaderText = "تم التعديل بواسطة";
-
-                            // Hide internal ID
-                            transactionsGridView.Columns["PrisonerID"].Visible = false;
-
-                            // ✅ Arabic-friendly font
-                            transactionsGridView.DefaultCellStyle.Font = new Font("Tahoma", 10);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("An error occurred while loading monthly prisoners: " + ex.Message);
-                    }
-                }
-            }
-        }
-
-
-
-
-        private async void transactionsGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0 && e.RowIndex < transactionsGridView.Rows.Count)
-            {
-                DataGridViewRow row = transactionsGridView.Rows[e.RowIndex];
-
-                string prisonerId = row.Cells["PrisonerID"].Value?.ToString();
-                if (string.IsNullOrEmpty(prisonerId))
-                    return; // skip if it's the "إجمالي السجناء" row
-
-                string fullName = row.Cells["FullName"].Value?.ToString();
-                string criminalRecord = row.Cells["CriminalRecord"].Value?.ToString();
-                string imprisonmentDetails = row.Cells["ImprisonmentDetails"].Value?.ToString();
-                string securityRevealed = row.Cells["SecurityRevealed"].Value?.ToString();
-                string censorshipInfo = row.Cells["CensorshipInfo"].Value?.ToString();
-                string notes = row.Cells["Notes"].Value?.ToString();
-
-                string details =
-                    $"👤 الاسم: {fullName}\n" +
-                    $"🆔 رقم السجين: {prisonerId}\n\n" +
-                    $"📜 الفيش الجنائي:\n{criminalRecord}\n\n" +
-                    $"⛓️ نماذج الحبس:\n{imprisonmentDetails}\n\n" +
-                    $"🔒 كشف أمن عام:\n{securityRevealed}\n\n" +
-                    $"📝 خطاب الرقابة:\n{censorshipInfo}\n\n" +
-                    $"📌 ملاحظات:\n{notes}";
-
-                MessageBox.Show(details, "تفاصيل السجين", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
-
-        private async Task<Image> GetUserProfileImageAsync(int userId, SqlConnection connection)
-        {
-            string query = "SELECT ProfileImage FROM Users WHERE UserID = @UserID";
-
-            using (SqlCommand command = new SqlCommand(query, connection))
-            {
-                command.Parameters.Add("@UserID", SqlDbType.Int).Value = userId;
-
-                try
-                {
-                    await connection.OpenAsync();
-                    object result = await command.ExecuteScalarAsync();
-
-                    if (result != DBNull.Value && result != null)
-                    {
-                        byte[] imageData = result as byte[];
-                        if (imageData != null && imageData.Length > 0)
-                        {
-                            using (MemoryStream ms = new MemoryStream(imageData))
-                            {
-                                try
-                                {
-                                    return Image.FromStream(ms);
-                                }
-                                catch (ArgumentException ex)
-                                {
-                                    MessageBox.Show("Invalid image data: " + ex.Message);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("Profile image data is empty.");
-                        }
-                    }
-                   
-                    
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("An error occurred while retrieving the profile image: " + ex.Message);
-                }
-            }
-            transactionsGridView.Columns["UserID"].Visible = false;
-            transactionsGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            transactionsGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-
-            return null;
-        }
-        private void MonthlyReport_Load(object sender, EventArgs e)
-        {
-            LoadColumnsToComboBox();// Additional initialization if needed
-        }
 
         private void transactionsGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
-
-        private void datePicker_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private int currentPageIndex = 0;
         private List<DataGridViewColumn> columnsToPrint;
 
@@ -344,10 +327,10 @@ WHERE
     { "FullName", "الاسم" },
     { "ReservationNumber", "رقم الحجز" },
     { "CaseID", "رقم القضية" },
+      { "diseasestatus", "الحاله المرضيه" },
     { "DangerousLevel", "درجة الخطورة" },
     { "PrisonerStatus", "الحالة" },
     { "Accused", "التهمه" },
-      { "diseasestatus", "الحاله المرضيه" },
     { "PrinciplesType", "مبدأ الحبس" },
      {"NextSession","الجلسه القادمه" },
     { "ServiceTime", "مده الحكم" },
@@ -359,30 +342,22 @@ WHERE
     { "SecurityRevealed", "كشف أمن عام" },
     { "CensorshipInfo", "خطاب الرقابة" },
     { "Notes", "ملاحظات" },
-            {"DepositPlace" , "مكان الايداع" },
+     {"DepositPlace" , "مكان الايداع" },
+
     { "CreatedDate", "تاريخ الإنشاء" },
     { "LastModified", "آخر تعديل" },
     { "CreatedBy", "تم الإنشاء بواسطة" },
     { "ModifiedBy", "تم التعديل بواسطة" },
-           
+
 };
 
-        private Dictionary<string, object> printDataContainer = new Dictionary<string, object>();
-
-
-        public class PrintHeaderInfo
-        {
-            public string HeaderText { get; set; }
-            public string ReportDateText { get; set; }
-            public string MonthText { get; set; }
-        }
 
 
         private void PrintButton_Click(object sender, EventArgs e)
         {
             currentPageIndex = 0;
             columnsToPrint = transactionsGridView.Columns.Cast<DataGridViewColumn>()
-                .Where(col => col.Visible && col.Name != "UserID").ToList();  // Exclude UserID column from printing
+        .Where(col => col.Visible && col.Name != "PrisonerID").ToList();  // Exclude PrisonerID column from printing
 
             PrintDocument printDocument = new PrintDocument();
             printDocument.PrintPage += PrintDocument_PrintPage;
@@ -400,8 +375,6 @@ WHERE
                 printDocument.Print();
             }
         }
-
-        // متغيرات عامة لتتبع الصف الحالي
         private int currentRow = 0;
 
         private void PrintDocument_BeginPrint(object sender, PrintEventArgs e)
@@ -426,7 +399,7 @@ WHERE
                 topMargin - 80);
 
             // 🟢 العنوان مع الشهر اللي اختاره المستخدم
-            string monthText = $"تقرير شهري - {datePicker.Value:MMMM yyyy}";
+            string monthText = $"تقرير جلسات - {datePicker.Value.Date.ToShortDateString()}";
             e.Graphics.DrawString(monthText, subHeaderFont, Brushes.Black,
                 (e.PageBounds.Width - e.Graphics.MeasureString(monthText, subHeaderFont).Width) / 2,
                 topMargin - 50);
@@ -516,11 +489,6 @@ WHERE
 
 
 
-
-
-
-
-
         private void backButton_Click(object sender, EventArgs e)
         {
             this.Hide();
@@ -530,13 +498,13 @@ WHERE
             this.Close();
         }
 
-        private void ExportToExcelButton_Click_1(object sender, EventArgs e)
+        private void ExportToExcelButton_Click(object sender, EventArgs e)
         {
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
                 saveFileDialog.Filter = "Excel Files|*.xlsx";
                 saveFileDialog.Title = "Save as Excel File";
-                saveFileDialog.FileName = "MonthlyReport.xlsx";
+                saveFileDialog.FileName = "DailyReport.xlsx";
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
@@ -587,6 +555,15 @@ WHERE
             }
         }
 
+        private void CashierReport_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            CashierDailyReport cashierDailyReport = new CashierDailyReport(_username);
+            cashierDailyReport.ShowDialog();
+            this.Close();
+        }
+
+
         private Dictionary<string, string> columnMap = new Dictionary<string, string>
         {
             { "الاسم", "FullName" },
@@ -607,16 +584,32 @@ WHERE
             { "نماذج الحبس", "ImprisonmentDetails" },
             { "كشف أمن عام", "SecurityRevealed" },
             { "خطاب الرقابة", "CensorshipInfo" },
-            { "ملاحظات", "Notes" }
-            
+            { "ملاحظات", "Notes" },
+
         };
         private void LoadColumnsToComboBox()
         {
             columnnamecombobox.Items.Clear();
-            foreach (var col in columnMap.Keys)
+
+            // ✅ Only date columns
+            var dateColumns = new Dictionary<string, string>
+    {
+        { "تاريخ الإنشاء", "CreatedDate" },
+          { "الجلسه القادمه", "NextSession" },
+         { "مبدأ الحبس", "PrinciplesType" },
+        { "تاريخ كشف الطبي", "HospitalDate" },
+        { "موعد الترحيل", "LeaveDate" },
+      
+    };
+
+            foreach (var col in dateColumns.Keys)
             {
                 columnnamecombobox.Items.Add(col);
             }
+
+            // Save for mapping
+            columnMap = dateColumns;
+
             if (columnnamecombobox.Items.Count > 0)
                 columnnamecombobox.SelectedIndex = 0;
         }
@@ -628,12 +621,12 @@ WHERE
 
             string selectedArabic = columnnamecombobox.SelectedItem.ToString();
             string columnName = columnMap[selectedArabic];
-            string searchValue = searchtxt.Text.Trim();
+          //  string searchValue = searchtxt.Text.Trim();
 
-            DateTime selectedDate = datePicker.Value.Date;
+            DateTime? selectedDate = datePicker.Value.Date;
 
             // ✅ Reuse the same function with UNION ALL
-            await LoadTransactionsAsync(selectedDate, columnName, searchValue);
+            await LoadTransactionsAsync(selectedDate, columnName);
         }
 
 
@@ -642,14 +635,8 @@ WHERE
 
         }
 
-       
+
     }
 }
-
-
-
-
-
-
 
 

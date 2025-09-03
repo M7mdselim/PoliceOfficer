@@ -1,0 +1,616 @@
+USE [PoliceOfficerDB]
+GO
+/****** Object:  UserDefinedFunction [dbo].[NormalizeArabicText]    Script Date: 27/08/2025 20:38:59 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE FUNCTION [dbo].[NormalizeArabicText] (@text NVARCHAR(MAX))
+RETURNS NVARCHAR(MAX)
+AS
+BEGIN
+    -- Replace different forms of Arabic characters with their normalized forms
+    RETURN REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+        @text,
+        N'أ', N'ا'),   -- Normalize 'أ' to 'ا'
+        N'إ', N'ا'),   -- Normalize 'إ' to 'ا'
+        N'آ', N'ا'),   -- Normalize 'آ' to 'ا'
+        N'ى', N'ي'),   -- Normalize 'ى' to 'ي'
+        N'ئ', N'ي'),   -- Normalize 'ئ' to 'ي'
+        N'ة', N'ه')    -- Normalize 'ة' to 'ه'
+END
+GO
+/****** Object:  UserDefinedFunction [dbo].[ReverseNormalizeArabicText]    Script Date: 27/08/2025 20:38:59 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE FUNCTION [dbo].[ReverseNormalizeArabicText] (@text NVARCHAR(MAX))
+RETURNS NVARCHAR(MAX)
+AS
+BEGIN
+    -- Replace normalized characters with their original forms
+    RETURN REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+        @text,
+        N'ا', N'أ'),   -- Reverse normalize 'ا' to 'أ'
+        N'ا', N'إ'),   -- Reverse normalize 'ا' to 'إ'
+        N'ا', N'آ'),   -- Reverse normalize 'ا' to 'آ'
+        N'ي', N'ى'),   -- Reverse normalize 'ي' to 'ى'
+        N'ي', N'ئ'),   -- Reverse normalize 'ي' to 'ئ'
+        N'ه', N'ة')    -- Reverse normalize 'ه' to 'ة'
+END
+GO
+/****** Object:  Table [dbo].[Prisoner]    Script Date: 27/08/2025 20:39:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Prisoner](
+	[PrisonerID] [int] IDENTITY(1,1) NOT NULL,
+	[PrisonerInfoID] [int] NOT NULL,
+	[FullName] [nvarchar](100) NOT NULL,
+	[ReservationNumber] [nvarchar](50) NOT NULL,
+	[CaseID] [nvarchar](50) NOT NULL,
+	[DangerousLevel] [nvarchar](20) NULL,
+	[PrisonerStatus] [nvarchar](20) NULL,
+	[Accused] [nvarchar](200) NULL,
+	[PrinciplesType] [nvarchar](50) NULL,
+	[ServiceTime] [nvarchar](50) NULL,
+	[HospitalDate] [date] NULL,
+	[LeaveDate] [date] NULL,
+	[NIDNumber] [nvarchar](20) NULL,
+	[CriminalRecord] [nvarchar](max) NULL,
+	[ImprisonmentDetails] [nvarchar](max) NULL,
+	[SecurityRevealed] [nvarchar](max) NULL,
+	[CensorshipInfo] [nvarchar](max) NULL,
+	[Notes] [nvarchar](max) NULL,
+	[CreatedDate] [datetime] NULL,
+	[LastModified] [datetime] NULL,
+	[CreatedBy] [nvarchar](50) NULL,
+	[ModifiedBy] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[PrisonerID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  View [dbo].[vw_PrisonerReport]    Script Date: 27/08/2025 20:39:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE VIEW [dbo].[vw_PrisonerReport]
+AS
+SELECT
+    PrisonerID,
+    FullName,
+    ReservationNumber,
+    CaseID,
+    DangerousLevel,
+    PrisonerStatus,
+    Accused,
+    PrinciplesType,
+    ServiceTime,
+    HospitalDate,
+    LeaveDate,
+    NIDNumber,
+    CriminalRecord,
+    ImprisonmentDetails,
+    SecurityRevealed,
+    CensorshipInfo,
+    Notes,
+    DepositPlace,
+    CreatedDate,
+    LastModified,
+    CreatedBy,
+    ModifiedBy
+FROM Prisoner
+
+UNION ALL
+
+SELECT
+    NULL AS PrisonerID,
+    'Total Prisoners' AS FullName,
+    NULL AS ReservationNumber,
+    NULL AS CaseID,
+    NULL AS DangerousLevel,
+    NULL AS PrisonerStatus,
+    NULL AS Accused,
+    NULL AS PrinciplesType,
+    NULL AS ServiceTime,
+    NULL AS HospitalDate,
+    NULL AS LeaveDate,
+    NULL AS NIDNumber,
+    NULL AS CriminalRecord,
+    NULL AS ImprisonmentDetails,
+    NULL AS SecurityRevealed,
+    NULL AS CensorshipInfo,
+    NULL AS Notes,
+    Null As DepositPlace,
+    NULL AS CreatedDate,
+    NULL AS LastModified,
+    NULL AS CreatedBy,
+    NULL AS ModifiedBy
+GO
+/****** Object:  Table [dbo].[CashierDetails]    Script Date: 27/08/2025 20:39:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CashierDetails](
+	[CashierID] [int] IDENTITY(1,1) NOT NULL,
+	[Username] [nvarchar](50) NOT NULL,
+	[PasswordHash] [nvarchar](50) NOT NULL,
+	[RoleID] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[CashierID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[Username] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PrisonerInfo]    Script Date: 27/08/2025 20:39:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PrisonerInfo](
+	[PrisonerInfoID] [int] IDENTITY(1,1) NOT NULL,
+	[FullName] [nvarchar](100) NOT NULL,
+	[NIDNumber] [nvarchar](20) NOT NULL,
+	[DangerousLevel] [nvarchar](20) NULL,
+	[PrisonerStatus] [nvarchar](20) NULL,
+	[CreatedDate] [datetime] NULL,
+	[LastModified] [datetime] NULL,
+	[CreatedBy] [nvarchar](50) NULL,
+	[ModifiedBy] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[PrisonerInfoID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[NIDNumber] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Roles]    Script Date: 27/08/2025 20:39:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Roles](
+	[RoleID] [int] IDENTITY(1,1) NOT NULL,
+	[RoleName] [nvarchar](50) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[RoleID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[RoleName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[CashierDetails] ADD  DEFAULT ((1)) FOR [RoleID]
+GO
+ALTER TABLE [dbo].[Prisoner] ADD  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+ALTER TABLE [dbo].[Prisoner] ADD  DEFAULT (getdate()) FOR [LastModified]
+GO
+ALTER TABLE [dbo].[PrisonerInfo] ADD  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+ALTER TABLE [dbo].[PrisonerInfo] ADD  DEFAULT (getdate()) FOR [LastModified]
+GO
+ALTER TABLE [dbo].[CashierDetails]  WITH CHECK ADD FOREIGN KEY([RoleID])
+REFERENCES [dbo].[Roles] ([RoleID])
+GO
+ALTER TABLE [dbo].[CashierDetails]  WITH CHECK ADD FOREIGN KEY([RoleID])
+REFERENCES [dbo].[Roles] ([RoleID])
+GO
+ALTER TABLE [dbo].[Prisoner]  WITH CHECK ADD  CONSTRAINT [FK_Prisoner_PrisonerInfo] FOREIGN KEY([PrisonerInfoID])
+REFERENCES [dbo].[PrisonerInfo] ([PrisonerInfoID])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Prisoner] CHECK CONSTRAINT [FK_Prisoner_PrisonerInfo]
+GO
+
+
+GO
+
+
+
+
+CREATE FUNCTION [dbo].[HashPassword] (@Password NVARCHAR(50))
+RETURNS NVARCHAR(100)
+AS
+BEGIN
+    -- Hash the password using SHA2_256
+    DECLARE @HashedPassword VARBINARY(64);
+    SET @HashedPassword = HASHBYTES('SHA2_256', @Password);
+    
+    -- Convert to hexadecimal string
+    RETURN CONVERT(NVARCHAR(100), @HashedPassword, 2);
+END
+GO
+
+CREATE TRIGGER [dbo].[trg_CashierDetails_HashPassword]
+ON [dbo].[CashierDetails]
+INSTEAD OF INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    INSERT INTO [dbo].[CashierDetails] (Username, PasswordHash, RoleID)
+    SELECT 
+        i.Username,
+        dbo.HashPassword(i.PasswordHash), -- Hash the password
+        ISNULL(i.RoleID, 1) -- Default to role 1 if not specified
+    FROM inserted i;
+END
+GO
+
+
+CREATE TRIGGER [dbo].[trg_CashierDetails_UpdateHashPassword]
+ON [dbo].[CashierDetails]
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    -- Only update if PasswordHash was changed and doesn't look like a hash already
+    IF UPDATE(PasswordHash)
+    BEGIN
+        UPDATE cd
+        SET PasswordHash = dbo.HashPassword(i.PasswordHash)
+        FROM [dbo].[CashierDetails] cd
+        INNER JOIN inserted i ON cd.CashierID = i.CashierID
+        INNER JOIN deleted d ON cd.CashierID = d.CashierID
+        WHERE i.PasswordHash <> d.PasswordHash -- Password was changed
+        AND LEN(i.PasswordHash) < 64 -- Doesn't look like a hash already
+        AND i.PasswordHash NOT LIKE '%[^0-9A-Fa-f]%'; -- Doesn't contain only hex characters
+    END
+END
+GO
+
+
+-- Drop previous triggers if they exist
+IF OBJECT_ID('[dbo].[trg_CashierDetails_HashPassword]', 'TR') IS NOT NULL
+    DROP TRIGGER [dbo].[trg_CashierDetails_HashPassword]
+GO
+
+IF OBJECT_ID('[dbo].[trg_CashierDetails_UpdateHashPassword]', 'TR') IS NOT NULL
+    DROP TRIGGER [dbo].[trg_CashierDetails_UpdateHashPassword]
+GO
+
+
+-- Increase the PasswordHash column size to accommodate hashed values
+ALTER TABLE [dbo].[CashierDetails] 
+ALTER COLUMN [PasswordHash] NVARCHAR(160) NOT NULL;
+GO
+
+
+
+
+
+-------------------------------------------------------------------------------------
+
+
+
+USE [PoliceOfficerDB]
+GO
+/****** Object:  UserDefinedFunction [dbo].[HashPassword]    Script Date: 29/08/2025 00:27:16 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE FUNCTION [dbo].[HashPassword] (@Password NVARCHAR(50))
+RETURNS NVARCHAR(100)
+AS
+BEGIN
+    -- Hash the password using SHA2_256
+    DECLARE @HashedPassword VARBINARY(64);
+    SET @HashedPassword = HASHBYTES('SHA2_256', @Password);
+    
+    -- Convert to hexadecimal string
+    RETURN CONVERT(NVARCHAR(100), @HashedPassword, 2);
+END
+GO
+/****** Object:  UserDefinedFunction [dbo].[NormalizeArabicText]    Script Date: 29/08/2025 00:27:16 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE FUNCTION [dbo].[NormalizeArabicText] (@text NVARCHAR(MAX))
+RETURNS NVARCHAR(MAX)
+AS
+BEGIN
+    -- Replace different forms of Arabic characters with their normalized forms
+    RETURN REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+        @text,
+        N'أ', N'ا'),   -- Normalize 'أ' to 'ا'
+        N'إ', N'ا'),   -- Normalize 'إ' to 'ا'
+        N'آ', N'ا'),   -- Normalize 'آ' to 'ا'
+        N'ى', N'ي'),   -- Normalize 'ى' to 'ي'
+        N'ئ', N'ي'),   -- Normalize 'ئ' to 'ي'
+        N'ة', N'ه')    -- Normalize 'ة' to 'ه'
+END
+GO
+/****** Object:  UserDefinedFunction [dbo].[ReverseNormalizeArabicText]    Script Date: 29/08/2025 00:27:16 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE FUNCTION [dbo].[ReverseNormalizeArabicText] (@text NVARCHAR(MAX))
+RETURNS NVARCHAR(MAX)
+AS
+BEGIN
+    -- Replace normalized characters with their original forms
+    RETURN REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+        @text,
+        N'ا', N'أ'),   -- Reverse normalize 'ا' to 'أ'
+        N'ا', N'إ'),   -- Reverse normalize 'ا' to 'إ'
+        N'ا', N'آ'),   -- Reverse normalize 'ا' to 'آ'
+        N'ي', N'ى'),   -- Reverse normalize 'ي' to 'ى'
+        N'ي', N'ئ'),   -- Reverse normalize 'ي' to 'ئ'
+        N'ه', N'ة')    -- Reverse normalize 'ه' to 'ة'
+END
+GO
+/****** Object:  Table [dbo].[Prisoner]    Script Date: 29/08/2025 00:27:16 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Prisoner](
+	[PrisonerID] [int] IDENTITY(1,1) NOT NULL,
+	[PrisonerInfoID] [int] NOT NULL,
+	[FullName] [nvarchar](100) NOT NULL,
+	[ReservationNumber] [nvarchar](50) NOT NULL,
+	[CaseID] [nvarchar](50) NOT NULL,
+	[DangerousLevel] [nvarchar](20) NULL,
+	[PrisonerStatus] [nvarchar](20) NULL,
+	[Accused] [nvarchar](200) NULL,
+	[PrinciplesType] [nvarchar](50) NULL,
+	[ServiceTime] [nvarchar](50) NULL,
+	[HospitalDate] [date] NULL,
+	[LeaveDate] [date] NULL,
+	[NIDNumber] [nvarchar](20) NULL,
+	[CriminalRecord] [nvarchar](max) NULL,
+	[ImprisonmentDetails] [nvarchar](max) NULL,
+	[SecurityRevealed] [nvarchar](max) NULL,
+	[CensorshipInfo] [nvarchar](max) NULL,
+	[Notes] [nvarchar](max) NULL,
+	[CreatedDate] [datetime] NULL,
+	[LastModified] [datetime] NULL,
+	[CreatedBy] [nvarchar](50) NULL,
+	[ModifiedBy] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[PrisonerID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  View [dbo].[vw_PrisonerReport]    Script Date: 29/08/2025 00:27:16 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE VIEW [dbo].[vw_PrisonerReport]
+AS
+SELECT
+    PrisonerID,
+    FullName,
+    ReservationNumber,
+    CaseID,
+    DangerousLevel,
+    PrisonerStatus,
+    Accused,
+    PrinciplesType,
+    ServiceTime,
+    HospitalDate,
+    LeaveDate,
+    NIDNumber,
+    CriminalRecord,
+    ImprisonmentDetails,
+    SecurityRevealed,
+    CensorshipInfo,
+    Notes,
+    CreatedDate,
+    LastModified,
+    CreatedBy,
+    ModifiedBy
+FROM Prisoner
+
+UNION ALL
+
+SELECT
+    NULL AS PrisonerID,
+    'Total Prisoners' AS FullName,
+    NULL AS ReservationNumber,
+    NULL AS CaseID,
+    NULL AS DangerousLevel,
+    NULL AS PrisonerStatus,
+    NULL AS Accused,
+    NULL AS PrinciplesType,
+    NULL AS ServiceTime,
+    NULL AS HospitalDate,
+    NULL AS LeaveDate,
+    NULL AS NIDNumber,
+    NULL AS CriminalRecord,
+    NULL AS ImprisonmentDetails,
+    NULL AS SecurityRevealed,
+    NULL AS CensorshipInfo,
+    NULL AS Notes,
+    NULL AS CreatedDate,
+    NULL AS LastModified,
+    NULL AS CreatedBy,
+    NULL AS ModifiedBy
+GO
+/****** Object:  Table [dbo].[CashierDetails]    Script Date: 29/08/2025 00:27:16 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CashierDetails](
+	[CashierID] [int] IDENTITY(1,1) NOT NULL,
+	[Username] [nvarchar](50) NOT NULL,
+	[PasswordHash] [nvarchar](160) NOT NULL,
+	[RoleID] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[CashierID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[Username] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PrisonerInfo]    Script Date: 29/08/2025 00:27:16 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PrisonerInfo](
+	[PrisonerInfoID] [int] IDENTITY(1,1) NOT NULL,
+	[FullName] [nvarchar](100) NOT NULL,
+	[NIDNumber] [nvarchar](20) NOT NULL,
+	[DangerousLevel] [nvarchar](20) NULL,
+	[PrisonerStatus] [nvarchar](20) NULL,
+	[CreatedDate] [datetime] NULL,
+	[LastModified] [datetime] NULL,
+	[CreatedBy] [nvarchar](50) NULL,
+	[ModifiedBy] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[PrisonerInfoID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[NIDNumber] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Roles]    Script Date: 29/08/2025 00:27:16 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Roles](
+	[RoleID] [int] IDENTITY(1,1) NOT NULL,
+	[RoleName] [nvarchar](50) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[RoleID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[RoleName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[CashierDetails] ADD  DEFAULT ((1)) FOR [RoleID]
+GO
+ALTER TABLE [dbo].[Prisoner] ADD  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+ALTER TABLE [dbo].[Prisoner] ADD  DEFAULT (getdate()) FOR [LastModified]
+GO
+ALTER TABLE [dbo].[PrisonerInfo] ADD  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+ALTER TABLE [dbo].[PrisonerInfo] ADD  DEFAULT (getdate()) FOR [LastModified]
+GO
+ALTER TABLE [dbo].[CashierDetails]  WITH CHECK ADD FOREIGN KEY([RoleID])
+REFERENCES [dbo].[Roles] ([RoleID])
+GO
+ALTER TABLE [dbo].[CashierDetails]  WITH CHECK ADD FOREIGN KEY([RoleID])
+REFERENCES [dbo].[Roles] ([RoleID])
+GO
+ALTER TABLE [dbo].[Prisoner]  WITH CHECK ADD  CONSTRAINT [FK_Prisoner_PrisonerInfo] FOREIGN KEY([PrisonerInfoID])
+REFERENCES [dbo].[PrisonerInfo] ([PrisonerInfoID])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Prisoner] CHECK CONSTRAINT [FK_Prisoner_PrisonerInfo]
+GO
+-------------------------------------------------------------
+ Alter Table Prisoner
+  Add DepositPlace Nvarchar(Max);
+-----------------------------------------
+  Alter Table Prisoner
+  Add NextSession date;
+
+
+  ALTER TABLE [dbo].[Prisoner]
+ALTER COLUMN [PrinciplesType] DATE NULL;
+
+
+
+
+   ALTER TABLE [dbo].[Prisoner]
+Add   diseasestatus nvarchar(20) NULL;
+ALTER VIEW [dbo].[vw_PrisonerReport]
+AS
+SELECT
+    PrisonerID,
+    FullName,
+    ReservationNumber,
+    CaseID,
+	diseasestatus,
+    DangerousLevel,
+    PrisonerStatus,
+    Accused,
+    PrinciplesType,
+	NextSession,   
+    ServiceTime,
+    HospitalDate,
+    LeaveDate,
+    NIDNumber,
+    CriminalRecord,
+    ImprisonmentDetails,
+    SecurityRevealed,
+    CensorshipInfo,
+    Notes,
+	DepositPlace,
+    CreatedDate,
+    LastModified,
+    CreatedBy,
+    ModifiedBy
+    
+FROM Prisoner
+
+UNION ALL
+
+SELECT
+    NULL AS PrisonerID,
+    'Total Prisoners' AS FullName,
+    NULL AS ReservationNumber,
+    NULL AS CaseID,
+	Null AS diseasestatus,
+    NULL AS DangerousLevel,
+    NULL AS PrisonerStatus,
+    NULL AS Accused,
+    NULL AS PrinciplesType,
+	 NULL AS NextSession,
+    NULL AS ServiceTime,
+    NULL AS HospitalDate,
+    NULL AS LeaveDate,
+    NULL AS NIDNumber,
+    NULL AS CriminalRecord,
+    NULL AS ImprisonmentDetails,
+    NULL AS SecurityRevealed,
+    NULL AS CensorshipInfo,
+    NULL AS Notes,
+	NULL AS DepositPlace,
+    NULL AS CreatedDate,
+    NULL AS LastModified,
+    NULL AS CreatedBy,
+    NULL AS ModifiedBy
+   
+
+
+  Alter Table [PrisonerInfo]
+  Add DepositPlace Nvarchar(20);

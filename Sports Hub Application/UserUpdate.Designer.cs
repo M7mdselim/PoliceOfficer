@@ -114,7 +114,7 @@
             this.updatetransbtn.Name = "updatetransbtn";
             this.updatetransbtn.Size = new System.Drawing.Size(146, 41);
             this.updatetransbtn.TabIndex = 34;
-            this.updatetransbtn.Text = "تعديل حسابات";
+            this.updatetransbtn.Text = "تعديل ملف";
             this.updatetransbtn.UseVisualStyleBackColor = false;
             this.updatetransbtn.Click += new System.EventHandler(this.updatetransbtn_Click);
             // 
@@ -124,6 +124,7 @@
             this.nametxt.Name = "nametxt";
             this.nametxt.Size = new System.Drawing.Size(274, 20);
             this.nametxt.TabIndex = 35;
+            this.nametxt.TextChanged += new System.EventHandler(this.nametxt_TextChanged);
             // 
             // label1
             // 
@@ -154,7 +155,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "UserUpdate";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Sign in";
+            this.Text = "تعديل بيانات شخصيه";
             this.Load += new System.EventHandler(this.UserUpdate_Load);
             ((System.ComponentModel.ISupportInitialize)(this.usersDataGridView)).EndInit();
             this.ResumeLayout(false);

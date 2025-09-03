@@ -41,7 +41,7 @@ namespace Mixed_Gym_Application
             // fullnametxt
             // 
             this.fullnametxt.Font = new System.Drawing.Font("Tahoma", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.fullnametxt.Location = new System.Drawing.Point(378, 189);
+            this.fullnametxt.Location = new System.Drawing.Point(378, 115);
             this.fullnametxt.Margin = new System.Windows.Forms.Padding(2);
             this.fullnametxt.Name = "fullnametxt";
             this.fullnametxt.Size = new System.Drawing.Size(285, 33);
@@ -53,7 +53,7 @@ namespace Mixed_Gym_Application
             this.prisonerinfoprisonersgridview.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.prisonerinfoprisonersgridview.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.prisonerinfoprisonersgridview.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.prisonerinfoprisonersgridview.Location = new System.Drawing.Point(11, 315);
+            this.prisonerinfoprisonersgridview.Location = new System.Drawing.Point(11, 243);
             this.prisonerinfoprisonersgridview.Margin = new System.Windows.Forms.Padding(2);
             this.prisonerinfoprisonersgridview.Name = "prisonerinfoprisonersgridview";
             this.prisonerinfoprisonersgridview.RowHeadersWidth = 35;
@@ -67,7 +67,7 @@ namespace Mixed_Gym_Application
             this.nameLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
             this.nameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
             this.nameLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
-            this.nameLabel.Location = new System.Drawing.Point(702, 184);
+            this.nameLabel.Location = new System.Drawing.Point(702, 110);
             this.nameLabel.Name = "nameLabel";
             this.nameLabel.Size = new System.Drawing.Size(157, 45);
             this.nameLabel.TabIndex = 3;
@@ -79,11 +79,11 @@ namespace Mixed_Gym_Application
             this.titleLabel.BackColor = System.Drawing.Color.Transparent;
             this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
             this.titleLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.titleLabel.Location = new System.Drawing.Point(283, 30);
+            this.titleLabel.Location = new System.Drawing.Point(283, -16);
             this.titleLabel.Name = "titleLabel";
             this.titleLabel.Size = new System.Drawing.Size(411, 88);
             this.titleLabel.TabIndex = 4;
-            this.titleLabel.Text = "تفرير متهم";
+            this.titleLabel.Text = "تقرير متهم";
             this.titleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label1
@@ -91,7 +91,7 @@ namespace Mixed_Gym_Application
             this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
-            this.label1.Location = new System.Drawing.Point(231, 193);
+            this.label1.Location = new System.Drawing.Point(231, 119);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(111, 29);
             this.label1.TabIndex = 5;
@@ -101,7 +101,7 @@ namespace Mixed_Gym_Application
             // dangerousleveltxt
             // 
             this.dangerousleveltxt.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dangerousleveltxt.Location = new System.Drawing.Point(104, 195);
+            this.dangerousleveltxt.Location = new System.Drawing.Point(113, 119);
             this.dangerousleveltxt.Margin = new System.Windows.Forms.Padding(2);
             this.dangerousleveltxt.Name = "dangerousleveltxt";
             this.dangerousleveltxt.Size = new System.Drawing.Size(113, 27);
@@ -111,7 +111,7 @@ namespace Mixed_Gym_Application
             // nidtxt
             // 
             this.nidtxt.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nidtxt.Location = new System.Drawing.Point(577, 259);
+            this.nidtxt.Location = new System.Drawing.Point(577, 185);
             this.nidtxt.Margin = new System.Windows.Forms.Padding(2);
             this.nidtxt.Name = "nidtxt";
             this.nidtxt.Size = new System.Drawing.Size(157, 27);
@@ -123,7 +123,7 @@ namespace Mixed_Gym_Application
             this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
             this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
-            this.label2.Location = new System.Drawing.Point(748, 257);
+            this.label2.Location = new System.Drawing.Point(748, 183);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(111, 29);
             this.label2.TabIndex = 7;
@@ -133,7 +133,7 @@ namespace Mixed_Gym_Application
             // statustxt
             // 
             this.statustxt.Font = new System.Drawing.Font("Tahoma", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.statustxt.Location = new System.Drawing.Point(219, 259);
+            this.statustxt.Location = new System.Drawing.Point(219, 185);
             this.statustxt.Margin = new System.Windows.Forms.Padding(2);
             this.statustxt.Name = "statustxt";
             this.statustxt.Size = new System.Drawing.Size(184, 27);
@@ -145,7 +145,7 @@ namespace Mixed_Gym_Application
             this.label3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(178)));
             this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
-            this.label3.Location = new System.Drawing.Point(424, 257);
+            this.label3.Location = new System.Drawing.Point(424, 183);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(111, 29);
             this.label3.TabIndex = 9;
@@ -157,7 +157,7 @@ namespace Mixed_Gym_Application
             this.searchButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
             this.searchButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F);
             this.searchButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
-            this.searchButton.Location = new System.Drawing.Point(702, 682);
+            this.searchButton.Location = new System.Drawing.Point(702, 611);
             this.searchButton.Margin = new System.Windows.Forms.Padding(2);
             this.searchButton.Name = "searchButton";
             this.searchButton.Size = new System.Drawing.Size(209, 58);
@@ -171,7 +171,7 @@ namespace Mixed_Gym_Application
             this.printButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
             this.printButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F);
             this.printButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
-            this.printButton.Location = new System.Drawing.Point(23, 682);
+            this.printButton.Location = new System.Drawing.Point(23, 611);
             this.printButton.Margin = new System.Windows.Forms.Padding(2);
             this.printButton.Name = "printButton";
             this.printButton.Size = new System.Drawing.Size(205, 58);
@@ -182,7 +182,7 @@ namespace Mixed_Gym_Application
             // 
             // ExportToExcelButton
             // 
-            this.ExportToExcelButton.Location = new System.Drawing.Point(319, 700);
+            this.ExportToExcelButton.Location = new System.Drawing.Point(319, 629);
             this.ExportToExcelButton.Name = "ExportToExcelButton";
             this.ExportToExcelButton.Size = new System.Drawing.Size(70, 23);
             this.ExportToExcelButton.TabIndex = 25;
@@ -195,7 +195,7 @@ namespace Mixed_Gym_Application
             this.clearbtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
             this.clearbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F);
             this.clearbtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
-            this.clearbtn.Location = new System.Drawing.Point(472, 682);
+            this.clearbtn.Location = new System.Drawing.Point(472, 611);
             this.clearbtn.Margin = new System.Windows.Forms.Padding(2);
             this.clearbtn.Name = "clearbtn";
             this.clearbtn.Size = new System.Drawing.Size(205, 58);
@@ -223,7 +223,7 @@ namespace Mixed_Gym_Application
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(953, 749);
+            this.ClientSize = new System.Drawing.Size(953, 680);
             this.Controls.Add(this.clearbtn);
             this.Controls.Add(this.ExportToExcelButton);
             this.Controls.Add(this.backButton);

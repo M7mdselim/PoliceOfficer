@@ -284,6 +284,7 @@
             this.Controls.Add(this.Headerlabel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Changepass";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ChangePass";
             this.ResumeLayout(false);
             this.PerformLayout();

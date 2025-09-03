@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Police_officer_Application;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -220,6 +221,22 @@ namespace Mixed_Gym_Application
             this.Hide();
             Changepass changepass = new Changepass(_username);
             changepass.ShowDialog();
+            this.Close();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            DepositPlaceForm form = new DepositPlaceForm(_username);
+            form.ShowDialog();
+            this.Close();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            SessionForm form = new SessionForm(_username);
+            form.ShowDialog();
             this.Close();
         }
     }

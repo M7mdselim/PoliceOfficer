@@ -20,6 +20,10 @@ namespace Mixed_Gym_Application
         private string connectionString = DatabaseConfig.connectionString;
         private string currentUsername;
 
+        private float _initialFormWidth;
+        private float _initialFormHeight;
+        private ControlInfo[] _controlsInfo;
+
         public Cashier(string username)
         {
             InitializeComponent();
@@ -28,6 +32,62 @@ namespace Mixed_Gym_Application
 
 
             this.Text = $"Prison Management System - Welcome {username}";
+            _initialFormWidth = this.Width;
+            _initialFormHeight = this.Height;
+
+            // Store initial size and location of all controls
+            _controlsInfo = new ControlInfo[this.Controls.Count];
+            for (int i = 0; i < this.Controls.Count; i++)
+            {
+                Control c = this.Controls[i];
+                _controlsInfo[i] = new ControlInfo(c.Left, c.Top, c.Width, c.Height, c.Font.Size);
+            }
+
+            // Set event handler for form resize
+            this.Resize += Home_Resize;
+
+        }
+
+        private void Home_Resize(object sender, EventArgs e)
+        {
+            float widthRatio = this.Width / _initialFormWidth;
+            float heightRatio = this.Height / _initialFormHeight;
+            ResizeControls(this.Controls, widthRatio, heightRatio);
+        }
+
+        private void ResizeControls(Control.ControlCollection controls, float widthRatio, float heightRatio)
+        {
+            for (int i = 0; i < controls.Count; i++)
+            {
+                Control control = controls[i];
+                ControlInfo controlInfo = _controlsInfo[i];
+
+                control.Left = (int)(controlInfo.Left * widthRatio);
+                control.Top = (int)(controlInfo.Top * heightRatio);
+                control.Width = (int)(controlInfo.Width * widthRatio);
+                control.Height = (int)(controlInfo.Height * heightRatio);
+
+                // Adjust font size
+                control.Font = new Font(control.Font.FontFamily, controlInfo.FontSize * Math.Min(widthRatio, heightRatio));
+            }
+        }
+
+        private class ControlInfo
+        {
+            public int Left { get; set; }
+            public int Top { get; set; }
+            public int Width { get; set; }
+            public int Height { get; set; }
+            public float FontSize { get; set; }
+
+            public ControlInfo(int left, int top, int width, int height, float fontSize)
+            {
+                Left = left;
+                Top = top;
+                Width = width;
+                Height = height;
+                FontSize = fontSize;
+            }
         }
 
 
@@ -58,8 +118,8 @@ namespace Mixed_Gym_Application
                             {
                                 // Insert new PrisonerInfo
                                 string insertPrisonerInfo = @"
-                            INSERT INTO PrisonerInfo (FullName, NIDNumber, DangerousLevel, PrisonerStatus, CreatedBy)
-                            VALUES (@FullName, @NIDNumber, @DangerousLevel, @PrisonerStatus, @CreatedBy);
+                            INSERT INTO PrisonerInfo (FullName, NIDNumber, DangerousLevel, PrisonerStatus, CreatedBy , DepositPlace)
+                            VALUES (@FullName, @NIDNumber, @DangerousLevel, @PrisonerStatus, @CreatedBy , @DepositPlace);
                             SELECT SCOPE_IDENTITY();";
 
                                 using (SqlCommand cmdInfo = new SqlCommand(insertPrisonerInfo, connection))
@@ -69,6 +129,7 @@ namespace Mixed_Gym_Application
                                     cmdInfo.Parameters.AddWithValue("@DangerousLevel", dangerouslevelcombo.SelectedItem?.ToString() ?? "");
                                     cmdInfo.Parameters.AddWithValue("@PrisonerStatus", prisonerstatus.SelectedItem?.ToString() ?? "");
                                     cmdInfo.Parameters.AddWithValue("@CreatedBy", currentUsername);
+                                    cmdInfo.Parameters.AddWithValue("@DepositPlace", Deposittxt.Text.Trim());
 
                                     prisonerInfoId = Convert.ToInt32(cmdInfo.ExecuteScalar());
                                 }
@@ -81,12 +142,12 @@ namespace Mixed_Gym_Application
                     (PrisonerInfoID, FullName, ReservationNumber, CaseID, DangerousLevel, PrisonerStatus, 
                      Accused, PrinciplesType, ServiceTime, HospitalDate, LeaveDate, 
                      NIDNumber, CriminalRecord, ImprisonmentDetails, SecurityRevealed, 
-                     CensorshipInfo, Notes, CreatedBy) 
+                     CensorshipInfo, Notes, CreatedBy , DepositPlace , NextSession , diseasestatus) 
                     VALUES 
                     (@PrisonerInfoID, @FullName, @ReservationNumber, @CaseID, @DangerousLevel, @PrisonerStatus, 
                      @Accused, @PrinciplesType, @ServiceTime, @HospitalDate, @LeaveDate, 
                      @NIDNumber, @CriminalRecord, @ImprisonmentDetails, @SecurityRevealed, 
-                     @CensorshipInfo, @Notes, @CreatedBy)";
+                     @CensorshipInfo, @Notes, @CreatedBy , @DepositPlace , @NextSession ,@diseasestatus)";
 
                         using (SqlCommand cmdPrisoner = new SqlCommand(insertPrisoner, connection))
                         {
@@ -97,10 +158,30 @@ namespace Mixed_Gym_Application
                             cmdPrisoner.Parameters.AddWithValue("@DangerousLevel", dangerouslevelcombo.SelectedItem?.ToString() ?? "");
                             cmdPrisoner.Parameters.AddWithValue("@PrisonerStatus", prisonerstatus.SelectedItem?.ToString() ?? "");
                             cmdPrisoner.Parameters.AddWithValue("@Accused", accusedtxt.Text.Trim());
-                            cmdPrisoner.Parameters.AddWithValue("@PrinciplesType", principlestxt.Text);
+                            if (principlestxt.CustomFormat == " ")
+                                cmdPrisoner.Parameters.AddWithValue("@PrinciplesType", DBNull.Value);
+                            else
+                                cmdPrisoner.Parameters.AddWithValue("@PrinciplesType", principlestxt.Value);
+                            //cmdPrisoner.Parameters.AddWithValue("@PrinciplesType", principlestxts.Text);
                             cmdPrisoner.Parameters.AddWithValue("@ServiceTime", servicetimetxt.Text);
-                            cmdPrisoner.Parameters.AddWithValue("@HospitalDate", hospitaldate.Value);
-                            cmdPrisoner.Parameters.AddWithValue("@LeaveDate", leavedate.Value);
+                            // HospitalDate
+                            if (hospitaldate.CustomFormat == " ")
+                                cmdPrisoner.Parameters.AddWithValue("@HospitalDate", DBNull.Value);
+                            else
+                                cmdPrisoner.Parameters.AddWithValue("@HospitalDate", hospitaldate.Value);
+
+                            // LeaveDate
+                            if (leavedate.CustomFormat == " ")
+                                cmdPrisoner.Parameters.AddWithValue("@LeaveDate", DBNull.Value);
+                            else
+                                cmdPrisoner.Parameters.AddWithValue("@LeaveDate", leavedate.Value);
+
+
+                            if (nextsessiondate.CustomFormat == " ")
+                                cmdPrisoner.Parameters.AddWithValue("@NextSession", DBNull.Value);
+                            else
+                                cmdPrisoner.Parameters.AddWithValue("@NextSession", nextsessiondate.Value);
+
                             cmdPrisoner.Parameters.AddWithValue("@NIDNumber", nidnumber.Text.Trim());
                             cmdPrisoner.Parameters.AddWithValue("@CriminalRecord", criminalrecordtxt.Text.Trim());
                             cmdPrisoner.Parameters.AddWithValue("@ImprisonmentDetails", Imprisonmenttxt.Text.Trim());
@@ -108,14 +189,14 @@ namespace Mixed_Gym_Application
                             cmdPrisoner.Parameters.AddWithValue("@CensorshipInfo", Censorshiptxt.Text.Trim());
                             cmdPrisoner.Parameters.AddWithValue("@Notes", notestxt.Text.Trim());
                             cmdPrisoner.Parameters.AddWithValue("@CreatedBy", currentUsername);
+                            cmdPrisoner.Parameters.AddWithValue("@DepositPlace", Deposittxt.Text.Trim());
+                            cmdPrisoner.Parameters.AddWithValue("@diseasestatus", diseasestatus.Text.Trim());
 
                             int result = cmdPrisoner.ExecuteNonQuery();
                             if (result > 0)
                             {
                                 MessageBox.Show("Prisoner added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                fullNametxt.ReadOnly = false;
-                                dangerouslevelcombo.Enabled = true;
-                                prisonerstatus.Enabled = true;
+                               
                                 ResetForm();
                             }
                             else
@@ -188,7 +269,7 @@ namespace Mixed_Gym_Application
             dangerouslevelcombo.SelectedIndex = -1;
             prisonerstatus.SelectedIndex = -1;
             accusedtxt.Clear();
-            principlestxt.Text = "";
+           
             servicetimetxt.Clear();
             hospitaldate.Value = DateTime.Now;
             leavedate.Value = DateTime.Now;
@@ -198,8 +279,26 @@ namespace Mixed_Gym_Application
             securityrevealedtxt.Clear();
             Censorshiptxt.Clear();
             notestxt.Clear();
+            diseasestatus.Clear();
+            Deposittxt.SelectedIndex = -1;
+            hospitaldate.Format = DateTimePickerFormat.Custom;
+            hospitaldate.CustomFormat = " ";
+
+            leavedate.Format = DateTimePickerFormat.Custom;
+            leavedate.CustomFormat = " ";
+
+            principlestxt.Format = DateTimePickerFormat.Custom;
+            principlestxt.CustomFormat = " ";
+
+            nextsessiondate.Format = DateTimePickerFormat.Custom;
+            nextsessiondate.CustomFormat = " ";
 
             fullNametxt.Focus();
+
+            fullNametxt.ReadOnly = false;
+            dangerouslevelcombo.Enabled = true;
+            prisonerstatus.Enabled = true;
+            Deposittxt.Enabled = true;
         }
 
         private void dailyreportbtn_Click(object sender, EventArgs e)
@@ -245,6 +344,18 @@ namespace Mixed_Gym_Application
         {
             SetButtonVisibilityBasedOnRole();
             cashiernamelabel.Text= currentUsername;
+            hospitaldate.Format = DateTimePickerFormat.Custom;
+            hospitaldate.CustomFormat = " ";
+
+            leavedate.Format = DateTimePickerFormat.Custom;
+            leavedate.CustomFormat = " ";
+
+
+            nextsessiondate.Format = DateTimePickerFormat.Custom;
+            nextsessiondate.CustomFormat = " ";
+
+            principlestxt.Format = DateTimePickerFormat.Custom;
+            principlestxt.CustomFormat = " ";
 
 
             try
@@ -287,7 +398,7 @@ namespace Mixed_Gym_Application
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     connection.Open();
-                    string query = @"SELECT FullName, DangerousLevel, PrisonerStatus 
+                    string query = @"SELECT FullName, DangerousLevel, PrisonerStatus ,DepositPlace
                              FROM PrisonerInfo 
                              WHERE NIDNumber = @NIDNumber";
 
@@ -303,11 +414,13 @@ namespace Mixed_Gym_Application
                                 fullNametxt.Text = reader["FullName"].ToString();
                                 dangerouslevelcombo.SelectedItem = reader["DangerousLevel"].ToString();
                                 prisonerstatus.SelectedItem = reader["PrisonerStatus"].ToString();
+                                Deposittxt.Text = reader["DepositPlace"].ToString();
 
                                 // Lock them
                                 fullNametxt.ReadOnly = true;
                                 dangerouslevelcombo.Enabled = false;
                                 prisonerstatus.Enabled = false;
+                                Deposittxt.Enabled = false;
                             }
                             else
                             {
@@ -408,6 +521,65 @@ namespace Mixed_Gym_Application
             Home home = new Home(cashiernamelabel.Text);
             home.ShowDialog();
             this.Close();
+
+        }
+
+        // Make it look empty
+       
+            
+
+        private void hospitaldate_ValueChanged(object sender, EventArgs e)
+        {
+            hospitaldate.Format = DateTimePickerFormat.Short;
+            hospitaldate.CustomFormat = null; // reset
+        }
+
+        private void leavedate_ValueChanged(object sender, EventArgs e)
+        {
+            leavedate.Format = DateTimePickerFormat.Short;
+            leavedate.CustomFormat = null; // reset
+        }
+
+        private void hospitaldatecancel_Click(object sender, EventArgs e)
+        {
+            hospitaldate.Format = DateTimePickerFormat.Custom;
+            hospitaldate.CustomFormat = " ";
+        }
+
+        private void leavedatecancel_Click(object sender, EventArgs e)
+        {
+            leavedate.Format = DateTimePickerFormat.Custom;
+            leavedate.CustomFormat = " ";
+        }
+
+        private void principlestxt_ValueChanged(object sender, EventArgs e)
+        {
+
+            principlestxt.Format = DateTimePickerFormat.Short;
+            principlestxt.CustomFormat = null; // reset
+
+        }
+
+        private void principlescancel_Click(object sender, EventArgs e)
+        {
+            principlestxt.Format = DateTimePickerFormat.Custom;
+            principlestxt.CustomFormat = " ";
+        }
+
+        private void nextsessiondate_ValueChanged(object sender, EventArgs e)
+        {
+            nextsessiondate.Format = DateTimePickerFormat.Short;
+            nextsessiondate .CustomFormat = null; // reset
+        }
+
+        private void nextsessiondatecancel_Click(object sender, EventArgs e)
+        {
+            nextsessiondate.Format = DateTimePickerFormat.Custom;
+            nextsessiondate.CustomFormat = " ";
+        }
+
+        private void Deposittxt_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
         }
     }

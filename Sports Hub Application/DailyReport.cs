@@ -62,10 +62,12 @@ namespace Mixed_Gym_Application
         P.FullName,
         P.ReservationNumber,
         P.CaseID,
+        P.diseasestatus,
         P.DangerousLevel,
         P.PrisonerStatus,
         P.Accused,
         P.PrinciplesType,
+        P.NextSession,
         P.ServiceTime,
         P.HospitalDate,
         P.LeaveDate,
@@ -75,6 +77,7 @@ namespace Mixed_Gym_Application
         P.SecurityRevealed,
         P.CensorshipInfo,
         P.Notes,
+        P.DepositPlace,
         P.CreatedDate,
         P.LastModified,
         P.CreatedBy,
@@ -82,19 +85,21 @@ namespace Mixed_Gym_Application
     FROM vw_PrisonerReport P
     WHERE 
         (@CreatedDate IS NULL OR CAST(P.CreatedDate AS DATE) = @CreatedDate)
-        AND (@SearchValue IS NULL OR {0} LIKE @SearchValue)
+        {0}
 
     UNION ALL
 
     SELECT
         NULL AS PrisonerID,
-        'Total Abused' AS FullName,       
+        N'إجمالي السجناء' AS FullName,       
         CAST(COUNT(*) AS NVARCHAR(10)) AS ReservationNumber, 
         NULL AS CaseID,
+        NULL as diseasestatus,
         NULL AS DangerousLevel,
         NULL AS PrisonerStatus,
         NULL AS Accused,
         NULL AS PrinciplesType,
+        NULL AS NextSession,
         NULL AS ServiceTime,
         NULL AS HospitalDate,
         NULL AS LeaveDate,
@@ -104,6 +109,7 @@ namespace Mixed_Gym_Application
         NULL AS SecurityRevealed,
         NULL AS CensorshipInfo,
         NULL AS Notes,
+        NULL AS DepositPlace,
         NULL AS CreatedDate,
         NULL AS LastModified,
         NULL AS CreatedBy,
@@ -111,12 +117,40 @@ namespace Mixed_Gym_Application
     FROM vw_PrisonerReport P
     WHERE 
         (@CreatedDate IS NULL OR CAST(P.CreatedDate AS DATE) = @CreatedDate)
-        AND (@SearchValue IS NULL OR {0} LIKE @SearchValue)
+        {0}
     ";
 
-            // ✅ لو المستخدم محدد عمود للبحث هنبدله مكان {0}
+            // ✅ Safe column name
             string safeColumn = string.IsNullOrEmpty(columnName) ? "P.FullName" : columnName;
-            query = string.Format(query, safeColumn);
+        
+            string filterCondition = "";
+            bool isDateColumn = safeColumn == "CreatedDate" || safeColumn == "HospitalDate" || safeColumn == "LeaveDate" || safeColumn == "NextSession" || safeColumn == "PrinciplesType";
+
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                if (isDateColumn && DateTime.TryParse(searchValue, out DateTime exactDate))
+                {
+                    // Full valid date → exact match
+                    filterCondition = $" AND CAST({safeColumn} AS DATE) = @ExactDate";
+                    query = string.Format(query, filterCondition);
+                }
+                else if (isDateColumn)
+                {
+                    // Partial date → string LIKE
+                    filterCondition = $" AND CONVERT(NVARCHAR(10), {safeColumn}, 103) LIKE @SearchValue";
+                    query = string.Format(query, filterCondition);
+                }
+                else
+                {
+                    // Normal string search
+                    filterCondition = $" AND {safeColumn} LIKE @SearchValue";
+                    query = string.Format(query, filterCondition);
+                }
+            }
+            else
+            {
+                query = string.Format(query, "");
+            }
 
             using (SqlConnection connection = new SqlConnection(DatabaseConfig.connectionString))
             {
@@ -125,9 +159,18 @@ namespace Mixed_Gym_Application
                     command.Parameters.AddWithValue("@CreatedDate", (object)date ?? DBNull.Value);
 
                     if (!string.IsNullOrEmpty(searchValue))
-                        command.Parameters.AddWithValue("@SearchValue", "%" + searchValue + "%");
-                    else
-                        command.Parameters.AddWithValue("@SearchValue", DBNull.Value);
+                    {
+                        if (isDateColumn && DateTime.TryParse(searchValue, out DateTime exactDate))
+                        {
+                            // exact date match
+                            command.Parameters.AddWithValue("@ExactDate", exactDate.Date);
+                        }
+                        else
+                        {
+                            // partial or string search
+                            command.Parameters.AddWithValue("@SearchValue", "%" + searchValue + "%");
+                        }
+                    }
 
                     try
                     {
@@ -138,7 +181,7 @@ namespace Mixed_Gym_Application
                             dataTable.Load(reader);
                             transactionsGridView.DataSource = dataTable;
 
-                            // ✅ تعديل العناوين بالعربي (زي ما عندك)
+                            // ✅ Arabic headers
                             transactionsGridView.Columns["FullName"].HeaderText = "الاسم";
                             transactionsGridView.Columns["ReservationNumber"].HeaderText = "رقم الحجز";
                             transactionsGridView.Columns["CaseID"].HeaderText = "رقم القضية";
@@ -146,17 +189,18 @@ namespace Mixed_Gym_Application
                             transactionsGridView.Columns["PrisonerStatus"].HeaderText = "الحالة";
                             transactionsGridView.Columns["Accused"].HeaderText = "التهمه";
                             transactionsGridView.Columns["PrinciplesType"].HeaderText = "مبدأ الحبس";
+                            transactionsGridView.Columns["NextSession"].HeaderText = "الجلسه القادمه";
                             transactionsGridView.Columns["ServiceTime"].HeaderText = "مده الحكم";
                             transactionsGridView.Columns["HospitalDate"].HeaderText = "تاريخ المستشفى";
                             transactionsGridView.Columns["LeaveDate"].HeaderText = "تاريخ الخروج";
                             transactionsGridView.Columns["NIDNumber"].HeaderText = "رقم الهوية";
-
+                            transactionsGridView.Columns["diseasestatus"].HeaderText = "الحاله المرضيه";
                             transactionsGridView.Columns["CriminalRecord"].HeaderText = "الفيش الجنائي";
                             transactionsGridView.Columns["ImprisonmentDetails"].HeaderText = "نماذج الحبس";
                             transactionsGridView.Columns["SecurityRevealed"].HeaderText = "كشف أمن عام";
                             transactionsGridView.Columns["CensorshipInfo"].HeaderText = "خطاب الرقابة";
                             transactionsGridView.Columns["Notes"].HeaderText = "ملاحظات";
-
+                            transactionsGridView.Columns["DepositPlace"].HeaderText = "مكان الايداع";
                             transactionsGridView.Columns["CreatedDate"].HeaderText = "تاريخ الإنشاء";
                             transactionsGridView.Columns["LastModified"].HeaderText = "آخر تعديل";
                             transactionsGridView.Columns["CreatedBy"].HeaderText = "تم الإنشاء بواسطة";
@@ -173,6 +217,7 @@ namespace Mixed_Gym_Application
                 }
             }
         }
+
 
 
 
@@ -316,10 +361,12 @@ namespace Mixed_Gym_Application
     { "FullName", "الاسم" },
     { "ReservationNumber", "رقم الحجز" },
     { "CaseID", "رقم القضية" },
+      { "diseasestatus", "الحاله المرضيه" },
     { "DangerousLevel", "درجة الخطورة" },
     { "PrisonerStatus", "الحالة" },
     { "Accused", "التهمه" },
     { "PrinciplesType", "مبدأ الحبس" },
+     {"NextSession","الجلسه القادمه" },
     { "ServiceTime", "مده الحكم" },
     { "HospitalDate", "تاريخ المستشفى" },
     { "LeaveDate", "تاريخ الخروج" },
@@ -329,10 +376,13 @@ namespace Mixed_Gym_Application
     { "SecurityRevealed", "كشف أمن عام" },
     { "CensorshipInfo", "خطاب الرقابة" },
     { "Notes", "ملاحظات" },
+     {"DepositPlace" , "مكان الايداع" },
+     
     { "CreatedDate", "تاريخ الإنشاء" },
     { "LastModified", "آخر تعديل" },
     { "CreatedBy", "تم الإنشاء بواسطة" },
-    { "ModifiedBy", "تم التعديل بواسطة" }
+    { "ModifiedBy", "تم التعديل بواسطة" },
+           
 };
 
 
@@ -359,115 +409,115 @@ namespace Mixed_Gym_Application
                 printDocument.Print();
             }
         }
-        private int currentPage = 0; // Track the current page number
-        private int rowsPerPage; // Number of rows per page
-        private int totalRows; // Total number of rows
-        private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
+        private int currentRow = 0;
+
+        private void PrintDocument_BeginPrint(object sender, PrintEventArgs e)
         {
-            // Calculate scale factor for fitting content to page width
-            int totalWidth = columnsToPrint.Sum(col => col.Width);
-            int printableWidth = e.MarginBounds.Width;
-            float scaleFactor = (float)printableWidth / totalWidth;
-
-            // Calculate rows per page
-            rowsPerPage = (int)((e.MarginBounds.Height - e.MarginBounds.Top) / (transactionsGridView.RowTemplate.Height + 5)); // Adjust spacing as needed
-
-            // Print header with title and date on each page
-            string headerText = "تقرير يومي";
-            string reportDateText = $"التاريخ: {datePicker.Value.Date.ToShortDateString()}";
-
-            // Adjust the y position to decrease space above the header
-            float y = e.MarginBounds.Top - 30; // Start closer to the top of the page
-            float x = e.MarginBounds.Left;
-
-            // Define font sizes
-            Font headerFont = new Font(transactionsGridView.Font.FontFamily, 14, FontStyle.Bold);
-            Font dateFont = new Font(transactionsGridView.Font.FontFamily, 12, FontStyle.Regular);
-
-            // Measure the width of the header and date texts
-            SizeF headerSize = e.Graphics.MeasureString(headerText, headerFont);
-            SizeF dateSize = e.Graphics.MeasureString(reportDateText, dateFont);
-
-            // Set x positions for right-aligned text
-            float headerX = e.MarginBounds.Right - headerSize.Width;
-            float dateX = e.MarginBounds.Right - dateSize.Width;
-
-            // Print the header text and date
-            e.Graphics.DrawString(headerText, headerFont, Brushes.Black, new PointF(headerX, y));
-            e.Graphics.DrawString(reportDateText, dateFont, Brushes.Black, new PointF(dateX, y + headerSize.Height + 5)); // Add space between header and date
-
-            // Add less additional space between date and content
-            y += (int)headerSize.Height + (int)dateSize.Height + 30; // Reduce the space as needed
-
-            if (totalWidth > printableWidth)
-            {
-                scaleFactor = (float)printableWidth / totalWidth;
-            }
-
-            int remainingWidth = printableWidth;
-            int columnsPrinted = 0;
-
-            // Print column headers
-            foreach (var column in columnsToPrint)
-            {
-                int columnWidth = (int)(column.Width * scaleFactor);
-                if (remainingWidth < columnWidth)
-                {
-                    break;
-                }
-
-                RectangleF rect = new RectangleF(x, y, columnWidth, transactionsGridView.RowTemplate.Height);
-                string headerColumnText = columnHeaderMappings.ContainsKey(column.Name) ? columnHeaderMappings[column.Name] : column.HeaderText;
-                e.Graphics.DrawString(headerColumnText, transactionsGridView.Font, Brushes.Black, rect, new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
-                x += columnWidth;
-                remainingWidth -= columnWidth;
-                columnsPrinted++;
-            }
-
-            y += 25 + 5; // Move down for rows, adjust spacing as needed
-            x = e.MarginBounds.Left;
-
-            // Calculate total rows if not already done
-            if (totalRows == 0)
-            {
-                totalRows = transactionsGridView.Rows.Count;
-            }
-
-            // Track rows printed on current page
-            int rowsPrinted = 0;
-
-            // Print rows
-            for (int i = currentPage * rowsPerPage; i < totalRows; i++)
-            {
-                if (transactionsGridView.Rows[i].IsNewRow) continue;
-
-                x = e.MarginBounds.Left;
-                foreach (var cell in transactionsGridView.Rows[i].Cells.Cast<DataGridViewCell>().Where(c => c.OwningColumn.Name != "UserID"))
-                {
-                    int cellWidth = (int)(cell.OwningColumn.Width * scaleFactor);
-                    RectangleF rect = new RectangleF(x, y, cellWidth, transactionsGridView.RowTemplate.Height);
-                    e.Graphics.DrawString(cell.Value?.ToString(), transactionsGridView.Font, Brushes.Black, rect, new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });
-                    x += cellWidth;
-                }
-
-                y += transactionsGridView.RowTemplate.Height + 5; // Move down for the next row
-                rowsPrinted++;
-
-                // Check if we need to create a new page
-                if (rowsPrinted >= rowsPerPage) // If printed rows exceed the number of rows per page
-                {
-                    currentPage++; // Increment page number
-                    e.HasMorePages = true;
-                    return; // Exit method to trigger the next page
-                }
-            }
-
-            // If we've finished printing all rows, reset for the next print job
-            e.HasMorePages = false;
-            currentPage = 0; // Reset page number for the next print job
-            totalRows = 0; // Reset total rows
+            currentRow = 0;
         }
 
+        private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            Font headerFont = new Font("Tahoma", 16, FontStyle.Bold);
+            Font subHeaderFont = new Font("Tahoma", 12, FontStyle.Regular);
+            Font cellFont = new Font("Tahoma", 9, FontStyle.Regular);
+
+            int leftMargin = e.MarginBounds.Left;
+            int topMargin = e.MarginBounds.Top;
+            int rightMargin = e.MarginBounds.Right;
+
+            // 🟢 هيدر رئيسي
+            string headerTitle = "نظام إدارة السجناء (SPS)";
+            e.Graphics.DrawString(headerTitle, headerFont, Brushes.Black,
+                (e.PageBounds.Width - e.Graphics.MeasureString(headerTitle, headerFont).Width) / 2,
+                topMargin - 80);
+
+            // 🟢 العنوان مع الشهر اللي اختاره المستخدم
+            string monthText = $"تقرير يومي - {datePicker.Value.Date.ToShortDateString()}";
+            e.Graphics.DrawString(monthText, subHeaderFont, Brushes.Black,
+                (e.PageBounds.Width - e.Graphics.MeasureString(monthText, subHeaderFont).Width) / 2,
+                topMargin - 50);
+
+            e.Graphics.DrawLine(Pens.Black, leftMargin, topMargin - 10, rightMargin, topMargin - 10);
+
+            // 🟢 تحديد عرض الأعمدة ديناميكياً بحيث الكل يتوزع
+            int totalWidth = rightMargin - leftMargin;
+            int columnCount = columnsToPrint.Count;
+            int columnWidth = totalWidth / columnCount;
+            int cellHeight = 30;
+
+            int startY = topMargin;
+            int startX;
+
+            // 🟢 رأس الجدول (أسماء الأعمدة)
+            startX = leftMargin;
+            foreach (var col in columnsToPrint)
+            {
+                string headerText = columnHeaderMappings.ContainsKey(col.Name) ? columnHeaderMappings[col.Name] : col.HeaderText;
+
+                Rectangle rect = new Rectangle(startX, startY, columnWidth, cellHeight);
+                e.Graphics.FillRectangle(Brushes.LightGray, rect);
+                e.Graphics.DrawRectangle(Pens.Black, rect);
+
+                StringFormat format = new StringFormat
+                {
+                    Alignment = StringAlignment.Center,
+                    LineAlignment = StringAlignment.Center
+                };
+
+                e.Graphics.DrawString(headerText, cellFont, Brushes.Black, rect, format);
+                startX += columnWidth;
+            }
+
+            startY += cellHeight;
+
+            // 🟢 البيانات
+            while (currentRow < transactionsGridView.Rows.Count)
+            {
+                DataGridViewRow row = transactionsGridView.Rows[currentRow];
+                if (row.IsNewRow)
+                {
+                    currentRow++;
+                    continue;
+                }
+
+                startX = leftMargin;
+                foreach (var col in columnsToPrint)
+                {
+                    string value = row.Cells[col.Name].Value?.ToString() ?? "";
+                    Rectangle rect = new Rectangle(startX, startY, columnWidth, cellHeight);
+
+                    e.Graphics.DrawRectangle(Pens.Black, rect);
+
+                    StringFormat format = new StringFormat
+                    {
+                        Alignment = StringAlignment.Center,
+                        LineAlignment = StringAlignment.Center
+                    };
+
+                    e.Graphics.DrawString(value, cellFont, Brushes.Black, rect, format);
+                    startX += columnWidth;
+                }
+
+                startY += cellHeight;
+                currentRow++;
+
+                // 🛑 لو الصفحة خلصت
+                if (startY + cellHeight > e.MarginBounds.Bottom - 100)
+                {
+                    e.HasMorePages = true;
+                    return;
+                }
+            }
+
+            // 🟢 الفوتر
+            string footer = $"تمت الطباعة بواسطة SPS - {_username}  |   التاريخ: {DateTime.Now:yyyy/MM/dd}";
+            e.Graphics.DrawString(footer, cellFont, Brushes.Gray,
+                (e.PageBounds.Width - e.Graphics.MeasureString(footer, cellFont).Width) / 2,
+                e.MarginBounds.Bottom + 40);
+
+            e.HasMorePages = false;
+        }
 
 
 
@@ -554,9 +604,12 @@ namespace Mixed_Gym_Application
             { "الرقم القومي", "NIDNumber" },
             { "درجة الخطورة", "DangerousLevel" },
             { "الحالة", "PrisonerStatus" },
+              { "الحاله المرضيه", "diseasestatus" },
             { "رقم الحجز", "ReservationNumber" },
             { "رقم القضية", "CaseID" },
             { "التهمه", "Accused" },
+            {"مكان الايداع" , "DepositPlace" },
+             {"الجلسه القادمه","NextSession" },
             { "مبدأ الحبس", "PrinciplesType" },
             { "مده الحكم", "ServiceTime" },
             { "تاريخ المستشفى", "HospitalDate" },
@@ -565,7 +618,8 @@ namespace Mixed_Gym_Application
             { "نماذج الحبس", "ImprisonmentDetails" },
             { "كشف أمن عام", "SecurityRevealed" },
             { "خطاب الرقابة", "CensorshipInfo" },
-            { "ملاحظات", "Notes" }
+            { "ملاحظات", "Notes" },
+            
         };
         private void LoadColumnsToComboBox()
         {

@@ -104,6 +104,7 @@
             this.usersDataGridView.Name = "usersDataGridView";
             this.usersDataGridView.Size = new System.Drawing.Size(837, 353);
             this.usersDataGridView.TabIndex = 33;
+            this.usersDataGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.usersDataGridView_CellContentClick);
             // 
             // sportsComboBox
             // 
@@ -161,7 +162,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "UpdateTransaction";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "تعديل اسعار";
+            this.Text = "تعديل ملف";
             this.Load += new System.EventHandler(this.UpdateTransaction_Load);
             ((System.ComponentModel.ISupportInitialize)(this.usersDataGridView)).EndInit();
             this.ResumeLayout(false);

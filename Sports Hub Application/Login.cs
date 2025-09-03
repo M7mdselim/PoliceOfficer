@@ -12,6 +12,7 @@ using System.Data.SqlClient;
 using System.Reflection.Emit;
 using System.Diagnostics;
 using DocumentFormat.OpenXml.Drawing.Spreadsheet;
+using Police_officer_Application;
 
 
 namespace Mixed_Gym_Application
@@ -102,13 +103,6 @@ namespace Mixed_Gym_Application
 
         private void loginbtn_Click(object sender, EventArgs e)
         {
-
-          
-
-
-
-
-
             string username = Usertxt.Text;
             string password = passwordtxt.Text;
 
@@ -116,46 +110,33 @@ namespace Mixed_Gym_Application
             label2.Visible = false;
             label5.Visible = false;
 
-
-
-
             if (ValidateLogin(username, password, out int roleID))
             {
                 LoggedInUsername = username;
                 LoggedInUserRole = roleID;
 
-
-
-                
-
                 // Create and show the main form based on role
                 Form mainForm = CreateFormBasedOnRole(roleID);
-                mainForm.FormClosed += (s, args) => Application.Exit(); // Exit the application when the main form is closed
+                mainForm.FormClosed += (s, args) => Application.Exit();
 
-                this.Hide(); // Hide the login form
-                mainForm.Show(); // Show the main form
+                this.Hide();
+                mainForm.Show();
             }
             else
             {
-                // Determine which label to show based on which field is incorrect
+                // Check if username exists
                 if (!IsUsernameValid(username))
                 {
                     label2.Visible = true;
-                    Usertxt.Focus(); // Set focus to the username text box
-                }
-                else if (!IsPasswordValid(password))
-                {
-                    label5.Visible = true;
-                    passwordtxt.Focus(); // Set focus to the password text box
+                    Usertxt.Focus();
                 }
                 else
                 {
-                    // If the username is correct but password is incorrect
+                    // Username exists but password is incorrect
                     label5.Visible = true;
-                    passwordtxt.Focus(); // Set focus to the password text box
+                    passwordtxt.Focus();
+                    passwordtxt.SelectAll();
                 }
-
-              // MessageBox.Show("Username or Password is Incorrect.");
             }
         }
 
@@ -210,12 +191,12 @@ namespace Mixed_Gym_Application
         private bool ValidateLogin(string username, string password, out int roleID)
         {
             bool isValid = false;
-            roleID = 0; // Default value for roleID
+            roleID = 0;
 
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 string query = "SELECT PasswordHash, RoleID FROM CashierDetails WHERE Username = @Username";
-                using (SqlCommand command = new SqlCommand(query, connection))
+                using (SqlCommand command = new SqlCommand( query, connection: connection))
                 {
                     command.Parameters.AddWithValue("@Username", username);
 
@@ -229,14 +210,35 @@ namespace Mixed_Gym_Application
                             string storedPasswordHash = reader["PasswordHash"] as string;
                             roleID = (int)reader["RoleID"];
 
-                            if (storedPasswordHash != null && storedPasswordHash == password)
+                            // DEBUG: Show what we're comparing
+                            Debug.WriteLine($"Username: {username}");
+                            Debug.WriteLine($"Input password: {password}");
+                            Debug.WriteLine($"Stored hash: {storedPasswordHash}");
+
+                            // Generate hash from input password using the fixed method
+                            string inputHash = PasswordHasher.HashPassword(password);
+                            Debug.WriteLine($"Input hash: {inputHash}");
+                            Debug.WriteLine($"Hashes match: {inputHash == storedPasswordHash}");
+
+                            if (storedPasswordHash != null)
                             {
-                                isValid = true;
+                                // Use the fixed PasswordHasher to verify the password
+                                isValid = PasswordHasher.VerifyPassword(password, storedPasswordHash);
+                                Debug.WriteLine($"VerifyPassword result: {isValid}");
+
+                                // If still not working, try the SQL-based verification
+                                if (!isValid)
+                                {
+                                    Debug.WriteLine("Trying SQL-based verification...");
+                                    isValid = PasswordHasher.VerifyPasswordUsingSQL(username, password, ConnectionString);
+                                    Debug.WriteLine($"SQL verification result: {isValid}");
+                                }
                             }
                         }
                     }
                     catch (Exception ex)
                     {
+                        Debug.WriteLine($"Error during login: {ex.Message}");
                         MessageBox.Show("An error occurred: " + ex.Message);
                     }
                 }
@@ -244,6 +246,32 @@ namespace Mixed_Gym_Application
 
             return isValid;
         }
+
+        private void UpdatePasswordToNewFormat(string username, string password)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                string hashedPassword = PasswordHasher.HashPassword(password);
+                string query = "UPDATE CashierDetails SET PasswordHash = @PasswordHash WHERE Username = @Username";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Username", username);
+                    command.Parameters.AddWithValue("@PasswordHash", hashedPassword);
+
+                    try
+                    {
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("Error updating password format: " + ex.Message);
+                    }
+                }
+            }
+        }
+
 
         private Form CreateFormBasedOnRole(int roleID)
         {
@@ -298,10 +326,10 @@ namespace Mixed_Gym_Application
         {
 
         }
-
+       
         private void Login_Load(object sender, EventArgs e)
         {
-
+           
         }
 
         private void label2_Click(object sender, EventArgs e)

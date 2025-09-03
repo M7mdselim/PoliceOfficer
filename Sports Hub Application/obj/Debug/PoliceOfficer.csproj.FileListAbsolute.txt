@@ -67,3 +67,5 @@ D:\Github\PoliceOfficer\Sports Hub Application\bin\Debug\nl\PdfiumViewer.resourc
 D:\Github\PoliceOfficer\Sports Hub Application\obj\Debug\PoliceOf.ACA9FFB0.Up2Date
 D:\Github\PoliceOfficer\Sports Hub Application\obj\Debug\PoliceOfficer.exe
 D:\Github\PoliceOfficer\Sports Hub Application\obj\Debug\PoliceOfficer.pdb
+D:\Github\PoliceOfficer\Sports Hub Application\obj\Debug\Police_officer_Application.DepositPlaceForm.resources
+D:\Github\PoliceOfficer\Sports Hub Application\obj\Debug\Mixed_Gym_Application.SessionForm.resources

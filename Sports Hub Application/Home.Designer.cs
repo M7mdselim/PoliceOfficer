@@ -37,6 +37,8 @@
             this.signupbtn = new System.Windows.Forms.Button();
             this.updateform = new System.Windows.Forms.Button();
             this.changepassbtn = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // CashierFormbtn
@@ -48,7 +50,7 @@
             this.CashierFormbtn.Name = "CashierFormbtn";
             this.CashierFormbtn.Size = new System.Drawing.Size(287, 76);
             this.CashierFormbtn.TabIndex = 16;
-            this.CashierFormbtn.Text = "إضافة - بحث";
+            this.CashierFormbtn.Text = "إضافة ملف";
             this.CashierFormbtn.UseVisualStyleBackColor = false;
             this.CashierFormbtn.Click += new System.EventHandler(this.CashierFormbtn_Click);
             // 
@@ -57,9 +59,9 @@
             this.DailyReportbtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
             this.DailyReportbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F);
             this.DailyReportbtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
-            this.DailyReportbtn.Location = new System.Drawing.Point(35, 99);
+            this.DailyReportbtn.Location = new System.Drawing.Point(190, 99);
             this.DailyReportbtn.Name = "DailyReportbtn";
-            this.DailyReportbtn.Size = new System.Drawing.Size(287, 76);
+            this.DailyReportbtn.Size = new System.Drawing.Size(132, 76);
             this.DailyReportbtn.TabIndex = 17;
             this.DailyReportbtn.Text = "تقرير يومي";
             this.DailyReportbtn.UseVisualStyleBackColor = false;
@@ -70,9 +72,9 @@
             this.MonthlyReportbtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
             this.MonthlyReportbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F);
             this.MonthlyReportbtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
-            this.MonthlyReportbtn.Location = new System.Drawing.Point(35, 181);
+            this.MonthlyReportbtn.Location = new System.Drawing.Point(35, 99);
             this.MonthlyReportbtn.Name = "MonthlyReportbtn";
-            this.MonthlyReportbtn.Size = new System.Drawing.Size(287, 76);
+            this.MonthlyReportbtn.Size = new System.Drawing.Size(132, 76);
             this.MonthlyReportbtn.TabIndex = 18;
             this.MonthlyReportbtn.Text = "تقرير شهري";
             this.MonthlyReportbtn.UseVisualStyleBackColor = false;
@@ -83,9 +85,9 @@
             this.CustomerReportBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
             this.CustomerReportBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F);
             this.CustomerReportBtn.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
-            this.CustomerReportBtn.Location = new System.Drawing.Point(35, 263);
+            this.CustomerReportBtn.Location = new System.Drawing.Point(190, 263);
             this.CustomerReportBtn.Name = "CustomerReportBtn";
-            this.CustomerReportBtn.Size = new System.Drawing.Size(287, 76);
+            this.CustomerReportBtn.Size = new System.Drawing.Size(132, 76);
             this.CustomerReportBtn.TabIndex = 19;
             this.CustomerReportBtn.Text = "تقرير متهم";
             this.CustomerReportBtn.UseVisualStyleBackColor = false;
@@ -145,12 +147,40 @@
             this.changepassbtn.Visible = false;
             this.changepassbtn.Click += new System.EventHandler(this.changepassbtn_Click);
             // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F);
+            this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
+            this.button1.Location = new System.Drawing.Point(35, 263);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(132, 76);
+            this.button1.TabIndex = 25;
+            this.button1.Text = "تقرير ايداع";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F);
+            this.button2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(219)))), ((int)(((byte)(200)))));
+            this.button2.Location = new System.Drawing.Point(35, 181);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(287, 76);
+            this.button2.TabIndex = 26;
+            this.button2.Text = "بحث جلسه";
+            this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(356, 523);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.changepassbtn);
             this.Controls.Add(this.updateform);
             this.Controls.Add(this.signupbtn);
@@ -178,5 +208,7 @@
         private System.Windows.Forms.Button signupbtn;
         private System.Windows.Forms.Button updateform;
         private System.Windows.Forms.Button changepassbtn;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }

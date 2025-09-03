@@ -61,10 +61,12 @@ namespace Mixed_Gym_Application
         P.FullName,
         P.ReservationNumber,
         P.CaseID,
+p.diseasestatus,
         P.DangerousLevel,
         P.PrisonerStatus,
         P.Accused,
         P.PrinciplesType,
+        p.NextSession,
         P.ServiceTime,
         P.HospitalDate,
         P.LeaveDate,
@@ -74,6 +76,7 @@ namespace Mixed_Gym_Application
         P.SecurityRevealed,
         P.CensorshipInfo,
         P.Notes,
+        p.DepositPlace,
         P.CreatedDate,
         P.LastModified,
         P.CreatedBy,
@@ -88,13 +91,15 @@ namespace Mixed_Gym_Application
 
     SELECT
         NULL AS PrisonerID,
-        'إجمالي السجناء' AS FullName,       
+        'Total Abused' AS FullName,       
         CAST(COUNT(*) AS NVARCHAR(10)) AS ReservationNumber, 
         NULL AS CaseID,
+Null AS diseasestatus,
         NULL AS DangerousLevel,
         NULL AS PrisonerStatus,
         NULL AS Accused,
         NULL AS PrinciplesType,
+        NULL AS NextSession,
         NULL AS ServiceTime,
         NULL AS HospitalDate,
         NULL AS LeaveDate,
@@ -104,6 +109,7 @@ namespace Mixed_Gym_Application
         NULL AS SecurityRevealed,
         NULL AS CensorshipInfo,
         NULL AS Notes,
+        NULL AS DepositPlace,
         NULL AS CreatedDate,
         NULL AS LastModified,
         NULL AS CreatedBy,
@@ -137,10 +143,12 @@ namespace Mixed_Gym_Application
                             transactionsGridView.Columns["FullName"].HeaderText = "الاسم";
                             transactionsGridView.Columns["ReservationNumber"].HeaderText = "رقم الحجز";
                             transactionsGridView.Columns["CaseID"].HeaderText = "رقم القضية";
+                            transactionsGridView.Columns["diseasestatus"].HeaderText = "الحاله المرضيه";
                             transactionsGridView.Columns["DangerousLevel"].HeaderText = "درجة الخطورة";
                             transactionsGridView.Columns["PrisonerStatus"].HeaderText = "الحالة";
                             transactionsGridView.Columns["Accused"].HeaderText = "التهمه";
                             transactionsGridView.Columns["PrinciplesType"].HeaderText = "مبدأ الحبس";
+                            transactionsGridView.Columns["NextSession"].HeaderText = "الجلسه القادمه";
                             // ✅ New translations
                             transactionsGridView.Columns["CriminalRecord"].HeaderText = "الفيش الجنائي";
                             transactionsGridView.Columns["ImprisonmentDetails"].HeaderText = "نماذج الحبس";
@@ -155,6 +163,7 @@ namespace Mixed_Gym_Application
                             transactionsGridView.Columns["LastModified"].HeaderText = "آخر تعديل";
                             transactionsGridView.Columns["CreatedBy"].HeaderText = "تم الإنشاء بواسطة";
                             transactionsGridView.Columns["ModifiedBy"].HeaderText = "تم التعديل بواسطة";
+                            transactionsGridView.Columns["DepositPlace"].HeaderText = "مكان الايداع";
 
                             // Hide internal IDs
                             transactionsGridView.Columns["PrisonerID"].Visible = false;

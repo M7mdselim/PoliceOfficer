@@ -40,6 +40,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.infobtn = new ComponentFactory.Krypton.Toolkit.KryptonButton();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -95,7 +96,7 @@
             this.Headerlabel.BackColor = System.Drawing.Color.White;
             this.Headerlabel.Font = new System.Drawing.Font("Elephant", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Headerlabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.Headerlabel.Location = new System.Drawing.Point(125, 2);
+            this.Headerlabel.Location = new System.Drawing.Point(126, 35);
             this.Headerlabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.Headerlabel.Name = "Headerlabel";
             this.Headerlabel.Size = new System.Drawing.Size(134, 25);
@@ -105,7 +106,7 @@
             // 
             // Usertxt
             // 
-            this.Usertxt.Location = new System.Drawing.Point(94, 250);
+            this.Usertxt.Location = new System.Drawing.Point(94, 283);
             this.Usertxt.Name = "Usertxt";
             this.Usertxt.Size = new System.Drawing.Size(227, 31);
             this.Usertxt.StateCommon.Back.Color1 = System.Drawing.Color.White;
@@ -125,7 +126,7 @@
             // 
             // passwordtxt
             // 
-            this.passwordtxt.Location = new System.Drawing.Point(94, 297);
+            this.passwordtxt.Location = new System.Drawing.Point(94, 330);
             this.passwordtxt.Name = "passwordtxt";
             this.passwordtxt.PasswordChar = '●';
             this.passwordtxt.Size = new System.Drawing.Size(227, 31);
@@ -150,7 +151,7 @@
             this.label3.BackColor = System.Drawing.Color.White;
             this.label3.Font = new System.Drawing.Font("Elephant", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.label3.Location = new System.Drawing.Point(-1, 257);
+            this.label3.Location = new System.Drawing.Point(-1, 290);
             this.label3.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(93, 20);
@@ -163,7 +164,7 @@
             this.label4.BackColor = System.Drawing.Color.White;
             this.label4.Font = new System.Drawing.Font("Elephant", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
-            this.label4.Location = new System.Drawing.Point(7, 304);
+            this.label4.Location = new System.Drawing.Point(7, 337);
             this.label4.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(82, 20);
@@ -172,7 +173,7 @@
             // 
             // loginbtn
             // 
-            this.loginbtn.Location = new System.Drawing.Point(42, 346);
+            this.loginbtn.Location = new System.Drawing.Point(37, 379);
             this.loginbtn.Name = "loginbtn";
             this.loginbtn.OverrideDefault.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
             this.loginbtn.OverrideDefault.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
@@ -234,7 +235,7 @@
             // 
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Red;
-            this.label2.Location = new System.Drawing.Point(314, 259);
+            this.label2.Location = new System.Drawing.Point(314, 292);
             this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(67, 31);
@@ -248,7 +249,7 @@
             // 
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.Red;
-            this.label5.Location = new System.Drawing.Point(314, 304);
+            this.label5.Location = new System.Drawing.Point(314, 337);
             this.label5.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(67, 31);
@@ -260,7 +261,7 @@
             // infobtn
             // 
             this.infobtn.AutoSize = true;
-            this.infobtn.Location = new System.Drawing.Point(347, 6);
+            this.infobtn.Location = new System.Drawing.Point(354, 6);
             this.infobtn.Name = "infobtn";
             this.infobtn.OverrideDefault.Back.Color1 = System.Drawing.Color.FromArgb(((int)(((byte)(6)))), ((int)(((byte)(174)))), ((int)(((byte)(244)))));
             this.infobtn.OverrideDefault.Back.Color2 = System.Drawing.Color.FromArgb(((int)(((byte)(8)))), ((int)(((byte)(142)))), ((int)(((byte)(254)))));
@@ -325,7 +326,7 @@
             this.pictureBox1.BackColor = System.Drawing.Color.DimGray;
             this.pictureBox1.BackgroundImage = global::Police_officer_Application.Properties.Resources.images;
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Location = new System.Drawing.Point(56, 30);
+            this.pictureBox1.Location = new System.Drawing.Point(59, 63);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(265, 204);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -333,12 +334,27 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.White;
+            this.label1.Font = new System.Drawing.Font("Elephant", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
+            this.label1.Location = new System.Drawing.Point(114, 9);
+            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(166, 25);
+            this.label1.TabIndex = 54;
+            this.label1.Text = "SPS Application";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(379, 407);
+            this.ClientSize = new System.Drawing.Size(379, 437);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.infobtn);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label2);
@@ -356,7 +372,7 @@
             this.PaletteMode = ComponentFactory.Krypton.Toolkit.PaletteMode.Custom;
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Login Form";
+            this.Text = "SPS Login Form";
             this.Load += new System.EventHandler(this.Login_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
@@ -377,6 +393,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label5;
         private ComponentFactory.Krypton.Toolkit.KryptonButton infobtn;
+        private System.Windows.Forms.Label label1;
     }
 }
 

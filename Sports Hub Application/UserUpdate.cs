@@ -106,7 +106,7 @@ namespace Mixed_Gym_Application
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    string query = @"SELECT PrisonerInfoID, FullName, NIDNumber, DangerousLevel, PrisonerStatus, CreatedDate, LastModified, CreatedBy, ModifiedBy
+                    string query = @"SELECT PrisonerInfoID, FullName, NIDNumber, DangerousLevel, PrisonerStatus,DepositPlace, CreatedDate, LastModified, CreatedBy, ModifiedBy
                              FROM PrisonerInfo";
 
                     if (!string.IsNullOrEmpty(filterName))
@@ -133,17 +133,29 @@ namespace Mixed_Gym_Application
                     bindingSource.DataSource = dt;
                     usersDataGridView.DataSource = bindingSource;
 
+                    usersDataGridView.Columns["PrisonerInfoID"].HeaderText = "ID";
+                    usersDataGridView.Columns["FullName"].HeaderText = "الاسم";
+                    usersDataGridView.Columns["NIDNumber"].HeaderText = "الرقم القومي";
+                //    usersDataGridView.Columns["DangerousLevel"].HeaderText = "درجة الخطوره";
+                   // usersDataGridView.Columns["PrisonerStatus"].HeaderText = "الحالة";
+                    usersDataGridView.Columns["DepositPlace"].HeaderText = "مكان الإيداع";
+                    usersDataGridView.Columns["CreatedDate"].HeaderText = "تاريخ الإنشاء";
+                    usersDataGridView.Columns["LastModified"].HeaderText = "آخر تعديل";
+                    usersDataGridView.Columns["CreatedBy"].HeaderText = "أنشئ بواسطة";
+                    usersDataGridView.Columns["ModifiedBy"].HeaderText = "عُدل بواسطة";
+
                     // Make some columns read-only
                     usersDataGridView.Columns["PrisonerInfoID"].ReadOnly = true;
                     usersDataGridView.Columns["CreatedDate"].ReadOnly = true;
                     usersDataGridView.Columns["CreatedBy"].ReadOnly = true;
 
-                    // Replace DangerousLevel column with ComboBox
-                    if (usersDataGridView.Columns.Contains("DangerousLevel"))
+                    // Replace DangerousLevel column with ComboBox (only if it's not already ComboBox)
+                    if (usersDataGridView.Columns.Contains("DangerousLevel") &&
+                        !(usersDataGridView.Columns["DangerousLevel"] is DataGridViewComboBoxColumn))
                     {
                         DataGridViewComboBoxColumn comboDanger = new DataGridViewComboBoxColumn();
                         comboDanger.DataPropertyName = "DangerousLevel";
-                        comboDanger.HeaderText = "DangerousLevel";
+                        comboDanger.HeaderText = "درجة الخطوره";
                         comboDanger.Items.AddRange("أ", "ب", "ج");
 
                         int index = usersDataGridView.Columns["DangerousLevel"].Index;
@@ -151,18 +163,20 @@ namespace Mixed_Gym_Application
                         usersDataGridView.Columns.Insert(index, comboDanger);
                     }
 
-                    // Replace PrisonerStatus column with ComboBox
-                    if (usersDataGridView.Columns.Contains("PrisonerStatus"))
+                    // Replace PrisonerStatus column with ComboBox (only if it's not already ComboBox)
+                    if (usersDataGridView.Columns.Contains("PrisonerStatus") &&
+                        !(usersDataGridView.Columns["PrisonerStatus"] is DataGridViewComboBoxColumn))
                     {
                         DataGridViewComboBoxColumn comboStatus = new DataGridViewComboBoxColumn();
                         comboStatus.DataPropertyName = "PrisonerStatus";
-                        comboStatus.HeaderText = "PrisonerStatus";
+                        comboStatus.HeaderText = "الحالة";
                         comboStatus.Items.AddRange("حبس احتياطي", "حكم عليه", "اخلاء سبيل");
 
                         int index = usersDataGridView.Columns["PrisonerStatus"].Index;
                         usersDataGridView.Columns.Remove("PrisonerStatus");
                         usersDataGridView.Columns.Insert(index, comboStatus);
                     }
+
                 }
             }
             catch (Exception ex)
@@ -190,7 +204,7 @@ namespace Mixed_Gym_Application
             {
                 using (SqlConnection connection = new SqlConnection(ConnectionString))
                 {
-                    SqlDataAdapter adapter = new SqlDataAdapter("SELECT PrisonerInfoID, FullName, NIDNumber, DangerousLevel, PrisonerStatus, CreatedDate, LastModified, CreatedBy, ModifiedBy FROM PrisonerInfo", connection);
+                    SqlDataAdapter adapter = new SqlDataAdapter("SELECT PrisonerInfoID, FullName, NIDNumber, DangerousLevel, PrisonerStatus,DespositPlace, CreatedDate, LastModified, CreatedBy, ModifiedBy FROM PrisonerInfo", connection);
                     SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
 
                     // Override UpdateCommand to always update ModifiedBy + LastModified
@@ -200,6 +214,7 @@ namespace Mixed_Gym_Application
                       NIDNumber = @NIDNumber,
                       DangerousLevel = @DangerousLevel,
                       PrisonerStatus = @PrisonerStatus,
+                        DepositPlace = @DepositPlace,
                       LastModified = GETDATE(),
                       ModifiedBy = @ModifiedBy
                   WHERE PrisonerInfoID = @PrisonerInfoID", connection);
@@ -208,6 +223,7 @@ namespace Mixed_Gym_Application
                     adapter.UpdateCommand.Parameters.Add("@NIDNumber", SqlDbType.NVarChar, 50, "NIDNumber");
                     adapter.UpdateCommand.Parameters.Add("@DangerousLevel", SqlDbType.NVarChar, 5, "DangerousLevel");
                     adapter.UpdateCommand.Parameters.Add("@PrisonerStatus", SqlDbType.NVarChar, 100, "PrisonerStatus");
+                    adapter.UpdateCommand.Parameters.Add("@DepositPlace", SqlDbType.NVarChar, 100, "DepositPlace");
                     adapter.UpdateCommand.Parameters.Add("@PrisonerInfoID", SqlDbType.Int, 0, "PrisonerInfoID").SourceVersion = DataRowVersion.Original;
 
                     // always use current username
@@ -260,5 +276,20 @@ namespace Mixed_Gym_Application
         {
 
         }
+
+        private void nametxt_TextChanged(object sender, EventArgs e)
+        {
+            string filterText = nametxt.Text.Trim();
+
+            if (!string.IsNullOrEmpty(filterText))
+            {
+                LoadData(filterName: filterText);  // filter by name
+            }
+            else
+            {
+                LoadData();  // reload all when textbox is empty
+            }
+        }
+
     }
 }
