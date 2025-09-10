@@ -15,6 +15,8 @@ namespace Mixed_Gym_Application
             this.columnnamecombobox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.backButton = new System.Windows.Forms.Button();
+            this.notesfiltertxt = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.transactionsGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -119,9 +121,30 @@ namespace Mixed_Gym_Application
             this.backButton.UseVisualStyleBackColor = false;
             this.backButton.Click += new System.EventHandler(this.backButton_Click);
             // 
+            // notesfiltertxt
+            // 
+            this.notesfiltertxt.Location = new System.Drawing.Point(302, 585);
+            this.notesfiltertxt.Name = "notesfiltertxt";
+            this.notesfiltertxt.Size = new System.Drawing.Size(138, 20);
+            this.notesfiltertxt.TabIndex = 43;
+            this.notesfiltertxt.TextChanged += new System.EventHandler(this.notesfiltertxt_TextChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(16)))), ((int)(((byte)(44)))), ((int)(((byte)(87)))));
+            this.label2.Location = new System.Drawing.Point(446, 585);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(79, 20);
+            this.label2.TabIndex = 44;
+            this.label2.Text = "فلتر ملاحظات";
+            // 
             // SessionForm
             // 
             this.ClientSize = new System.Drawing.Size(911, 617);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.notesfiltertxt);
             this.Controls.Add(this.columnnamecombobox);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ExportToExcelButton);
@@ -150,5 +173,7 @@ namespace Mixed_Gym_Application
         private Button ExportToExcelButton;
         private ComboBox columnnamecombobox;
         private Label label1;
+        private TextBox notesfiltertxt;
+        private Label label2;
     }
 }

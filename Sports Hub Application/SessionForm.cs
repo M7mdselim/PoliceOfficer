@@ -144,7 +144,11 @@ namespace Mixed_Gym_Application
                         {
                             DataTable dataTable = new DataTable();
                             dataTable.Load(reader);
-                            transactionsGridView.DataSource = dataTable;
+
+                            // Bind to BindingSource for easy filtering
+                            bindingSource.DataSource = dataTable;
+                            transactionsGridView.DataSource = bindingSource;
+
 
                             // ✅ Arabic headers
                             transactionsGridView.Columns["FullName"].HeaderText = "الاسم";
@@ -635,6 +639,39 @@ namespace Mixed_Gym_Application
 
         }
 
+        private void notesfiltertxt_TextChanged(object sender, EventArgs e)
+        {
+            // Escape single quotes in case the user types '
+            string filterValue = notesfiltertxt.Text.Replace("'", "''");
+
+            if (bindingSource.DataSource != null)
+            {
+                if (string.IsNullOrWhiteSpace(filterValue))
+                {
+                    // clear the filter
+                    bindingSource.RemoveFilter();
+                }
+                else
+                {
+                    // Notes is the column name in your query
+                    // build a view without the totals
+                    bindingSource.Filter = $"Notes LIKE '%{filterValue}%'";
+
+                    DataView view = (DataView)bindingSource.List;
+                    DataTable filtered = view.ToTable();
+
+                    // create a summary row
+                    DataRow summary = filtered.NewRow();
+                    summary["FullName"] = "إجمالي السجناء";
+                    summary["ReservationNumber"] = filtered.Rows.Count.ToString();
+                    filtered.Rows.Add(summary);
+
+                    // temporarily show that in the grid
+                    transactionsGridView.DataSource = filtered;
+
+                }
+            }
+        }
 
     }
 }
